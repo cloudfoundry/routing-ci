@@ -11,9 +11,10 @@ inputs:
 - name: cf-release
 - name: cf-routing-release-tarball
 - name: routing-release
+- name: routing-ci
 
 run:
-  path: deployments-routing/routing-ci/scripts/ci/deploy_routing_to_bosh_lite/gcp_task
+  path: routing-ci/deploy_routing_to_bosh_lite/gcp_task
 
 params:
   CF_ROUTING_RELEASE_TARBALL_DIR: cf-routing-release-tarball

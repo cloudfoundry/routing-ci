@@ -10,9 +10,10 @@ inputs:
   - name: routing-release
   - name: deployments-routing
   - name: old-routing-release
+  - name: routing-ci
 
 params:
   PACKAGE:
 
 run:
-  path: deployments-routing/routing-ci/scripts/ci/run_routing_release_unit
+  path: routing-ci/run_routing_release_unit

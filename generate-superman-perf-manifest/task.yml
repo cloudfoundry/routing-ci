@@ -9,12 +9,13 @@ image_resource:
 inputs:
 - name: deployments-routing
 - name: routing-release
+- name: routing-ci
 
 outputs:
   - name: perf-manifest
 
 run:
-  path: deployments-routing/routing-ci/scripts/ci/generate-superman-perf-manifest/task
+  path: routing-ci/generate-superman-perf-manifest/task
 
 params:
   ENV_DIR: deployments-routing/superman-perf

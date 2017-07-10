@@ -11,8 +11,9 @@ inputs:
   - name: gcp-stemcell
   - name: release-tarball
   - name: perf-manifest
+  - name: routing-ci
 run:
-  path: deployments-routing/routing-ci/scripts/ci/bosh2_deploy/task
+  path: routing-ci/bosh2_deploy/task
 
 params:
   MANIFEST:

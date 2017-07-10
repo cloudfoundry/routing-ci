@@ -9,9 +9,10 @@ image_resource:
 inputs:
   - name: deployments-routing
   - name: zero-downtime
+  - name: routing-ci
 
 run:
-  path: deployments-routing/routing-ci/scripts/ci/deploy-http-app/task
+  path: routing-ci/deploy-http-app/task
 
 params:
   ENVIRONMENT:

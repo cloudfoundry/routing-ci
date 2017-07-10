@@ -10,9 +10,10 @@ inputs:
 - name: deployments-routing
 - name: diego-github-release
 - name: diego-release-src
+- name: routing-ci
 
 run:
-  path: deployments-routing/routing-ci/scripts/ci/deploy_diego_to_bosh_lite/gcp_task
+  path: routing-ci/deploy_diego_to_bosh_lite/gcp_task
 
 params:
   DIEGO_RELEASE_TARBALL_DIR: diego-github-release

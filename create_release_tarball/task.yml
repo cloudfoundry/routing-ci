@@ -9,12 +9,13 @@ image_resource:
 inputs:
   - name: release-dir
   - name: deployments-routing
+  - name: routing-ci
 
 outputs:
   - name: release-tarball
 
 run:
-  path: deployments-routing/routing-ci/scripts/ci/create_release_tarball/task
+  path: routing-ci/create_release_tarball/task
 
 params:
   RELEASE_DIR: release-dir

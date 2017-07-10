@@ -14,6 +14,7 @@ inputs:
   - name: routing-release
   - name: rc-version
   - name: final-version
+  - name: routing-ci
 
 outputs:
   - name: final-comparison-report
@@ -21,7 +22,7 @@ outputs:
   - name: rc-csvs
 
 run:
-  path: deployments-routing/routing-ci/scripts/ci/create_jupyter_notebook/task
+  path: routing-ci/create_jupyter_notebook/task
 
 params:
   RELEASE_DIR:

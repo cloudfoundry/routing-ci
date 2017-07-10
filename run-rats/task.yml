@@ -10,8 +10,9 @@ inputs:
 - name: deployments-routing
 - name: routing-release
 - name: integration-config
+- name: routing-ci
 run:
-  path: deployments-routing/routing-ci/scripts/ci/run-rats/task
+  path: routing-ci/run-rats/task
 
 params:
   NODES: 12

@@ -12,12 +12,13 @@ inputs:
 - name: bosh-lite-ip
 - name: bosh-lite-stemcell
 - name: routing-release
+- name: routing-ci
 
 outputs:
 - name: cf-release-manifest
 
 run:
-  path: deployments-routing/routing-ci/scripts/ci/deploy_cf_to_bosh_lite/task
+  path: routing-ci/deploy_cf_to_bosh_lite/task
 
 params:
   BOSH_LITE_STEMCELL_DIR: bosh-lite-stemcell

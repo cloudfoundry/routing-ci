@@ -9,12 +9,13 @@ image_resource:
 inputs:
 - name: cf-release-source
 - name: deployments-routing
+- name: routing-ci
 
 outputs:
 - name: cf-manifest
 
 run:
-  path: deployments-routing/routing-ci/scripts/ci/create_cf_release_manifest
+  path: routing-ci/create_cf_release_manifest
 
 params:
   INFRASTRUCTURE:

@@ -9,12 +9,13 @@ image_resource:
 inputs:
   - name: deployments-routing
   - name: routing-perf-release
+  - name: routing-ci
 
 outputs:
   - name: routing-perf-release-tarball
 
 run:
-  path: deployments-routing/routing-ci/scripts/ci/create_perf_release_tarball/task
+  path: routing-ci/create_perf_release_tarball/task
 
 params:
   ROUTING_PERF_RELEASE_DIR: routing-perf-release

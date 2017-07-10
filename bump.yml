@@ -10,9 +10,10 @@ inputs:
   - name: cf-release-dev
   - name: deployments-routing
   - name: routing-release
+  - name: routing-ci
 
 outputs:
   - name: bumped
 
 run:
-  path: deployments-routing/routing-ci/scripts/ci/bump
+  path: routing-ci/bump

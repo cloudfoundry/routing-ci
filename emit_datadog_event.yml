@@ -8,9 +8,10 @@ image_resource:
 
 inputs:
   - name: deployments-routing
+  - name: routing-ci
 
 run:
-  path: deployments-routing/routing-ci/scripts/ci/emit_datadog_event
+  path: routing-ci/emit_datadog_event
 
 params:
   TITLE:

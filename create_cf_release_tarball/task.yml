@@ -10,12 +10,13 @@ inputs:
   - name: deployments-routing
   - name: cf-release-source
   - name: version
+  - name: routing-ci
 
 outputs:
   - name: cf-release-tarball
 
 run:
-  path: deployments-routing/routing-ci/scripts/ci/create_cf_release_tarball/task
+  path: routing-ci/create_cf_release_tarball/task
 
 params:
   CF_RELEASE_DIR: cf-release-source

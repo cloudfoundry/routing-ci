@@ -8,9 +8,10 @@ image_resource:
 
 inputs:
   - name: deployments-routing
+  - name: routing-ci
 
 run:
-  path: deployments-routing/routing-ci/scripts/ci/create-org-quota/task
+  path: routing-ci/create-org-quota/task
 
 params:
   CF_API:

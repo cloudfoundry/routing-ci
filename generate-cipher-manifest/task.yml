@@ -9,12 +9,13 @@ image_resource:
 inputs:
 - name: deployments-routing
 - name: routing-release
+- name: routing-ci
 
 outputs:
   - name: cipher-manifest
 
 run:
-  path: deployments-routing/routing-ci/scripts/ci/generate-cipher-manifest/task
+  path: routing-ci/generate-cipher-manifest/task
 
 params:
   CIPHERS:

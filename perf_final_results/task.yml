@@ -11,10 +11,11 @@ inputs:
 - name: rc-perf-results
 - name: rc-version
 - name: routing-release-master
+- name: routing-ci
 
 outputs:
 - name: results
 
 run:
-  path: deployments-routing/routing-ci/scripts/ci/perf_final_results/task
+  path: routing-ci/perf_final_results/task
 

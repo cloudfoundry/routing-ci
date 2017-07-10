@@ -9,6 +9,7 @@ image_resource:
 inputs:
   - name: routing-release
   - name: deployments-routing
+  - name: routing-ci
 
 outputs:
   - name: routing-manifest
@@ -21,4 +22,4 @@ params:
   INFRASTRUCTURE: ~
 
 run:
-  path: deployments-routing/routing-ci/scripts/ci/create_routing_manifest/task
+  path: routing-ci/create_routing_manifest/task

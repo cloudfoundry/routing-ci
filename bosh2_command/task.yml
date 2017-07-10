@@ -8,9 +8,10 @@ image_resource:
 
 inputs:
   - name: deployments-routing
+  - name: routing-ci
 
 run:
-  path: deployments-routing/routing-ci/scripts/ci/bosh2_command/task
+  path: routing-ci/bosh2_command/task
 
 params:
   NUMBER_OF_RUNS:

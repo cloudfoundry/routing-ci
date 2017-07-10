@@ -8,9 +8,10 @@ image_resource:
 
 inputs:
   - name: deployments-routing
+  - name: routing-ci
 
 run:
-  path: deployments-routing/routing-ci/scripts/ci/create-tcp-app/task
+  path: routing-ci/create-tcp-app/task
 
 params:
   CF_API:

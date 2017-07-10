@@ -10,9 +10,10 @@ inputs:
 - name: bosh-lite
 - name: deployments-routing
 - name: bosh-lite-vagrant
+- name: routing-ci
 
 run:
-  path: deployments-routing/routing-ci/scripts/ci/destroy_bosh_lite/task
+  path: routing-ci/destroy_bosh_lite/task
 
 params:
   VAGRANT_DIR: bosh-lite-vagrant

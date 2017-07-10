@@ -9,6 +9,7 @@ image_resource:
 inputs:
   - name: cf-deployment
   - name: deployments-routing
+  - name: routing-ci
 
 outputs:
   - name: modified-cf-deployment
@@ -17,4 +18,4 @@ params:
   ENVIRONMENT:
 
 run:
-  path: deployments-routing/routing-ci/scripts/ci/copy_files_to_operations/task
+  path: routing-ci/copy_files_to_operations/task

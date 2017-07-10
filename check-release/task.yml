@@ -10,9 +10,10 @@ inputs:
   - name: deployments-routing
   - name: routing-release
   - name: rc-version
+  - name: routing-ci
 
 run:
-  path: deployments-routing/routing-ci/scripts/ci/check-release/task
+  path: routing-ci/check-release/task
 
 params:
   VERSION_DIR: rc-version

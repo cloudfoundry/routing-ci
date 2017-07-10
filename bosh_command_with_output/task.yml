@@ -8,12 +8,13 @@ image_resource:
 
 inputs:
   - name: deployments-routing
+  - name: routing-ci
 
 outputs:
   - name: command-output
 
 run:
-  path: deployments-routing/routing-ci/scripts/ci/bosh_command_with_output/task
+  path: routing-ci/bosh_command_with_output/task
 
 params:
   NUMBER_OF_RUNS:
