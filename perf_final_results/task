@@ -1,0 +1,30 @@
+#!/bin/bash
+set -ex
+set -u
+
+OUTPUT_DIR="${PWD}/results"
+mkdir -p $OUTPUT_DIR
+
+root_dir="${PWD}"
+CSV_DIR="${PWD}/rc-perf-results"
+VERSION_DIR="${PWD}/rc-version"
+VERSION=$(cat ${VERSION_DIR}/version)
+
+perf_results=$(sed -n '1p' "${CSV_DIR}/results")
+cpuStats_results=$(sed -n '2p' "${CSV_DIR}/results")
+
+pushd routing-release-master
+  SHA=$(git describe --tags | cut -d '-' -f1)
+  METADATA_NAME="metadata-${VERSION}.yml"
+  FILENAME="$OUTPUT_DIR/$METADATA_NAME"
+  touch ${FILENAME}
+  cat > ${FILENAME}<<EOF
+---
+sha: $SHA
+EOF
+
+NAME="perfResults-${VERSION}.csv"
+wget -O "${OUTPUT_DIR}/${NAME}" $perf_results
+
+CPU_STATS_NAME="cpuStats-${VERSION}.csv"
+wget -O "${OUTPUT_DIR}/${CPU_STATS_NAME}" $cpuStats_results

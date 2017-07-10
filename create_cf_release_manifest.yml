@@ -1,0 +1,21 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: cloudfoundry/cf-routing-pipeline
+
+inputs:
+- name: cf-release-source
+- name: deployments-routing
+
+outputs:
+- name: cf-manifest
+
+run:
+  path: deployments-routing/routing-ci/scripts/ci/create_cf_release_manifest
+
+params:
+  INFRASTRUCTURE:
+  ENVIRONMENT:

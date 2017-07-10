@@ -1,0 +1,22 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: cloudfoundry/cf-routing-pipeline
+
+inputs:
+- name: diego-github-release
+- name: deployments-routing
+- name: diego-release-src
+- name: bosh-lite-ip
+
+run:
+  path: deployments-routing/routing-ci/scripts/ci/deploy_diego_to_bosh_lite/task
+
+params:
+  BOSH_LITE_IP_DIR: bosh-lite-ip
+  DIEGO_RELEASE_DIR: diego-release-src
+  DIEGO_RELEASE_TARBALL_DIR: diego-github-release
+  BOSH_ADMIN_PASSWORD:

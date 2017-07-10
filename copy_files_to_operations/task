@@ -1,0 +1,6 @@
+#!/bin/bash
+
+set -e -x -u
+
+cp -r cf-deployment/* modified-cf-deployment
+cp deployments-routing/${ENVIRONMENT}/operations/*.yml modified-cf-deployment/operations/

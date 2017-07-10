@@ -1,0 +1,23 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: cloudfoundry/cf-routing-pipeline
+
+inputs:
+  - name: routing-release
+  - name: routing-release-master
+  - name: rc-version
+  - name: deployments-routing
+
+outputs:
+  - name: cf-routing-bosh-release
+  - name: routing-release-final
+
+run:
+  path: deployments-routing/routing-ci/scripts/ci/create_final_routing_release
+
+params:
+  CF_ROUTING_RELEASE_RC_DIR:

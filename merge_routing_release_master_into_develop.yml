@@ -1,0 +1,17 @@
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: cloudfoundry/cf-routing-pipeline
+
+inputs:
+  - name: cf-routing-release-develop
+  - name: deployments-routing
+  - name: cf-routing-release-master
+
+outputs:
+  - name: cf-routing-release-mergedmaster
+
+run:
+  path: deployments-routing/routing-ci/scripts/ci/merge_routing_release_master_into_develop

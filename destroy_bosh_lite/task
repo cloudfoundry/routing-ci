@@ -1,0 +1,42 @@
+#!/bin/bash
+set -ex
+
+# Cannot set -u before sourcing .bashrc because of all
+# the unbound variables in things beyond our control.
+source ~/.bashrc
+
+set -u
+
+root_dir="${PWD}"
+
+# Inputs
+ENV_DIR="${root_dir}/${ENV_DIR:?"\$ENV_DIR not set"}"
+VAGRANT_DIR="${root_dir}/${VAGRANT_DIR:?"VAGRANT_DIR must be provided"}"
+
+setup_env() {
+  export BOSH_LITE_PRIVATE_KEY="${ENV_DIR}/keypair/id_rsa_bosh"
+
+  source "${ENV_DIR}/aws_environment"
+  export BOSH_AWS_ACCESS_KEY_ID="${AWS_ACCESS_KEY_ID}"
+  export BOSH_AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY}"
+  export BOSH_LITE_KEYPAIR="bosh-lite"
+  export BOSH_LITE_ELASTIC_IP="true"
+}
+
+get_vagrant_machine() {
+  tar -C bosh-lite/ -xzf ${VAGRANT_DIR}/vagrant.tar.gz
+}
+
+destroy_bosh_lite() {
+  pushd bosh-lite
+    BOSH_LITE_INSTANCE_TYPE="m3.2xlarge" vagrant destroy -f
+  popd
+}
+
+main() {
+  setup_env
+  get_vagrant_machine
+  destroy_bosh_lite
+}
+
+main

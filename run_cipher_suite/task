@@ -1,0 +1,32 @@
+#!/bin/bash
+
+set -ex
+
+# Cannot set -u before sourcing .bashrc because of all
+# the unbound variables in things beyond our control.
+source ~/.bashrc
+
+set -u
+
+ENVIRONMENT_DIR=$PWD/deployments-routing/
+STEMCELL_PATH=$(ls $STEMCELL_REGEX)
+
+pushd "${ENVIRONMENT_DIR}"
+  ./scripts/bosh-login "${ENVIRONMENT}"
+popd
+
+bosh2 -n -e "${ENVIRONMENT}" us "${STEMCELL_PATH}"
+
+IFS=', ' read -r -a array <<< "${RELEASES_DIR}"
+
+for element in "${array[@]}"
+do
+  RELEASE_PATH=$(ls $element)
+  bosh2 -n -e "${ENVIRONMENT}" ur "${RELEASE_PATH}"
+done
+
+bosh2 -n -e "${ENVIRONMENT}" -d "${BOSH_DEPLOYMENT}" deploy "${MANIFEST}"
+
+echo "Running cipher test suite"
+bosh2 -e "${ENVIRONMENT}" -d cipher run-errand run-cipher-test --keep-alive --download-logs
+

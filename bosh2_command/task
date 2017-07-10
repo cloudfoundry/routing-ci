@@ -1,0 +1,32 @@
+#!/bin/bash
+set -e -x
+
+source ~/.bashrc
+
+if [ -n "$LOGS_DIR" ]; then
+  mkdir $LOGS_DIR
+fi
+
+ENVIRONMENT_DIR=$PWD/deployments-routing/${ENVIRONMENT}
+
+num_runs=${NUMBER_OF_RUNS:-1}
+
+set +x
+pushd $ENVIRONMENT_DIR
+	BOSH_CA_CERT="$(bbl director-ca-cert)"
+	export BOSH_CA_CERT
+	BOSH_ENVIRONMENT=$(bbl director-address)
+	export BOSH_ENVIRONMENT
+	BOSH_CLIENT=$(bbl director-username)
+	export BOSH_CLIENT
+	BOSH_CLIENT_SECRET=$(bbl director-password)
+	export BOSH_CLIENT_SECRET
+popd
+set -x
+
+
+for ((i=0; i<${num_runs}; i++)); do
+    echo "Starting run ${i}"
+    bosh -e $BOSH_ENVIRONMENT -d $BOSH_DEPLOYMENT $COMMAND
+    echo "Finished run ${i}"
+done

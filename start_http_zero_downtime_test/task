@@ -1,0 +1,29 @@
+#!/bin/bash
+set -ex
+
+# Cannot set -u before sourcing .bashrc because of all
+# the unbound variables in things beyond our control.
+source ~/.bashrc
+
+if [ "${CF_SKIP_SSL_VALIDATION}" == 'true' ] ;
+then
+  cf api "${CF_API}" --skip-ssl-validation
+else
+  cf api "${CF_API}"
+fi
+
+echo "Authenticating with CF"
+
+cf auth "${CF_USERNAME}" "${CF_PASSWORD}"
+
+cf target -o "${CF_ORG}" -s "${CF_SPACE}"
+
+# Expects the app to be already present
+cf apps | grep "${CF_APP_POLL_NAME}"
+
+echo "Starting zero downtime test..."
+
+POLL_URL="http://${CF_POLL_APP_NAME}.${CF_APP_DOMAIN}/health"
+APP_URL="http://${CF_APP_NAME}.${CF_APP_DOMAIN}"
+
+curl "${APP_URL}"/start -X POST -d'{"Endpoint":"'${POLL_URL}'"}'

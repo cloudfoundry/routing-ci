@@ -1,0 +1,34 @@
+#!/bin/bash
+set -ex
+
+# Cannot set -u before sourcing .bashrc because of all
+# the unbound variables in things beyond our control.
+source ~/.bashrc
+
+if [ "${CF_SKIP_SSL_VALIDATION}" == 'true' ] ;
+then
+  cf api "${CF_API}" --skip-ssl-validation
+else
+  cf api "${CF_API}"
+fi
+
+cf auth "${CF_USER}" "${CF_PASSWORD}"
+
+cf target -o "${CF_ORG}" -s "${CF_SPACE}"
+
+echo "Cloning doctorroute repo"
+git clone https://github.com/cf-routing/doctorroute.git
+
+pushd doctorroute
+	set +e
+	cf apps | grep "${CF_APP_NAME}"
+	EXIT_STATUS=$?
+	set -e
+  # If app does not exist push and map-route
+	if [ "${EXIT_STATUS}" != "0" ]; then
+	    echo "Pushing doctorroute..."
+	    cf target -o "${CF_ORG}" -s "${CF_SPACE}"
+	    cf push "${CF_APP_NAME}" -d "${CF_APP_DOMAIN}" --random-route
+	    cf map-route "${CF_APP_NAME}" "${CF_APP_DOMAIN}" -n "${CF_APP_NAME}"
+	fi
+popd

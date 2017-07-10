@@ -1,0 +1,19 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: cloudfoundry/cf-routing-pipeline
+
+inputs:
+- name: deployments-routing
+- name: routing-release
+- name: integration-config
+run:
+  path: deployments-routing/routing-ci/scripts/ci/run-rats/task
+
+params:
+  NODES: 12
+  CONFIG_FILE_PATH: rats_integration_config.json
+  GINKGO_ARGS:

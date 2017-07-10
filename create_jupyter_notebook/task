@@ -1,0 +1,77 @@
+#!/bin/bash
+
+set -eux -o pipefail
+
+FINAL_OUTPUT_DIR="${PWD}/final-comparison-report"
+RC_OUTPUT_DIR="${PWD}/rc-comparison-report"
+OUTPUT_CSV_DIR="${PWD}/rc-csvs"
+JUPYTER_DIR="${PWD}/${RELEASE_DIR}/src/jupyter_notebook"
+NEXT_VERSION=$(cat "${PWD}/rc-version/version")
+REPORT_NAME=report.html
+RC_REPORT_NAME=rc-report.html
+METADATA_CUR_FILE_NAME="metadata.yml"
+METADATA_PREV_FILE_NAME="old_metadata.yml"
+
+mkdir -p "${FINAL_OUTPUT_DIR}" "${RC_OUTPUT_DIR}" "${OUTPUT_CSV_DIR}"
+
+CURRENT_METADATA_FILENAME="$JUPYTER_DIR/$METADATA_CUR_FILE_NAME"
+touch "${CURRENT_METADATA_FILENAME}"
+cat > "${CURRENT_METADATA_FILENAME}"<<EOF
+---
+sha: "${NEXT_VERSION}"
+EOF
+
+pushd routing-release
+  PREVIOUS_METADATA_FILENAME="${JUPYTER_DIR}/${METADATA_PREV_FILE_NAME}"
+  CURRENT_VERSION=$(git describe --tags | cut -d '-' -f1)
+  touch "${PREVIOUS_METADATA_FILENAME}"
+  cat > "${PREVIOUS_METADATA_FILENAME}"<<EOF
+---
+sha: "${CURRENT_VERSION}"
+EOF
+popd
+
+bosh -n -t "${BOSH_DIRECTOR}" download manifest "${BOSH_DEPLOYMENT}" > /tmp/deployment.yml
+
+sed -i -e "1d" /tmp/deployment.yml
+
+bosh -n --color -t "${BOSH_DIRECTOR}" -d /tmp/deployment.yml run errand throughputramp --download-logs --logs-dir "${FINAL_OUTPUT_DIR}" > output
+
+perfResults=$(grep "csv uploaded to" output | awk '{print $4}' | head -n 1)
+cpuResults=$(grep "cpu csv uploaded to" output | awk '{print $5}' | head -n 1)
+
+pushd "${FINAL_OUTPUT_DIR}"
+  log_file=$(find . -type f -print)
+  tar xvf "${log_file}"
+  mv cpuStats.csv "${JUPYTER_DIR}/cpuStats.csv"
+  mv perfResults.csv "${JUPYTER_DIR}/perfResults.csv"
+popd
+
+mv latest-released-perf-results/*.csv "${JUPYTER_DIR}/old_perfResults.csv"
+mv latest-released-cpu-stats/*.csv "${JUPYTER_DIR}/old_cpuStats.csv"
+
+pushd "${JUPYTER_DIR}"
+  jupyter nbconvert --ExecutePreprocessor.timeout=600 --to html --execute Performance_Data.ipynb
+popd
+
+cp "${JUPYTER_DIR}/Performance_Data.html" "${FINAL_OUTPUT_DIR}/${REPORT_NAME}"
+
+pushd routing-release
+  PREVIOUS_METADATA_FILENAME="${JUPYTER_DIR}/${METADATA_PREV_FILE_NAME}"
+  current_sha=$(git log --pretty=format:'%h' -n 1)
+  cat > "${CURRENT_METADATA_FILENAME}"<<EOF
+---
+sha: "${current_sha}"
+EOF
+popd
+
+pushd "${JUPYTER_DIR}"
+  jupyter nbconvert --ExecutePreprocessor.timeout=600 --to html --execute Performance_Data.ipynb
+popd
+
+cp "${JUPYTER_DIR}/Performance_Data.html" "${RC_OUTPUT_DIR}/${RC_REPORT_NAME}"
+
+cat > "${OUTPUT_CSV_DIR}/results" <<END
+${perfResults}
+${cpuResults}
+END

@@ -1,0 +1,36 @@
+#!/bin/bash
+
+set -e -x -u
+
+environment_path="${PWD}/${DEPLOYMENTS_DIR}/${ENVIRONMENT}"
+stubs_path="${environment_path}/stubs"
+templates_path="${environment_path}/templates"
+
+cf_deployment_name="cf-${ENVIRONMENT}"
+
+root_dir=${PWD}
+OUTPUT_DIR=${root_dir}/diego-manifest
+mkdir -p $OUTPUT_DIR
+diego_manifest_file="${OUTPUT_DIR}/diego-deployment.yml"
+
+bosh -n target ${BOSH_TARGET}
+bosh -n login ${BOSH_USER} ${BOSH_PASSWORD}
+
+pushd diego-release-src
+
+  bosh download manifest ${cf_deployment_name} /tmp/cf.yml
+
+  ./scripts/generate-deployment-manifest \
+    -c /tmp/cf.yml \
+    -i ${stubs_path}/diego/aws-iaas-settings.yml \
+    -p ${stubs_path}/diego/property-overrides.yml \
+    -s ${stubs_path}/diego/diego-sql.yml \
+    -n ${stubs_path}/diego/instance-count-overrides.yml \
+    -v ${stubs_path}/diego/release_versions.yml \
+    -g \
+    > ${diego_manifest_file}
+
+  echo "===GENERATED MANIFEST==="
+  cat ${diego_manifest_file}
+
+popd

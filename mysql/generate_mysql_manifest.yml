@@ -1,0 +1,24 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: cloudfoundry/cf-routing-pipeline
+
+inputs:
+  - name: deployments-routing
+  - name: mysql-release-source
+
+outputs:
+  - name: mysql-manifest
+
+params:
+  DEPLOYMENTS_DIR: ~
+  ENVIRONMENT: ~
+  BOSH_TARGET: ~
+  BOSH_USER: ~
+  BOSH_PASSWORD: ~
+
+run:
+  path: deployments-routing/routing-ci/scripts/ci/mysql/generate_mysql_manifest

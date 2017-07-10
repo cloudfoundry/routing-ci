@@ -1,0 +1,25 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: cloudfoundry/cf-routing-pipeline
+
+inputs:
+  - name: deployments-routing
+
+outputs:
+  - name: command-output
+
+run:
+  path: deployments-routing/routing-ci/scripts/ci/bosh_command_with_output/task
+
+params:
+  NUMBER_OF_RUNS:
+  BOSH_DIRECTOR:
+  BOSH_USER:
+  BOSH_PASSWORD:
+  BOSH_DEPLOYMENT:
+  COMMAND:
+  OUTPUT_DIR: command-output

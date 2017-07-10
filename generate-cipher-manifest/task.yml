@@ -1,0 +1,21 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: cloudfoundry/cf-routing-pipeline
+
+inputs:
+- name: deployments-routing
+- name: routing-release
+
+outputs:
+  - name: cipher-manifest
+
+run:
+  path: deployments-routing/routing-ci/scripts/ci/generate-cipher-manifest/task
+
+params:
+  CIPHERS:
+  OUTPUT_DIR: cipher-manifest

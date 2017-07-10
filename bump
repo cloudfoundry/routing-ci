@@ -1,0 +1,42 @@
+#!/bin/bash
+set -e
+
+source ~/.bashrc
+
+export PATH=$RUBY_ROOT/bin:$PATH
+
+echo "Attempting to bump... ¯\_(ツ)_/¯"
+
+pushd cf-release-dev
+  # GoRouter
+  pushd ../routing-release
+    SHA="$(git rev-parse --short HEAD)"
+  popd
+  pushd src/routing-release
+    echo "Checking out routing release sha: $SHA"
+    git fetch
+    git checkout $SHA
+  popd
+
+  git status -s
+
+  echo "----- STAGE -----"
+  git add src/routing-release
+
+  # TODO: ask MEGA to change to not use alias in staged shortlog script
+  git config --global alias.ci commit
+  git config --global user.email "cf-routing-eng@pivotal.io"
+  git config --global user.name "routing-ci"
+
+  echo "--- SETUP GIT HOOKS ----"
+  ./scripts/test
+  ./scripts/unused_packages
+
+  echo "----- COMMIT -----"
+  ./scripts/commit_with_shortlog
+
+  echo "----- CHANGES -----"
+  git --no-pager show HEAD
+popd
+
+cp -r cf-release-dev bumped/cf-release

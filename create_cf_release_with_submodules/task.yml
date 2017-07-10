@@ -1,0 +1,21 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: cloudfoundry/cf-routing-pipeline
+
+inputs:
+  - name: cf-release
+  - name: routing-release
+  - name: deployments-routing
+
+outputs:
+  - name: cf-release-tarball
+
+run:
+  path: deployments-routing/routing-ci/scripts/ci/create_cf_release_with_submodules/task
+
+params:
+  CF_RELEASE_DIR: cf-release

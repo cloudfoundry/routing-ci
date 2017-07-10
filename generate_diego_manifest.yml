@@ -1,0 +1,26 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: cloudfoundry/cf-routing-pipeline
+
+inputs:
+  - name: cf-release-source
+  - name: deployments-routing
+  - name: diego-release-src
+
+outputs:
+  - name: diego-manifest
+
+params:
+  DEPLOYMENTS_DIR: ~
+  ENVIRONMENT: ~
+  INFRASTRUCTURE: ~
+  BOSH_TARGET: ~
+  BOSH_USER: ~
+  BOSH_PASSWORD: ~
+
+run:
+  path: deployments-routing/routing-ci/scripts/ci/generate_diego_manifest

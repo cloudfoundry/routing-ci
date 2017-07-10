@@ -1,0 +1,22 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+
+inputs:
+  - name: deployments-routing
+  - name: gcp-stemcell
+  - name: release-tarball
+  - name: perf-manifest
+run:
+  path: deployments-routing/routing-ci/scripts/ci/bosh2_deploy/task
+
+params:
+  MANIFEST:
+  ENVIRONMENT:
+  BOSH_DEPLOYMENT:
+  RELEASES_DIR:
+  STEMCELL_REGEX:

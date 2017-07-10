@@ -1,0 +1,28 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: cloudfoundry/cf-routing-pipeline
+
+inputs:
+- name: bosh-lite
+- name: deployments-routing
+
+outputs:
+- name: bosh-lite-ip
+- name: bosh-lite-vagrant
+
+run:
+  path: deployments-routing/routing-ci/scripts/ci/provision_bosh_lite/task
+
+params:
+  BOSH_LITE_NAME: bosh-lite-ci
+  IP_OUTPUT_DIR: bosh-lite-ip
+  VAGRANT_OUTPUT_DIR: bosh-lite-vagrant
+  ENV_DIR: deployments-routing/catwoman
+  BOSH_ADMIN_PASSWORD:
+  SUBNET_ID:
+  SECURITY_GROUP:
+  ELASTIC_IP:

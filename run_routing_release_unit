@@ -1,0 +1,29 @@
+#!/bin/bash
+
+set -e -x
+
+root_dir=$PWD
+pushd old-routing-release/src/code.cloudfoundry.org/routing-api
+  export GOPATH=${root_dir}/old-routing-release
+  go build cmd/routing-api/main.go
+popd
+
+cd routing-release/
+
+export GOPATH=$PWD
+export PATH=$GOPATH/bin:$PATH
+export OLD_ROUTING_API_BIN_PATH=${root_dir}/old-routing-release/src/code.cloudfoundry.org/routing-api/main
+
+go get github.com/nats-io/gnatsd
+
+go install github.com/onsi/ginkgo/ginkgo
+
+chown -R mysql:mysql /var/lib/mysql /var/log/mysql /var/run/mysqld
+chown -R postgres:postgres /var/lib/postgresql /var/log/postgresql /var/run/postgresql /etc/postgresql
+chown -R root:ssl-cert /etc/ssl/private
+
+/etc/init.d/rsyslog start
+service mysql restart
+service postgresql restart
+
+./scripts/run-unit-tests

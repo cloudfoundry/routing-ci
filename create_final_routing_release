@@ -1,0 +1,48 @@
+#!/bin/bash
+
+set -e -x
+
+source ~/.bashrc
+
+set -u
+
+#Copy private.yml from private repo before creating final bosh release
+echo "----- Copy private blobstore credentials into cf-routing-release"
+cp deployments-routing/batman-aws/private.yml ${CF_ROUTING_RELEASE_RC_DIR}/config/private.yml
+
+FINAL_VERSION=`cat rc-version/version`
+
+root_dir=${PWD}
+OUTPUT_DIR=${root_dir}/cf-routing-bosh-release
+mkdir -p $OUTPUT_DIR
+
+pushd ${CF_ROUTING_RELEASE_RC_DIR}
+  echo "----- Set git identity"
+  git config user.email "cf-routing-eng@pivotal.io"
+  git config user.name "Routing CI (Automated)"
+
+  git remote add -f master-repo ../routing-release-master
+  git merge "master-repo/master" -m 'Merge with master'
+
+  git status
+  git diff-index --quiet HEAD -- || ( echo "There are uncommitted changes! Investigate immediately." && exit 1 )
+
+  echo "----- Create final release"
+  bosh -v
+  bosh --parallel 4 -n create release --with-tarball | tee ../create_release.out
+
+  tarball=$(grep 'Release tarball' ../create_release.out | cut -d ' ' -f4)
+  bosh -n finalize release ${tarball} --version $FINAL_VERSION
+
+  mv releases/routing/*.tgz $OUTPUT_DIR/routing-$FINAL_VERSION.tgz
+
+  echo "----- Update master and develop branches on origin"
+
+  git add .final_builds releases
+  git commit -m "Create final release ${FINAL_VERSION}"
+
+  echo "----- DEBUG: show the commit we just created"
+  git --no-pager show HEAD
+
+  cp -a ./  ${root_dir}/routing-release-final/
+popd

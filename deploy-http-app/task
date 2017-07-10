@@ -1,0 +1,18 @@
+#!/bin/bash
+set -ex
+
+# Cannot set -u before sourcing .bashrc because of all
+# the unbound variables in things beyond our control.
+source ~/.bashrc
+
+ENVIRONMENT_DIR=$PWD/deployments-routing/
+
+pushd "${ENVIRONMENT_DIR}"
+  ./scripts/bosh-login "${ENVIRONMENT}"
+popd
+
+pushd zero-downtime
+    bosh2 create-release
+    bosh2 -e ${ENVIRONMENT} ur --rebase
+    bosh2 -e ${ENVIRONMENT} -d zero-downtime -n deploy ${ENVIRONMENT_DIR}/${ENVIRONMENT}/zero_downtime/zero_downtime.yml --no-redact
+popd

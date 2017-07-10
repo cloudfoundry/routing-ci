@@ -1,0 +1,18 @@
+#!/bin/bash
+
+set -e -x
+
+source ~/.bashrc
+root_dir=${PWD}
+
+OUTPUT_DIR=${root_dir}/cf-manifest
+mkdir -p $OUTPUT_DIR
+
+pushd cf-release-source
+
+./scripts/generate_deployment_manifest ${INFRASTRUCTURE} ../deployments-routing/${ENVIRONMENT}/stubs/cf/*.yml > ${OUTPUT_DIR}/deployment.yml
+
+echo "===GENERATED MANIFEST==="
+cat ${OUTPUT_DIR}/deployment.yml
+
+popd

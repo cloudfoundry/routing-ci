@@ -1,0 +1,20 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: cloudfoundry/cf-routing-pipeline
+
+inputs:
+  - name: deployments-routing
+
+run:
+  path: deployments-routing/routing-ci/scripts/ci/create-org-quota/task
+
+params:
+  CF_API:
+  CF_ORG:
+  CF_ADMIN_USER:
+  CF_ADMIN_PASSWORD:
+  CF_SKIP_SSL_VALIDATION:

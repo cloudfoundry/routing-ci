@@ -1,0 +1,20 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: cloudfoundry/cf-routing-pipeline
+
+inputs:
+- name: deployments-routing
+- name: rc-perf-results
+- name: rc-version
+- name: routing-release-master
+
+outputs:
+- name: results
+
+run:
+  path: deployments-routing/routing-ci/scripts/ci/perf_final_results/task
+
