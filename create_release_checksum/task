@@ -12,7 +12,7 @@ OUTPUT_DIR=${root_dir}/release-checksum
 mkdir -p $OUTPUT_DIR
 
 echo "calculating checksum"
-CHECKSUM_FILE=${OUTPUT_DIR}/routing-${FINAL_VERSION}.tgz.sha256sum.txt
-sha256sum ${RELEASE_DIR}/routing-$FINAL_VERSION.tgz | awk '{ print $1 }' > $CHECKSUM_FILE
+CHECKSUM_FILE=${OUTPUT_DIR}/routing-${FINAL_VERSION}.tgz.sha256
+sha256sum ${RELEASE_DIR}/routing-$FINAL_VERSION.tgz > $CHECKSUM_FILE
 echo "created sha file at ${CHECKSUM_FILE}"
 ls $OUTPUT_DIR
