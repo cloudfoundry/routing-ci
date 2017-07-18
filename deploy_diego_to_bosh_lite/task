@@ -51,6 +51,7 @@ build_manifest() {
       -v manifest-generation/bosh-lite-stubs/release-versions.yml \
       -s manifest-generation/bosh-lite-stubs/postgres/diego-sql.yml \
       -r \
+      -x \
       > diego.yml
 
   popd > /dev/null
