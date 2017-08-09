@@ -21,7 +21,7 @@ pushd "${CF_RELEASE_DIR}"
   ./scripts/generate_deployment_manifest \
   bosh-lite \
   <(echo "director_uuid: ${DIRECTOR_UUID}") \
-  "../deployments-routing/${ENVIRONMENT}/stubs/**/*.yml" \
+  ../deployments-routing/"${ENVIRONMENT}"/stubs/**/*.yml \
   > bosh-lite/deployments/cf.yml
 
   bosh2 -n -e "${ENVIRONMENT}" -d cf-warden deploy bosh-lite/deployments/cf.yml
