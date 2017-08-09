@@ -7,22 +7,22 @@ source ~/.bashrc
 
 set -u
 
+ENVIRONMENT="${ENVIRONMENT:?"ENVIRONMENT not set"}"
 
 pushd deployments-routing
- ./scripts/bosh-login clark-lite
+ ./scripts/bosh-login "${ENVIRONMENT}"
 popd
 
-bosh2 -e clark-lite ur "${CF_RELEASE_TARBALL_DIR}"/cf-*.tgz
+bosh2 -e "${ENVIRONMENT}" ur "${CF_RELEASE_TARBALL_DIR}"/cf-*.tgz
 
 pushd "${CF_RELEASE_DIR}"
   mkdir -p bosh-lite/deployments
-  DIRECTOR_UUID=$(bosh2 -e clark-lite env --json | jq .Tables[0].Rows[0].uuid)
+  DIRECTOR_UUID=$(bosh2 -e "${ENVIRONMENT}" env --json | jq .Tables[0].Rows[0].uuid)
   ./scripts/generate_deployment_manifest \
   bosh-lite \
   <(echo "director_uuid: ${DIRECTOR_UUID}") \
-  ../deployments-routing/clark-lite/stubs/**/*.yml \
+  "../deployments-routing/${ENVIRONMENT}/stubs/**/*.yml" \
   > bosh-lite/deployments/cf.yml
 
-  bosh2 -n -e clark-lite -d cf-warden deploy bosh-lite/deployments/cf.yml
+  bosh2 -n -e "${ENVIRONMENT}" -d cf-warden deploy bosh-lite/deployments/cf.yml
 popd
-

@@ -7,33 +7,35 @@ source ~/.bashrc
 
 set -u
 
+ENVIRONMENT="${ENVIRONMENT:?"ENVIRONMENT not set"}"
+
 pushd deployments-routing
- ./scripts/bosh-login clark-lite
+ ./scripts/bosh-login "${ENVIRONMENT}"
 popd
 
-bosh2 -e clark-lite ur "${CF_ROUTING_RELEASE_TARBALL_DIR}"/routing-*.tgz
+bosh2 -e "${ENVIRONMENT}" ur "${CF_ROUTING_RELEASE_TARBALL_DIR}/routing-*.tgz"
 
-bosh2 -e clark-lite -d cf-warden manifest > /tmp/cf.yml
+bosh2 -e "${ENVIRONMENT}" -d cf-warden manifest > /tmp/cf.yml
 CF_RELEASE_MANIFEST=/tmp/cf.yml
 
-bosh2 -e clark-lite -d cf-warden-diego manifest > /tmp/diego.yml
+bosh2 -e "${ENVIRONMENT}" -d cf-warden-diego manifest > /tmp/diego.yml
 DIEGO_RELEASE_MANIFEST=/tmp/diego.yml
 
 
 pushd "${CF_ROUTING_RELEASE_DIR}"
   mkdir -p bosh-lite/deployments
-  DIRECTOR_UUID=$(bosh2 -e clark-lite env --json | jq .Tables[0].Rows[0].uuid) \
+  DIRECTOR_UUID=$(bosh2 -e "${ENVIRONMENT}" env --json | jq .Tables[0].Rows[0].uuid) \
   ./scripts/generate-manifest \
   -c "${CF_RELEASE_MANIFEST}" \
   -d "${DIEGO_RELEASE_MANIFEST}" \
   -l bosh-lite/stubs/property-overrides.yml \
   -l bosh-lite/stubs/instance-count-overrides.yml \
   -l bosh-lite/stubs/persistent-disk-overrides.yml \
-  -l ../deployments-routing/clark-lite/stubs/routing/iaas-settings.yml \
+  -l "../deployments-routing/${ENVIRONMENT}/stubs/routing/iaas-settings.yml" \
   > bosh-lite/deployments/routing.yml
 popd
 
-bosh2 -n -e clark-lite -d cf-warden-routing deploy routing-release/bosh-lite/deployments/routing.yml
+bosh2 -n -e "${ENVIRONMENT}" -d cf-warden-routing deploy routing-release/bosh-lite/deployments/routing.yml
 
 # redeploy CF release
 pushd "${CF_RELEASE_DIR}"
@@ -42,7 +44,7 @@ pushd "${CF_RELEASE_DIR}"
   > /tmp/cf-updated.yml
 popd
 
-bosh2 -n -e clark-lite -d cf-warden deploy /tmp/cf-updated.yml
+bosh2 -n -e "${ENVIRONMENT}" -d cf-warden deploy /tmp/cf-updated.yml
 
-bosh2 -e clark-lite -d cf-warden-routing run-errand routing_acceptance_tests --keep-alive --download-logs
-bosh2 -e clark-lite -d cf-warden-routing run-errand routing_smoke_tests --keep-alive --download-logs
+bosh2 -e "${ENVIRONMENT}" -d cf-warden-routing run-errand routing_acceptance_tests --keep-alive --download-logs
+bosh2 -e "${ENVIRONMENT}" -d cf-warden-routing run-errand routing_smoke_tests --keep-alive --download-logs

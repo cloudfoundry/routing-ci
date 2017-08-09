@@ -20,3 +20,4 @@ params:
   CF_ROUTING_RELEASE_TARBALL_DIR: cf-routing-release-tarball
   CF_ROUTING_RELEASE_DIR: routing-release
   CF_RELEASE_DIR: cf-release
+  ENVIRONMENT:

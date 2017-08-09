@@ -7,16 +7,18 @@ source ~/.bashrc
 
 set -u
 
+ENVIRONMENT="${ENVIRONMENT:?"ENVIRONMENT not set"}"
+
 pushd deployments-routing
- ./scripts/bosh-login clark-lite
+ ./scripts/bosh-login "${ENVIRONMENT}"
 popd
 
-bosh2 -e clark-lite ur "${DIEGO_RELEASE_TARBALL_DIR}"/garden-runc-*.tgz
-bosh2 -e clark-lite ur "${DIEGO_RELEASE_TARBALL_DIR}"/cflinuxfs2-*.tgz
-bosh2 -e clark-lite ur "${DIEGO_RELEASE_TARBALL_DIR}"/diego-*.tgz
+bosh2 -e "${ENVIRONMENT}" ur "${DIEGO_RELEASE_TARBALL_DIR}/garden-runc-*.tgz"
+bosh2 -e "${ENVIRONMENT}" ur "${DIEGO_RELEASE_TARBALL_DIR}/cflinuxfs2-*.tgz"
+bosh2 -e "${ENVIRONMENT}" ur "${DIEGO_RELEASE_TARBALL_DIR}/diego-*.tgz"
 
 
-bosh2 -e clark-lite -d cf-warden manifest > /tmp/cf.yml
+bosh2 -e "${ENVIRONMENT}" -d cf-warden manifest > /tmp/cf.yml
 CF_RELEASE_MANIFEST=/tmp/cf.yml
 
 
@@ -34,4 +36,4 @@ pushd "${DIEGO_RELEASE_DIR}"
   > bosh-lite/deployments/diego.yml
 popd
 
-bosh2 -n -e clark-lite -d cf-warden-diego deploy diego-release-src/bosh-lite/deployments/diego.yml
+bosh2 -n -e "${ENVIRONMENT}" -d cf-warden-diego deploy diego-release-src/bosh-lite/deployments/diego.yml

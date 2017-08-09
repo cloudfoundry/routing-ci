@@ -19,3 +19,4 @@ run:
 params:
   CF_RELEASE_TARBALL_DIR: cf-release-tarball
   CF_RELEASE_DIR: cf-release
+  ENVIRONMENT:

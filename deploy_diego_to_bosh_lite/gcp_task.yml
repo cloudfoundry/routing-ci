@@ -18,3 +18,4 @@ run:
 params:
   DIEGO_RELEASE_TARBALL_DIR: diego-github-release
   DIEGO_RELEASE_DIR: diego-release-src
+  ENVIRONMENT:
