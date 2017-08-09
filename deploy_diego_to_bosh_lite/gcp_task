@@ -13,9 +13,9 @@ pushd deployments-routing
  ./scripts/bosh-login "${ENVIRONMENT}"
 popd
 
-bosh2 -e "${ENVIRONMENT}" ur "${DIEGO_RELEASE_TARBALL_DIR}/garden-runc-*.tgz"
-bosh2 -e "${ENVIRONMENT}" ur "${DIEGO_RELEASE_TARBALL_DIR}/cflinuxfs2-*.tgz"
-bosh2 -e "${ENVIRONMENT}" ur "${DIEGO_RELEASE_TARBALL_DIR}/diego-*.tgz"
+bosh2 -e "${ENVIRONMENT}" ur "${DIEGO_RELEASE_TARBALL_DIR}"/garden-runc-*.tgz
+bosh2 -e "${ENVIRONMENT}" ur "${DIEGO_RELEASE_TARBALL_DIR}"/cflinuxfs2-*.tgz
+bosh2 -e "${ENVIRONMENT}" ur "${DIEGO_RELEASE_TARBALL_DIR}"/diego-*.tgz
 
 
 bosh2 -e "${ENVIRONMENT}" -d cf-warden manifest > /tmp/cf.yml
