@@ -5,14 +5,19 @@ set -e -x
 source ~/.bashrc
 
 FINAL_VERSION=`cat rc-version/version`
+FINAL_RELEASE_TGZ="routing-${FINAL_VERSION}.tgz"
 
 root_dir=${PWD}
 RELEASE_DIR=${root_dir}/cf-routing-bosh-release
 OUTPUT_DIR=${root_dir}/release-checksum
-mkdir -p $OUTPUT_DIR
+CHECKSUM_FILE="${OUTPUT_DIR}/${FINAL_RELEASE_TGZ}.sha256"
 
-echo "calculating checksum"
-CHECKSUM_FILE=${OUTPUT_DIR}/routing-${FINAL_VERSION}.tgz.sha256
-sha256sum ${RELEASE_DIR}/routing-$FINAL_VERSION.tgz > $CHECKSUM_FILE
-echo "created sha file at ${CHECKSUM_FILE}"
-ls $OUTPUT_DIR
+mkdir -p ${OUTPUT_DIR}
+
+pushd "${RELEASE_DIR}"
+  echo "calculating checksum"
+  sha256sum "${FINAL_RELEASE_TGZ}" > "${CHECKSUM_FILE}"
+  cp "${CHECKSUM_FILE}" .
+  sha256sum -c "${FINAL_RELEASE_TGZ}.sha256"
+  echo "created sha file at ${CHECKSUM_FILE}"
+popd
