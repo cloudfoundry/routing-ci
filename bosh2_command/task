@@ -21,6 +21,7 @@ pushd $ENVIRONMENT_DIR
 	export BOSH_CLIENT
 	BOSH_CLIENT_SECRET=$(bbl director-password)
 	export BOSH_CLIENT_SECRET
+	export BOSH_DEPLOYMENT
 popd
 set -x
 
