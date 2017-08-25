@@ -117,6 +117,9 @@ RUN \
 RUN sed -i 's/peer/trust/' "$(find /etc/postgresql -name pg_hba.conf)" \
     && sed -i 's/md5/trust/' "$(find /etc/postgresql -name pg_hba.conf)"
 
+# Correct the Error: could not open temporary statistics file "/var/run/postgresql/9.3-main.pg_stat_tmp/global.tmp": No such file or directory
+RUN mkdir -p /var/run/postgresql/9.3-main.pg_stat_tmp
+RUN chown postgres.postgres /var/run/postgresql/9.3-main.pg_stat_tmp -R
 
 # bbl (not all dependencies have been included because we only are using certain bbl commands)
 RUN \
