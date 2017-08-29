@@ -15,6 +15,21 @@ popd
 
 bosh2 -e "${ENVIRONMENT}" ur "${CF_RELEASE_TARBALL_DIR}"/cf-*.tgz
 
+# discover routing-release SHA
+pushd routing-release
+  ROUTING_SHA="$(git rev-parse --short HEAD)"
+  local_git_remote="$PWD"
+popd
+
+# update cf-release/src/routing-release submodule to SHA
+pushd "${CF_RELEASE_DIR}/src/routing-release"
+  echo "Checking out routing release sha: $ROUTING_SHA"
+  git remote add local "$local_git_remote"
+  git fetch local
+  git checkout "$ROUTING_SHA"
+  ./scripts/update
+popd
+
 pushd "${CF_RELEASE_DIR}"
   mkdir -p bosh-lite/deployments
   DIRECTOR_UUID=$(bosh2 -e "${ENVIRONMENT}" env --json | jq .Tables[0].Rows[0].uuid)
