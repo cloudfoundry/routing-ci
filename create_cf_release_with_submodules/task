@@ -12,7 +12,8 @@ git_describe_output=$(git describe --long --tags)
 major=$(echo "${git_describe_output}" | cut -f1 -d- | cut -c 2-)
 trimmed_major=${major%.*}
 minor=$(echo "${git_describe_output}" | cut -f2 -d-)
-NEW_VERSION=$trimmed_major.$minor
+timestamp=$(date +%s)
+NEW_VERSION=$trimmed_major.$minor.$timestamp
 
 COMMIT_SHA=$(git rev-parse HEAD)
 
