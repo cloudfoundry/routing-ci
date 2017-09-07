@@ -5,12 +5,29 @@ set -ex
 # the unbound variables in things beyond our control.
 source ~/.bashrc
 
-set -u
+set -ue
+set -o pipefail
 
 root_dir="${PWD}"
 
 # Inputs
 OUTPUT_DIR="${root_dir}/${OUTPUT_DIR:?"OUTPUT_DIR must be provided"}"
+
+ENVIRONMENT_DIR=$PWD/deployments-routing/${ENVIRONMENT}
+
+set +x
+pushd $ENVIRONMENT_DIR
+	BOSH_CA_CERT="$(bbl director-ca-cert)"
+	export BOSH_CA_CERT
+	BOSH_ENVIRONMENT=$(bbl director-address)
+	export BOSH_ENVIRONMENT
+	BOSH_CLIENT=$(bbl director-username)
+	export BOSH_CLIENT
+	BOSH_CLIENT_SECRET=$(bbl director-password)
+	export BOSH_CLIENT_SECRET
+popd
+set -x
+FIRST_ROUTER_IP=$(bosh2 -d cf vms | grep ^router/ | awk '{print $4}' | head -n1)
 
 main() {
 
@@ -23,7 +40,7 @@ main() {
     properties:
       router:
         ciphers: ${CIPHERS}
-        ip: 10.0.16.12
+        ip: ${FIRST_ROUTER_IP}
         port: 443
     release: cipher-test
   lifecycle: errand
@@ -45,7 +62,7 @@ update:
   canary_watch_time: 5000-120000
   max_in_flight: 1
   serial: false
-  update_watch_time: 5000-120000" > $OUTPUT_DIR/cipher.yml
+  update_watch_time: 5000-120000" > "$OUTPUT_DIR/cipher.yml"
 }
 
 main
