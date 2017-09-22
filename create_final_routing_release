@@ -28,13 +28,8 @@ pushd ${CF_ROUTING_RELEASE_RC_DIR}
   git diff-index --quiet HEAD -- || ( echo "There are uncommitted changes! Investigate immediately." && exit 1 )
 
   echo "----- Create final release"
-  bosh -v
-  bosh --parallel 4 -n create release --with-tarball | tee ../create_release.out
-
-  tarball=$(grep 'Release tarball' ../create_release.out | cut -d ' ' -f4)
-  bosh -n finalize release ${tarball} --version $FINAL_VERSION
-
-  mv releases/routing/*.tgz $OUTPUT_DIR/routing-$FINAL_VERSION.tgz
+  bosh2 -v
+  bosh2 -n create-release --sha2 --final --version=$FINAL_VERSION --tarball=$OUTPUT_DIR/routing-$FINAL_VERSION.tgz
 
   echo "----- Update master and develop branches on origin"
 
