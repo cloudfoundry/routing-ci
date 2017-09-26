@@ -23,12 +23,14 @@ CF_RELEASE_MANIFEST=/tmp/cf.yml
 
 
 pushd "${DIEGO_RELEASE_DIR}"
+  bosh2 int -o ../deployments-routing/"${ENVIRONMENT}"/stub-ops/diego.yml manifest-generation/bosh-lite-stubs/property-overrides.yml > /tmp/property-overrides.yml
   mkdir -p bosh-lite/deployments
   ./scripts/generate-deployment-manifest \
   -c "${CF_RELEASE_MANIFEST}" \
   -i manifest-generation/bosh-lite-stubs/iaas-settings.yml \
-  -p manifest-generation/bosh-lite-stubs/property-overrides.yml \
-  -n manifest-generation/bosh-lite-stubs/instance-count-overrides.yml \
+  -p /tmp/property-overrides.yml \
+  -n ../deployments-routing/"${ENVIRONMENT}"/stubs/diego/instance-count-overrides.yml \
+  -R \
   -x \
   -Q \
   -s manifest-generation/bosh-lite-stubs/postgres/diego-sql.yml \
