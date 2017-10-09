@@ -61,7 +61,7 @@ RUN \
     debugger-ruby_core_source
 
 # Install go
-RUN curl https://storage.googleapis.com/golang/go1.8.3.linux-amd64.tar.gz | tar xvz -C /usr/local/
+RUN curl https://storage.googleapis.com/golang/go1.9.1.linux-amd64.tar.gz | tar xvz -C /usr/local/
 
 # Add golang environment variables
 ENV HOME /root
