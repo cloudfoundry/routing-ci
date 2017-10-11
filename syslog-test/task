@@ -6,7 +6,7 @@ pushd $PWD/deployments-routing
     ./scripts/bosh-login $ENVIRONMENT
     ./scripts/bosh-scp $ENVIRONMENT syslog_storer:/var/vcap/store/syslog_storer/syslog.log .
     set -x
-    grep "$(date -u +%Y-%m-%dT)$(($(date -u +%H)-1))\|$(date -u +%Y-%m-%dT%H)" syslog.log | grep "vcap.routing_api.stdout"
-    grep "$(date -u +%Y-%m-%dT)$(($(date -u +%H)-1))\|$(date -u +%Y-%m-%dT%H)" syslog.log | grep "vcap.gorouter.stdout"
-    grep "$(date -u +%Y-%m-%dT)$(($(date -u +%H)-1))\|$(date -u +%Y-%m-%dT%H)" syslog.log | grep "vcap.tcp_router.stdout"
+    grep "$(date -u +%Y-%m-%dT)$(($(date -u +%H)-1))\|$(date -u +%Y-%m-%dT%H)" syslog.log | grep -m 1 "vcap.routing_api.stdout"
+    grep "$(date -u +%Y-%m-%dT)$(($(date -u +%H)-1))\|$(date -u +%Y-%m-%dT%H)" syslog.log | grep -m 1 "vcap.gorouter.stdout"
+    grep "$(date -u +%Y-%m-%dT)$(($(date -u +%H)-1))\|$(date -u +%Y-%m-%dT%H)" syslog.log | grep -m 1 "vcap.tcp_router.stdout"
 popd
