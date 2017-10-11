@@ -30,7 +30,6 @@ pushd cf-release-dev
 
   echo "--- SETUP GIT HOOKS ----"
   ./scripts/test
-  ./scripts/unused_packages
 
   echo "----- COMMIT -----"
   ./scripts/commit_with_shortlog
