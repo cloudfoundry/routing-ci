@@ -1,0 +1,38 @@
+#!/bin/bash
+set -eu -o pipefail
+
+: "${SSH_DESTINATION_CIDR:="10.0.0.0/8"}"
+
+ENVIRONMENT="${ENVIRONMENT:?"ENVIRONMENT not set"}"
+
+export GOPATH="${PWD}"
+export PATH="${PATH}:${GOPATH}/bin"
+
+pushd deployments-routing > /dev/null
+  eval "$(scripts/get-bbr-config "${ENVIRONMENT}")"
+popd > /dev/null
+
+pushd bbr-binary-release
+  tar xvf -- *.tar
+  build_path="$(pwd)/releases/bbr"
+  export BBR_BUILD_PATH=${build_path}
+popd
+
+eval "$(ssh-agent)"
+
+rm -f ~/.gitconfig
+echo "${BOSH_GW_PRIVATE_KEY_CONTENTS}" > ssh.pem
+chmod 0400 ssh.pem
+ssh-add ssh.pem
+
+sshuttle -r "${BOSH_GW_USER}@${BOSH_GW_HOST}" "${SSH_DESTINATION_CIDR}" --daemon -e 'ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
+
+sleep 5
+
+cert_path="$(pwd)/bosh.cert"
+echo "${BOSH_CA_CERT}" > "${cert_path}"
+export BOSH_CERT_PATH="${cert_path}"
+
+pushd "src/github.com/cloudfoundry-incubator/disaster-recovery-acceptance-tests" > /dev/null
+  ./scripts/run_acceptance_tests.sh
+popd > /dev/null
