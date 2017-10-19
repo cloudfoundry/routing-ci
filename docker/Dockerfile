@@ -161,3 +161,10 @@ RUN set -ex \
 
 # install sshuttle
 RUN pip install sshuttle
+
+# install glide
+RUN \
+  add-apt-repository ppa:masterminds/glide && \
+  apt-get update && \
+  apt-get install glide && \
+  apt-get clean
