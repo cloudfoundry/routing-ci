@@ -39,6 +39,8 @@ if [ -n "${BOSH_CA_CERT}" ]; then
   echo "${BOSH_CA_CERT}" > "${BOSH_CERT_PATH}"
 fi
 
+export FOCUSED_SUITE_NAME=cf-routing
+
 echo "Running DRATs..."
 pushd "src/github.com/cloudfoundry-incubator/disaster-recovery-acceptance-tests" > /dev/null
   ./scripts/run_acceptance_tests.sh
