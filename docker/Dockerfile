@@ -158,3 +158,6 @@ RUN set -ex \
     && service mysql restart \
     && echo 'CREATE DATABASE routing_api_test;' | mysql -u root -ppassword \
     && rm -rf /tmp/* /var/tmp/* /var/run/mysqld/* /var/lib/mysql/tmp/*
+
+# install sshuttle
+RUN pip install sshuttle
