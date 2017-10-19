@@ -159,12 +159,16 @@ RUN set -ex \
     && echo 'CREATE DATABASE routing_api_test;' | mysql -u root -ppassword \
     && rm -rf /tmp/* /var/tmp/* /var/run/mysqld/* /var/lib/mysql/tmp/*
 
-# install sshuttle
-RUN pip install sshuttle
+# install sshuttle and iptables
+RUN \
+  apt-get update && \
+  apt-get -y install iptables && \
+  apt-get clean && \
+  pip install sshuttle
 
 # install glide
 RUN \
   add-apt-repository ppa:masterminds/glide && \
   apt-get update && \
-  apt-get install glide && \
+  apt-get -y install glide && \
   apt-get clean
