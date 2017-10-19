@@ -3,7 +3,7 @@ platform: linux
 
 image_resource:
   type: docker-image
-  source: {repository: cloudfoundrylondon/backup-and-restore}
+  source: {repository: cloudfoundry/cf-routing-pipeline}
 
 inputs:
 - name: disaster-recovery-acceptance-tests
