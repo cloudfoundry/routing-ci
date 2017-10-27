@@ -172,3 +172,8 @@ RUN \
   apt-get update && \
   apt-get -y install glide && \
   apt-get clean
+
+# install go dep
+RUN \
+    go get \
+        -u github.com/golang/dep/cmd/dep
