@@ -4,6 +4,8 @@ set -exu
 pushd $PWD/deployments-routing
     set +x
     ./scripts/bosh-login $ENVIRONMENT
+    ./scripts/bosh-exec batman syslog_storer 'sudo chmod a+w /var/vcap/store/syslog_storer/syslog.log; tail -n 100 /var/vcap/store/syslog_storer/syslog.log > /var/vcap/store/syslog_storer/syslog.log'
+    sleep 30
     ./scripts/bosh-scp $ENVIRONMENT syslog_storer:/var/vcap/store/syslog_storer/syslog.log .
     set -x
     grep "$(date -u +%Y-%m-%dT)$(($(date -u +%H)-1))\|$(date -u +%Y-%m-%dT%H)" syslog.log | grep -m 1 "vcap.routing_api.stdout"
