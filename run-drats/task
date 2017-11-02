@@ -40,7 +40,7 @@ if [ -n "${BOSH_CA_CERT}" ]; then
 fi
 
 export FOCUSED_SUITE_NAME=cf-routing
-export DEFAULT_TIMEOUT_MINS=30
+export DEFAULT_TIMEOUT_MINS=90
 
 echo "Running DRATs..."
 pushd "src/github.com/cloudfoundry-incubator/disaster-recovery-acceptance-tests" > /dev/null
