@@ -44,6 +44,6 @@ export DEFAULT_TIMEOUT_MINS=90
 
 echo "Running DRATs..."
 pushd "src/github.com/cloudfoundry-incubator/disaster-recovery-acceptance-tests" > /dev/null
-  ./scripts/run_acceptance_tests.sh
+  ./scripts/_run_acceptance_tests.sh
 popd > /dev/null
 echo "Successfully ran DRATs!"
