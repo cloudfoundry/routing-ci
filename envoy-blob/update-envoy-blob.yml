@@ -1,0 +1,21 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source: 
+    repository: cloudfoundry/cf-routing-pipeline
+
+inputs:
+- name: istio-release
+- name: routing-ci
+- name: envoy-binary
+
+outputs:
+- name: updated-istio-release 
+
+run: 
+  path: routing-ci/envoy-blob/update_envoy_blob
+
+params:
+  GCP_SERVICE_ACCOUNT_KEY:

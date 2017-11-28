@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -e -x
+
+cat > $PWD/istio-release/config/private.yml <<EOF
+---
+blobstore:
+  options:
+    json_key: |
+      $GCP_SERVICE_ACCOUNT_KEY
+EOF
+
