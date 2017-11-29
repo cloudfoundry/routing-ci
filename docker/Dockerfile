@@ -145,9 +145,9 @@ RUN \
 
 # Install bosh v2 cli
 RUN \
-  wget https://s3.amazonaws.com/bosh-cli-artifacts/bosh-cli-2.0.16-linux-amd64 && \
-  chmod +x bosh-cli-2.0.16-linux-amd64 && \
-  mv bosh-cli-2.0.16-linux-amd64 /usr/local/bin/bosh2
+  wget https://s3.amazonaws.com/bosh-cli-artifacts/bosh-cli-2.0.45-linux-amd64 && \
+  chmod +x bosh-cli-2.0.45-linux-amd64 && \
+  mv bosh-cli-2.0.45-linux-amd64 /usr/local/bin/bosh2
 
 # setup mysql database for testing, then stop and clean up
 RUN set -ex \
