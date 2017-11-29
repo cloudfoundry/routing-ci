@@ -2,7 +2,7 @@
 
 set -e -x
 
-FORMATTED_KEY="$(sed s/^/      / <(echo -e $GCP_SERVICE_ACCOUNT_KEY))"
+FORMATTED_KEY="$(sed 's/^/      /' <(echo -e $GCP_SERVICE_ACCOUNT_KEY))"
 cat > $PWD/istio-release/config/private.yml <<EOF
 ---
 blobstore:
