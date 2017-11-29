@@ -10,3 +10,17 @@ blobstore:
       $GCP_SERVICE_ACCOUNT_KEY
 EOF
 
+
+cd istio-release
+
+bosh2 sync-blobs
+old_envoy_version=$(ls -1 blobs/envoy-linux/envoy*.tgz | xargs basename | sed 's/envoy-\(.*\).tgz/\1/g')
+new_envoy_version=$(../envoy-binary/envoy --version | grep -vE '^$' | awk '{print $3}' | cut -d/ -f1)
+
+bosh2 remove-blob envoy-linux/envoy-${old_envoy_version}.tgz
+bosh2 add-blob ../envoy-binary/envoy.tgz envoy-linux/envoy-${new_envoy_version}.tgz
+sed -i "s/envoy.*\.tgz/envoy-${new_envoy_version}\.tgz/g" packages/envoy/*
+bosh2 blobs
+bosh2 upload-blobs
+bosh2 blobs
+git --no-pager diff config/ packages/
