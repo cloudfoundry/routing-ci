@@ -11,20 +11,22 @@ blobstore:
 $FORMATTED_KEY
 EOF
 
-cd istio-release
+pushd istio-release
+  bosh2 sync-blobs
+  old_envoy_version=$(ls -1 blobs/envoy-linux/envoy*.tgz | xargs basename | sed 's/envoy-\(.*\).tgz/\1/g')
+  new_envoy_version=$(../envoy-binary/envoy --version | grep -vE '^$' | awk '{print $3}' | cut -d/ -f1)
 
-bosh2 sync-blobs
-old_envoy_version=$(ls -1 blobs/envoy-linux/envoy*.tgz | xargs basename | sed 's/envoy-\(.*\).tgz/\1/g')
-new_envoy_version=$(../envoy-binary/envoy --version | grep -vE '^$' | awk '{print $3}' | cut -d/ -f1)
+  bosh2 remove-blob envoy-linux/envoy-${old_envoy_version}.tgz
+  bosh2 add-blob ../envoy-binary/envoy.tgz envoy-linux/envoy-${new_envoy_version}.tgz
+  sed -i "s/envoy.*\.tgz/envoy-${new_envoy_version}\.tgz/g" packages/envoy/*
+  bosh2 blobs
+  bosh2 upload-blobs
+  bosh2 blobs
+  git --no-pager diff config/ packages/
+  git add config/blobs.yml
+  git config user.email "cf-routing-eng@pivotal.io"
+  git config user.name "Routing CI (Automated)"
+  git commit -m "Update envoy blob"
+popd
 
-bosh2 remove-blob envoy-linux/envoy-${old_envoy_version}.tgz
-bosh2 add-blob ../envoy-binary/envoy.tgz envoy-linux/envoy-${new_envoy_version}.tgz
-sed -i "s/envoy.*\.tgz/envoy-${new_envoy_version}\.tgz/g" packages/envoy/*
-bosh2 blobs
-bosh2 upload-blobs
-bosh2 blobs
-git --no-pager diff config/ packages/
-git add config/blobs.yml
-git config user.email "cf-routing-eng@pivotal.io"
-git config user.name "Routing CI (Automated)"
-git commit -m "Update envoy blob"
+cp -R istio-release updated-istio-release
