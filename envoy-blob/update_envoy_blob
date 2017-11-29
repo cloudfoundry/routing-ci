@@ -18,7 +18,7 @@ pushd istio-release
 
   bosh2 remove-blob envoy-linux/envoy-${old_envoy_version}.tgz
   bosh2 add-blob ../envoy-binary/envoy.tgz envoy-linux/envoy-${new_envoy_version}.tgz
-  sed -i "s/envoy.*\.tgz/envoy-${new_envoy_version}\.tgz/g" packages/envoy/*
+  sed -i "s/envoy-linux\/envoy.*\.tgz/envoy-linux\/envoy-${new_envoy_version}\.tgz/g" packages/envoy/*
   bosh2 blobs
   bosh2 upload-blobs
   bosh2 blobs
