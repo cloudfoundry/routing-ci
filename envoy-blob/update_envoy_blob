@@ -27,5 +27,5 @@ pushd istio-release
   git config user.email "cf-routing-eng@pivotal.io"
   git config user.name "Routing CI (Automated)"
   git commit -m "Update envoy blob"
-  cp -a ./* ../updated-istio-release/
+  cp -a ./ ../updated-istio-release/
 popd
