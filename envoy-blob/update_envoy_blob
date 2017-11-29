@@ -24,3 +24,5 @@ bosh2 blobs
 bosh2 upload-blobs
 bosh2 blobs
 git --no-pager diff config/ packages/
+git add config/blobs.yml
+git commit -m "Update envoy blob"
