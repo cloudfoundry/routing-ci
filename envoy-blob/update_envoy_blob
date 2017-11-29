@@ -25,4 +25,6 @@ bosh2 upload-blobs
 bosh2 blobs
 git --no-pager diff config/ packages/
 git add config/blobs.yml
+git config user.email "cf-routing-eng@pivotal.io"
+git config user.name "Routing CI (Automated)"
 git commit -m "Update envoy blob"
