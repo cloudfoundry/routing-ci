@@ -1,0 +1,95 @@
+---
+- type: replace
+  path: /releases/-
+  value:
+    name: bpm
+    sha1: f2bd126b17b3591160f501d88d79ccf0aba1ae54
+    url: https://bosh.io/d/github.com/cloudfoundry-incubator/bpm-release?v=0.2.0
+    version: 0.2.0
+
+- type: replace
+  path: /releases/-
+  value:
+    name: istio
+    version: latest
+
+- type: replace
+  path: /instance_groups/name=istio?
+  value:
+    name: istio
+    networks:
+    - name: default
+    stemcell: default
+    vm_type: small
+    azs:
+    - z1
+    - z2
+    instances: 1
+    jobs:
+    - consumes:
+        consul_client:
+          from: consul_client_link
+        consul_common:
+          from: consul_common_link
+        consul_server: nil
+      name: consul_agent
+      release: consul
+    - name: bpm
+      release: bpm
+    - name: pilot-discovery
+      release: istio
+      properties:
+        copilot:
+          server_ca_cert: "((copilot.ca))"
+          client_cert: "((pilot.certificate))"
+          client_key: "((pilot.private_key))"
+        bpm:
+          enable: true
+    - name: copilot
+      release: istio
+      properties:
+        copilot:
+          client_ca_cert: "((pilot.ca))"
+          server_cert: "((copilot.certificate))"
+          server_key: "((copilot.private_key))"
+          bbs:
+            server_ca_cert: "((diego_bbs_client.ca))"
+            client_cert: "((diego_bbs_client.certificate))"
+            client_key: "((diego_bbs_client.private_key))"
+        bpm:
+          enable: true
+
+- type: replace
+  path: /variables?/-
+  value:
+    name: copilot_ca
+    type: certificate
+    options:
+      is_ca: true
+      common_name: copilotCA
+
+- type: replace
+  path: /variables?/-
+  value:
+    name: copilot
+    type: certificate
+    options:
+      ca: copilot_ca
+      common_name: copilot
+      extended_key_usage:
+      - server_auth
+      alternative_names:
+      - 127.0.0.1
+
+- type: replace
+  path: /variables?/-
+  value:
+    name: pilot
+    type: certificate
+    options:
+      ca: copilot_ca
+      common_name: pilot
+      extended_key_usage:
+      - client_auth
+      alternative_names:
+      - 127.0.0.1
