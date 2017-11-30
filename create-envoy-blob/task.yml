@@ -3,8 +3,8 @@ platform: linux
 
 image_resource:
   type: docker-image
-  source: 
-    repository: envoyproxy/envoy 
+  source:
+    repository: envoyproxy/envoy
 
 inputs:
 - name: routing-ci
@@ -13,7 +13,5 @@ inputs:
 outputs:
 - name: envoy-binary
 
-run: 
-  path: routing-ci/envoy-blob/create_envoy_blob 
-
-
+run:
+  path: routing-ci/create-envoy-blob/task

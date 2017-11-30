@@ -15,7 +15,7 @@ outputs:
 - name: updated-istio-release
 
 run:
-  path: routing-ci/envoy-blob/update_envoy_blob
+  path: routing-ci/update-envoy-blob/task
 
 params:
   GCP_SERVICE_ACCOUNT_KEY:
