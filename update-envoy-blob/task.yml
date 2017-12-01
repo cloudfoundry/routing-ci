@@ -18,4 +18,5 @@ run:
   path: routing-ci/update-envoy-blob/task
 
 params:
-  GCP_SERVICE_ACCOUNT_KEY:
+  AWS_BLOBSTORE_SECRET_ACCESS_KEY:
+  AWS_BLOBSTORE_ACCESS_KEY_ID:
