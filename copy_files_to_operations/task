@@ -4,4 +4,4 @@ set -e -x -u
 
 cp -r cf-deployment/* modified-cf-deployment
 cp -r routing-ci/operations/* modified-cf-deployment/operations/
-cp deployments-routing/${ENVIRONMENT}/operations/*.yml modified-cf-deployment/operations/
+cp -r deployments-routing/${ENVIRONMENT}/operations/ modified-cf-deployment/operations/
