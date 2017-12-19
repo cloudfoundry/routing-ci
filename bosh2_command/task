@@ -7,7 +7,7 @@ if [ -n "$LOGS_DIR" ]; then
   mkdir $LOGS_DIR
 fi
 
-ENVIRONMENT_DIR=$PWD/deployments-routing/${ENVIRONMENT}
+ENVIRONMENT_DIR=$PWD/deployments-routing/${ENVIRONMENT}/bbl-state
 
 num_runs=${NUMBER_OF_RUNS:-1}
 
