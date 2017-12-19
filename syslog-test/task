@@ -11,3 +11,5 @@ pushd "${PWD}/deployments-routing"
     grep "$(date -u +%Y-%m-%dT)$(($(date -u +%H)-1))\|$(date -u +%Y-%m-%dT%H)" syslog.log | grep -m 1 "vcap.gorouter.stdout"
     grep "$(date -u +%Y-%m-%dT)$(($(date -u +%H)-1))\|$(date -u +%Y-%m-%dT%H)" syslog.log | grep -m 1 "vcap.tcp_router.stdout"
 popd
+# this is to kill ssh tunnel that bbl establishes TODO: remove once bbl fixes this
+killall ssh
