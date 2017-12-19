@@ -57,7 +57,6 @@ ENV PATH $PATH:/home/root/.gem/ruby/${DOCKER_RUBY_VERSION}/bin:/opt/rubies/ruby-
 RUN \
   /opt/rubies/ruby-${DOCKER_RUBY_VERSION}/bin/gem install --no-rdoc --no-ri \
     bundler \
-    bosh_cli \
     debugger-ruby_core_source
 
 # Install go
@@ -123,11 +122,9 @@ RUN chown postgres.postgres /var/run/postgresql/9.3-main.pg_stat_tmp -R
 
 # bbl (not all dependencies have been included because we only are using certain bbl commands)
 RUN \
-  wget https://github.com/cloudfoundry/bosh-bootloader/releases/download/v3.2.3/bbl-v3.2.3_linux_x86-64 -P /tmp && \
+  wget https://github.com/cloudfoundry/bosh-bootloader/releases/download/v5.7.7/bbl-v5.7.7_linux_x86-64 -P /tmp && \
   mv /tmp/bbl-* /usr/local/bin/bbl && \
-  cd /usr/local/bin && \
-  echo "5a9bac2994011439ed2d17aeb67d6316ac638ada bbl" | sha1sum -c - && \
-  chmod +x bbl
+  chmod +x /usr/local/bin/bbl
 
 RUN \
   wget https://github.com/cloudfoundry-incubator/routing-api-cli/releases/download/2.9.0/rtr-linux-amd64.tgz && \
@@ -147,7 +144,8 @@ RUN \
 RUN \
   wget https://s3.amazonaws.com/bosh-cli-artifacts/bosh-cli-2.0.45-linux-amd64 && \
   chmod +x bosh-cli-2.0.45-linux-amd64 && \
-  mv bosh-cli-2.0.45-linux-amd64 /usr/local/bin/bosh2
+  mv bosh-cli-2.0.45-linux-amd64 /usr/local/bin/bosh2 && \
+  cp /usr/local/bin/bosh2 /usr/local/bin/bosh
 
 # setup mysql database for testing, then stop and clean up
 RUN set -ex \
