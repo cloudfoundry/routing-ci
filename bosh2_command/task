@@ -7,12 +7,12 @@ if [ -n "$LOGS_DIR" ]; then
   mkdir $LOGS_DIR
 fi
 
-ENVIRONMENT_DIR=$PWD/deployments-routing/${ENVIRONMENT}
+BBL_STATE_DIR=$PWD/deployments-routing/${ENVIRONMENT}/bbl-state
 
 num_runs=${NUMBER_OF_RUNS:-1}
 
 set +x
-pushd $ENVIRONMENT_DIR
+pushd $BBL_STATE_DIR
   eval "$(bbl print-env)"
 popd
 set -x
