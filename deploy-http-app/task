@@ -5,14 +5,15 @@ set -ex
 # the unbound variables in things beyond our control.
 source ~/.bashrc
 
-ENVIRONMENT_DIR=$PWD/deployments-routing/
+ENVIRONMENT_DIR="${PWD}/deployments-routing/"
 
 pushd "${ENVIRONMENT_DIR}"
-  ./scripts/bosh-login "${ENVIRONMENT}"
+  source ./scripts/script_helpers.sh
+  bosh_login "${ENVIRONMENT}"
 popd
 
 pushd zero-downtime
     bosh create-release
-    bosh -e ${ENVIRONMENT} ur --rebase
-    bosh -e ${ENVIRONMENT} -d zero-downtime -n deploy ${ENVIRONMENT_DIR}/${ENVIRONMENT}/zero_downtime/zero_downtime.yml --no-redact
+    bosh -e "${ENVIRONMENT}" ur --rebase
+    bosh -e "${ENVIRONMENT}" -d zero-downtime -n deploy "${ENVIRONMENT_DIR}/${ENVIRONMENT}/zero_downtime/zero_downtime.yml" --no-redact
 popd
