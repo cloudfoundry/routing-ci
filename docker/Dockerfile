@@ -60,7 +60,8 @@ RUN \
     debugger-ruby_core_source
 
 # Install go
-RUN curl https://storage.googleapis.com/golang/go1.9.1.linux-amd64.tar.gz | tar xvz -C /usr/local/
+ENV GO_VERSION 1.9.1
+RUN curl https://storage.googleapis.com/golang/go${GO_VERSION}.linux-amd64.tar.gz | tar xvz -C /usr/local/
 
 # Add golang environment variables
 ENV HOME /root
@@ -121,8 +122,9 @@ RUN mkdir -p /var/run/postgresql/9.3-main.pg_stat_tmp
 RUN chown postgres.postgres /var/run/postgresql/9.3-main.pg_stat_tmp -R
 
 # bbl (not all dependencies have been included because we only are using certain bbl commands)
+ENV BBL_VERSION 5.9.0
 RUN \
-  wget https://github.com/cloudfoundry/bosh-bootloader/releases/download/v5.7.7/bbl-v5.7.7_linux_x86-64 -P /tmp && \
+  wget https://github.com/cloudfoundry/bosh-bootloader/releases/download/v${BBL_VERSION}/bbl-v${BBL_VERSION}_linux_x86-64 -P /tmp && \
   mv /tmp/bbl-* /usr/local/bin/bbl && \
   chmod +x /usr/local/bin/bbl
 
