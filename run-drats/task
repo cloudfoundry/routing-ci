@@ -22,10 +22,7 @@ rm -f ~/.gitconfig
 
 tmpdir="$( mktemp -d /tmp/run-drats.XXXXXXXXXX )"
 
-ssh_key="${tmpdir}/bosh.pem"
-echo "${BOSH_GW_PRIVATE_KEY_CONTENTS}" > "${ssh_key}"
-chmod 600 "${ssh_key}"
-sshuttle -e "ssh -i ${ssh_key} -o 'StrictHostKeyChecking no' -o 'UserKnownHostsFile /dev/null'" -r "${BOSH_GW_USER}@${BOSH_GW_HOST}" 10.0.0.0/8 &
+sshuttle -e "ssh -i ${JUMPBOX_PRIVATE_KEY} -o 'StrictHostKeyChecking no' -o 'UserKnownHostsFile /dev/null'" -r "${BOSH_GW_USER}@${BOSH_GW_HOST}" 10.0.0.0/8 &
 tunnel_pid="$!"
 
 cleanup() {
