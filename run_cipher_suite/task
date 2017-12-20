@@ -12,7 +12,8 @@ ENVIRONMENT_DIR=$PWD/deployments-routing/
 STEMCELL_PATH=$(ls $STEMCELL_REGEX)
 
 pushd "${ENVIRONMENT_DIR}"
-  ./scripts/bosh-login "${ENVIRONMENT}"
+  source ./scripts/script_helpers.sh
+  bosh_login "${ENVIRONMENT}"
 popd
 
 bosh2 -n -e "${ENVIRONMENT}" us "${STEMCELL_PATH}"

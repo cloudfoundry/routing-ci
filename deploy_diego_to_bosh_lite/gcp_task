@@ -10,7 +10,8 @@ set -u
 ENVIRONMENT="${ENVIRONMENT:?"ENVIRONMENT not set"}"
 
 pushd deployments-routing
- ./scripts/bosh-login "${ENVIRONMENT}"
+  source ./scripts/script_helpers.sh
+  bosh_login "${ENVIRONMENT}"
 popd
 
 bosh2 -e "${ENVIRONMENT}" ur "${DIEGO_RELEASE_TARBALL_DIR}"/garden-runc-*.tgz
