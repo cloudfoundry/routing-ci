@@ -60,6 +60,25 @@
           enable: true
 
 - type: replace
+  path: /instance_groups/name=envoy-proxy?
+  value:
+    name: envoy-proxy
+    networks:
+    - name: default
+    stemcell: default
+    vm_type: small
+    azs:
+    - z1
+    - z2
+    instances: 1
+    jobs:
+    - name: bpm
+      release: bpm
+    - name: envoy
+      release: istio
+      properties: {}
+
+- type: replace
   path: /variables?/-
   value:
     name: copilot_ca
