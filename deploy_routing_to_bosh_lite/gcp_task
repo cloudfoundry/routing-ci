@@ -14,7 +14,7 @@ pushd deployments-routing
   bosh_login "${ENVIRONMENT}"
 popd
 
-bosh2 -e "${ENVIRONMENT}" ur "${CF_ROUTING_RELEASE_TARBALL_DIR}"/routing-*.tgz
+bosh2 -e "${ENVIRONMENT}" ur "${CF_ROUTING_RELEASE_TARBALL_DIR}"/*.tgz
 
 bosh2 -e "${ENVIRONMENT}" -d cf-warden manifest > /tmp/cf.yml
 CF_RELEASE_MANIFEST=/tmp/cf.yml
