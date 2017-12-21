@@ -19,7 +19,7 @@ pushd "${RELEASE_DIR}"
   version=$trimmed_major.$patch+$SHA
 
   bosh -v
-  bosh --parallel 4 -n create-release --version ${version} --tarball=release.tgz --force
+  bosh --parallel 4 -n create-release --version ${version} --tarball=release-${version}.tgz --force
 
-  mv release.tgz ${OUTPUT_DIR}/
+  mv *.tgz ${OUTPUT_DIR}/
 popd
