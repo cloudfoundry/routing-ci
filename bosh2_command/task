@@ -21,6 +21,6 @@ export BOSH_DEPLOYMENT="${DEPLOYMENT:-cf}"
 
 for ((i=0; i<${num_runs}; i++)); do
     echo "Starting run ${i}"
-    bosh "${COMMAND}"
+    bosh ${COMMAND}
     echo "Finished run ${i}"
 done

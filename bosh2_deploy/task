@@ -10,7 +10,10 @@ fi
 
 STEMCELL_PATH="$(ls ${STEMCELL_REGEX})"
 
+set +x
 bosh_login "${ENVIRONMENT}"
+set -x
+
 export BOSH_DEPLOYMENT="${DEPLOYMENT:-cf}"
 bosh -n upload-stemcell "${STEMCELL_PATH}"
 
