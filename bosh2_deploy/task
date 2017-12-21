@@ -8,7 +8,7 @@ if [ -n "${LOGS_DIR}" ]; then
   mkdir "${LOGS_DIR}"
 fi
 
-STEMCELL_PATH="$(ls "${STEMCELL_REGEX}")"
+STEMCELL_PATH="$(ls ${STEMCELL_REGEX})"
 
 bosh_login "${ENVIRONMENT}"
 export BOSH_DEPLOYMENT="${DEPLOYMENT:-cf}"
