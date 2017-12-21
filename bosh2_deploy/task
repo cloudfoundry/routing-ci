@@ -2,36 +2,24 @@
 set -e -x
 
 source ~/.bashrc
+source "${PWD}/deployments-routing/scripts/script_helpers.sh"
 
-if [ -n "$LOGS_DIR" ]; then
-  mkdir $LOGS_DIR
+if [ -n "${LOGS_DIR}" ]; then
+  mkdir "${LOGS_DIR}"
 fi
 
-ENVIRONMENT_DIR=$PWD/deployments-routing/${ENVIRONMENT}
-STEMCELL_PATH=$(ls $STEMCELL_REGEX)
+STEMCELL_PATH="$(ls "${STEMCELL_REGEX}")"
 
-set +x
-pushd $ENVIRONMENT_DIR
-	BOSH_CA_CERT="$(bbl director-ca-cert)"
-	export BOSH_CA_CERT
-	BOSH_ENVIRONMENT=$(bbl director-address)
-	export BOSH_ENVIRONMENT
-	BOSH_CLIENT=$(bbl director-username)
-	export BOSH_CLIENT
-	BOSH_CLIENT_SECRET=$(bbl director-password)
-	export BOSH_CLIENT_SECRET
-popd
-set -x
+bosh_login "${ENVIRONMENT}"
+export BOSH_DEPLOYMENT="${DEPLOYMENT:-cf}"
+bosh -n upload-stemcell "${STEMCELL_PATH}"
 
-
-bosh -n -e $BOSH_ENVIRONMENT us $STEMCELL_PATH
-
-IFS=', ' read -r -a array <<< $RELEASES_DIR
+IFS=', ' read -r -a array <<< "${RELEASES_DIR}"
 
 for element in ${array[@]}
 do
-  RELEASE_PATH=$(ls $element)
-  bosh -n -e $BOSH_ENVIRONMENT ur $RELEASE_PATH
+  RELEASE_PATH="$(ls "${element}")"
+  bosh -n upload-release "${RELEASE_PATH}"
 done
 
-bosh -n -e $BOSH_ENVIRONMENT -d $BOSH_DEPLOYMENT deploy ${MANIFEST}
+bosh -n deploy "${MANIFEST}"

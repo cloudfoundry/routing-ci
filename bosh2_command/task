@@ -2,24 +2,19 @@
 set -e -x
 
 source ~/.bashrc
+source "${PWD}/deployments-routing/scripts/script_helpers.sh"
 
-if [ -n "$LOGS_DIR" ]; then
-  mkdir $LOGS_DIR
+if [ -n "${LOGS_DIR}" ]; then
+  mkdir "${LOGS_DIR}"
 fi
 
-BBL_STATE_DIR=$PWD/deployments-routing/${ENVIRONMENT}/bbl-state
+num_runs="${NUMBER_OF_RUNS:-1}"
 
-num_runs=${NUMBER_OF_RUNS:-1}
-
-set +x
-pushd $BBL_STATE_DIR
-  eval "$(bbl print-env)"
-popd
-set -x
-
+bosh_login "${ENVIRONMENT}"
+export BOSH_DEPLOYMENT="${DEPLOYMENT:-cf}"
 
 for ((i=0; i<${num_runs}; i++)); do
     echo "Starting run ${i}"
-    bosh -e $BOSH_ENVIRONMENT -d $BOSH_DEPLOYMENT $COMMAND
+    bosh "${COMMAND}"
     echo "Finished run ${i}"
 done
