@@ -11,6 +11,12 @@ fi
 num_runs="${NUMBER_OF_RUNS:-1}"
 
 bosh_login "${ENVIRONMENT}"
+
+function cleanup() {
+  pkill ssh || true
+}
+trap 'cleanup' EXIT
+
 export BOSH_DEPLOYMENT="${DEPLOYMENT:-cf}"
 
 for ((i=0; i<${num_runs}; i++)); do
