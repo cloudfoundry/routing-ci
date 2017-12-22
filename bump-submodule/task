@@ -26,14 +26,17 @@ pushd needs-bump
     git checkout "${SHA}"
   popd
 
-  COMMIT_MSG="bump ${SUBMODULE_PATH}
+  if git diff-index --quiet HEAD --
+  then
+   echo "no changes in the parent repo, no commit necessary"
+  else
+    echo "changes detected, will commit..."
+    git add .
+    git commit -m "bump ${SUBMODULE_PATH}
 
 $(git diff --submodule)"
-
-  git add .
-  git commit -m "${COMMIT_MSG}"
+    git log -1 --color | cat
+  fi
 popd
 
 git clone needs-bump bumped
-cd bumped
-git log -1 --color | cat
