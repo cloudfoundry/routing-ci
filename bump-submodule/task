@@ -34,7 +34,7 @@ pushd needs-bump
     git add .
     git commit -m "bump ${SUBMODULE_PATH}
 
-$(git diff --submodule)"
+$(git diff --cached --submodule)"
     git log -1 --color | cat
   fi
 popd
