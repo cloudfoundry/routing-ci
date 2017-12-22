@@ -7,13 +7,6 @@ if [ -z "$SUBMODULE_PATH" ]; then
   exit 1
 fi
 
-submodule_log () {
-  git submodule foreach --quiet 'echo bump $name'
-  echo
-  git diff --cached --submodule
-}
-
-
 # discover the SHA that we want to bump to
 pushd submodule-latest
   SHA="$(git rev-parse HEAD)"
@@ -31,8 +24,13 @@ pushd needs-bump
     git fetch local
     git checkout "${SHA}"
   popd
+
+  COMMIT_MSG="bump ${SUBMODULE_PATH}
+
+$(git diff --submodule)"
+
   git add .
-  git commit -m "$( submodule_log )"
+  git commit -m "${COMMIT_MSG}"
 popd
 git clone needs-bump bumped
 cd bumped
