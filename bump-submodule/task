@@ -1,5 +1,5 @@
 #!/bin/bash
-set -exu
+set -eu
 set -o pipefail
 
 if [ -z "$SUBMODULE_PATH" ]; then
@@ -19,6 +19,7 @@ pushd needs-bump
   git config user.email "${GIT_COMMIT_EMAIL}"
 
   git checkout "${BRANCH}"
+
   pushd "${SUBMODULE_PATH}"
     git remote add local "${REMOTE}"
     git fetch local
@@ -32,6 +33,7 @@ $(git diff --submodule)"
   git add .
   git commit -m "${COMMIT_MSG}"
 popd
+
 git clone needs-bump bumped
 cd bumped
 git log -1 --color | cat
