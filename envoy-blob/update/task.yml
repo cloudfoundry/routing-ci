@@ -9,13 +9,13 @@ image_resource:
 inputs:
 - name: istio-release
 - name: routing-ci
-- name: envoy-binary
+- name: envoy-tarball
 
 outputs:
 - name: updated-istio-release
 
 run:
-  path: routing-ci/update-envoy-blob/task
+  path: routing-ci/envoy-blob/update/task
 
 params:
   AWS_BLOBSTORE_SECRET_ACCESS_KEY:

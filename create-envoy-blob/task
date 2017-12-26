@@ -1,8 +1,0 @@
-#!/bin/bash
-set -e -x
-
-mkdir -p $PWD/envoy-binary
-cp /usr/local/bin/envoy $PWD/envoy-binary/
-pushd envoy-binary
-  tar -czf envoy.tgz envoy
-popd

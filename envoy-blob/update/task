@@ -1,6 +1,5 @@
 #!/bin/bash
-
-set -e -x
+set -euo pipefail
 
 cat > $PWD/istio-release/config/private.yml <<EOF
 ---
@@ -10,13 +9,13 @@ blobstore:
     access_key_id: ${AWS_BLOBSTORE_ACCESS_KEY_ID}
 EOF
 
+new_envoy_version="$(cat envoy-tarball/version)"
 pushd istio-release
   bosh2 sync-blobs
   old_envoy_version=$(ls -1 blobs/envoy-linux/envoy*.tgz | xargs basename | sed 's/envoy-\(.*\).tgz/\1/g')
-  new_envoy_version=$(../envoy-binary/envoy --version | grep -vE '^$' | awk '{print $3}' | cut -d/ -f1)
 
   bosh2 remove-blob envoy-linux/envoy-${old_envoy_version}.tgz
-  bosh2 add-blob ../envoy-binary/envoy.tgz envoy-linux/envoy-${new_envoy_version}.tgz
+  bosh2 add-blob ../envoy-tarball/envoy.tgz envoy-linux/envoy-${new_envoy_version}.tgz
   sed -i "s/envoy-linux\/envoy.*\.tgz/envoy-linux\/envoy-${new_envoy_version}\.tgz/g" packages/envoy/*
   bosh2 blobs
   bosh2 upload-blobs
@@ -25,6 +24,6 @@ pushd istio-release
   git add config/blobs.yml packages/envoy
   git config user.email "cf-routing-eng@pivotal.io"
   git config user.name "Routing CI (Automated)"
-  git commit -m "Update envoy blob"
+  git commit -m "Update envoy blob to ${new_envoy_version}"
   cp -a ./ ../updated-istio-release/
 popd
