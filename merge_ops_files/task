@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -e -x -u
+
+cp -R cf-deployment/operations/* merged-operations/
+cp -R routing-ci/operations/* merged-operations/
+cp -R deployments-routing/${ENVIRONMENT}/operations/* merged-operations/

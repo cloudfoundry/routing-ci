@@ -12,10 +12,10 @@ inputs:
   - name: routing-ci
 
 outputs:
-  - name: modified-cf-deployment
+  - name: merged-operations
 
 params:
   ENVIRONMENT:
 
 run:
-  path: routing-ci/copy_files_to_operations/task
+  path: routing-ci/merge_ops_files/task

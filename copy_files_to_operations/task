@@ -1,7 +1,0 @@
-#!/bin/bash
-
-set -e -x -u
-
-cp -R cf-deployment/* modified-cf-deployment
-cp -R routing-ci/operations/* modified-cf-deployment/operations/
-cp -R deployments-routing/${ENVIRONMENT}/operations/* modified-cf-deployment/operations/
