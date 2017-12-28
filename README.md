@@ -7,7 +7,7 @@ Public configuration for the CF Routing team's CI pipelines
 ### Dashboard config
 
 #### DNS
- - `cf-app.com` base domain includes an NS record that delegates `routing.cf-app.com` to [DNS Zone `routing-team`](https://console.cloud.google.com/net-services/dns/zones/routing-team?project=cf-routing-batman)
+ - `cf-app.com` base domain includes an NS record that delegates `routing.cf-app.com` to [DNS Zone `routing-team`](https://console.cloud.google.com/net-services/dns/zones/routing-team?project=cf-routing)
  - CNAME record `axxxxxxxl.routing.cf-app.com` is required for domain verification.  If you remove it, everything breaks!
  - Then `dashboard.routing.cf-app.com` is a CNAME for `c.storage.googleapis.com` in order to support [GCP Static Website Hosting](https://cloud.google.com/storage/docs/hosting-static-website)
 
