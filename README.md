@@ -12,7 +12,7 @@ Public configuration for the CF Routing team's CI pipelines
  - Then `dashboard.routing.cf-app.com` is a CNAME for `c.storage.googleapis.com` in order to support [GCP Static Website Hosting](https://cloud.google.com/storage/docs/hosting-static-website)
 
 #### Storage
- - There's a GCP [storage bucket for `dashboard.routing.cf-app.com`](https://console.cloud.google.com/storage/browser/dashboard.routing.cf-app.com?project=cf-routing-batman)
+ - There's a GCP [storage bucket for `dashboard.routing.cf-app.com`](https://console.cloud.google.com/storage/browser/dashboard.routing.cf-app.com?project=cf-routing)
  - It is configured to serve the contents of the `index.html` file in the storage bucket
  - That file defines a simple `iframe` that uses the `htmlpreview.github.io`
    ```
