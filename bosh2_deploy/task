@@ -14,6 +14,11 @@ set +x
 bosh_login "${ENVIRONMENT}"
 set -x
 
+function cleanup() {
+  pkill ssh || true
+}
+trap 'cleanup' EXIT
+
 export BOSH_DEPLOYMENT="${DEPLOYMENT:-cf}"
 bosh -n upload-stemcell "${STEMCELL_PATH}"
 
