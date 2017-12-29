@@ -18,6 +18,6 @@ run:
   path: routing-ci/generate-perf-manifest/task
 
 params:
-  ENV_DIR: deployments-routing/diana
+  ENV_DIR: deployments-routing/YOUR-ENVIRONMENT
   ROUTING_RELEASE_DIR: routing-release
   OUTPUT_DIR: perf-manifest
