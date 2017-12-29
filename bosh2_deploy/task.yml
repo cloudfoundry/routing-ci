@@ -9,7 +9,6 @@ image_resource:
 inputs:
   - name: deployments-routing
   - name: gcp-stemcell
-  - name: cf-release-bosh-tarball
   - name: release-tarball
   - name: routing-ci
 
