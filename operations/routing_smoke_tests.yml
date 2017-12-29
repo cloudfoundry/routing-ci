@@ -9,7 +9,7 @@
     vm_type: minimal
     stemcell: default
     networks:
-    - name: private
+    - name: default
     jobs:
     - name: smoke_tests
       release: routing
