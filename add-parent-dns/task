@@ -1,0 +1,17 @@
+#!/bin/bash
+set -e -x -u -o pipefail
+
+indir=./deployments-routing
+outdir=./modified-deployments-routing
+git clone $indir $outdir
+
+if [ "${IS_BOSH_LITE}" == "true" ]; then
+  source_file="$PWD/routing-ci/add-parent-dns/bbl-lite-parent-dns_override.tf"
+else
+  source_file="$PWD/routing-ci/add-parent-dns/bbl-full-parent-dns_override.tf"
+fi
+
+dest_dir="$outdir/$ENVIRONMENT/bbl-state/terraform/"
+
+mkdir -p "$dest_dir"
+cp "$source_file" "$dest_dir"
