@@ -14,6 +14,8 @@ inputs:
 
 params:
   ENVIRONMENT:
+  FOCUSED_SUITE_NAME: cf-routing
+  DEFAULT_TIMEOUT_MINS: 90
 
 run:
   path: routing-ci/run-drats/task

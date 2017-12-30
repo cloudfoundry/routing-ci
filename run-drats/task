@@ -8,9 +8,10 @@ ENVIRONMENT="${ENVIRONMENT:?"ENVIRONMENT not set"}"
 export GOPATH="${PWD}"
 export PATH="${PATH}:${GOPATH}/bin"
 
-pushd deployments-routing > /dev/null
-  eval "$(scripts/get-bbr-config "${ENVIRONMENT}")"
-popd > /dev/null
+CF_VARS_STORE_PATH="$PWD/deployments-routing/${ENVIRONMENT}/deployment-vars.yml"
+export CF_VARS_STORE_PATH
+
+BBL_STATE="$PWD/deployments-routing/${ENVIRONMENT}/bbl-state"
 
 pushd bbr-binary-release
   tar xvf ./*.tar
@@ -20,27 +21,11 @@ popd
 
 rm -f ~/.gitconfig
 
-tmpdir="$( mktemp -d /tmp/run-drats.XXXXXXXXXX )"
-
-sshuttle -e "ssh -i ${JUMPBOX_PRIVATE_KEY} -o 'StrictHostKeyChecking no' -o 'UserKnownHostsFile /dev/null'" -r "${BOSH_GW_USER}@${BOSH_GW_HOST}" 10.0.0.0/8 &
-tunnel_pid="$!"
-
 cleanup() {
   kill "${tunnel_pid}"
-  rm -rf "${tmpdir}"
 }
 trap 'cleanup' EXIT
 
-if [ -n "${BOSH_CA_CERT}" ]; then
-  export BOSH_CERT_PATH="${tmpdir}/bosh.ca"
-  echo "${BOSH_CA_CERT}" > "${BOSH_CERT_PATH}"
-fi
-
-export FOCUSED_SUITE_NAME=cf-routing
-export DEFAULT_TIMEOUT_MINS=90
-
-echo "Running DRATs..."
 pushd "src/github.com/cloudfoundry-incubator/disaster-recovery-acceptance-tests" > /dev/null
-  ./scripts/_run_acceptance_tests.sh
+  ./scripts/run_acceptance_tests_with_bbl_env.sh "$BBL_STATE"
 popd > /dev/null
-echo "Successfully ran DRATs!"
