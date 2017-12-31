@@ -1,5 +1,6 @@
 #!/bin/bash
 set -eu -o pipefail
+set -x
 
 : "${SSH_DESTINATION_CIDR:="10.0.0.0/8"}"
 
@@ -22,6 +23,7 @@ popd
 rm -f ~/.gitconfig
 
 pushd "$BBL_STATE"
+  bbl version
   eval "$(bbl print-env)"
 	cleanup() {
 		pkill ssh$
