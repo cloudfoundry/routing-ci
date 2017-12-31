@@ -54,4 +54,5 @@ pushd "$BBL_STATE"
 popd
 
 echo "Running DRATs"
-. ./scripts/run_acceptance_tests_local.sh
+cd src/github.com/cloudfoundry-incubator/disaster-recovery-acceptance-tests
+./scripts/run_acceptance_tests_local.sh
