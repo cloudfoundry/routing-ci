@@ -26,10 +26,10 @@ rm -f ~/.gitconfig
 pushd "$BBL_STATE"
   bbl version
   eval "$(bbl print-env)"
-	cleanup() {
+	bbl_cleanup() {
 		pkill ssh$
 	}
-	trap 'cleanup' EXIT
+	trap 'bbl_cleanup' EXIT
 
 	export BOSH_CLI_NAME=bosh
 	export SKIP_SUITE_NAME=""
@@ -60,6 +60,31 @@ pushd "$BBL_STATE"
   fi
 popd
 
-echo "Running DRATs"
+
+tmpdir="$( mktemp -d /tmp/run-drats.XXXXXXXXXX )"
+
+ssh_key="${tmpdir}/bosh.pem"
+echo "${BOSH_GW_PRIVATE_KEY_CONTENTS}" > "${ssh_key}"
+chmod 600 "${ssh_key}"
+echo "Starting SSH tunnel, you may be prompted for your OS password..."
+sudo true # prompt for password
+sshuttle -e "ssh -i ${ssh_key} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -r "${BOSH_GW_USER}@${BOSH_GW_HOST}" ${SSH_DESTINATION_CIDR} &
+tunnel_pid="$!"
+
+full_cleanup() {
+  kill "${tunnel_pid}"
+  rm -rf "${tmpdir}"
+  bbl_cleanup
+}
+trap 'full_cleanup' EXIT
+
+if [ -n "${BOSH_CA_CERT}" ]; then
+  export BOSH_CERT_PATH="${tmpdir}/bosh.ca"
+  echo "${BOSH_CA_CERT}" > "${BOSH_CERT_PATH}"
+fi
+
+export BOSH_URL="${BOSH_ENVIRONMENT}"
+
+echo "Running DRATs..."
 cd src/github.com/cloudfoundry-incubator/disaster-recovery-acceptance-tests
-source ./scripts/run_acceptance_tests_local.sh
+source ./scripts/_run_acceptance_tests.sh
