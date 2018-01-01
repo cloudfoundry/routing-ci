@@ -15,9 +15,9 @@ BBL_STATE="$PWD/deployments-routing/${ENVIRONMENT}/bbl-state"
 
 pushd bbr-binary-release
   tar xvf ./*.tar
-  build_path="$(pwd)/releases/bbr"
-  BBR_BUILD_PATH="${build_path}"
+  BBR_BUILD_PATH="$PWD/releases/bbr"
   export BBR_BUILD_PATH
+  ls -la "$BBR_BUILD_PATH"
   file "$BBR_BUILD_PATH"
 popd
 
@@ -62,4 +62,4 @@ popd
 
 echo "Running DRATs"
 cd src/github.com/cloudfoundry-incubator/disaster-recovery-acceptance-tests
-./scripts/run_acceptance_tests_local.sh
+source ./scripts/run_acceptance_tests_local.sh
