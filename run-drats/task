@@ -1,6 +1,5 @@
 #!/bin/bash
 set -eu -o pipefail
-set -x
 
 : "${SSH_DESTINATION_CIDR:="10.0.0.0/8"}"
 
@@ -17,7 +16,9 @@ BBL_STATE="$PWD/deployments-routing/${ENVIRONMENT}/bbl-state"
 pushd bbr-binary-release
   tar xvf ./*.tar
   build_path="$(pwd)/releases/bbr"
-  export BBR_BUILD_PATH=${build_path}
+  BBR_BUILD_PATH="${build_path}"
+  export BBR_BUILD_PATH
+  file "$BBR_BUILD_PATH"
 popd
 
 rm -f ~/.gitconfig
@@ -33,7 +34,7 @@ pushd "$BBL_STATE"
 	export BOSH_CLI_NAME=bosh
 	export SKIP_SUITE_NAME=""
 
-  CF_ADMIN_PASSWORD="$(${BOSH_CLI_NAME} interpolate --path /cf_admin_password ${CF_VARS_STORE_PATH})"
+  CF_ADMIN_PASSWORD="$("${BOSH_CLI_NAME}" interpolate --path /cf_admin_password "${CF_VARS_STORE_PATH}")"
   export CF_ADMIN_PASSWORD
   export BOSH_GW_USER="jumpbox"
   BOSH_GW_HOST="$(bbl jumpbox-address)"
@@ -42,11 +43,12 @@ pushd "$BBL_STATE"
   export BOSH_GW_PRIVATE_KEY_CONTENTS
   CF_DOMAIN=$(jq .lb.domain bbl-state.json -r)
   export CF_API_URL="https://api.${CF_DOMAIN}"
-  if grep "nfs-broker-password" ${CF_VARS_STORE_PATH}>/dev/null; then
+  if grep "nfs-broker-password" "${CF_VARS_STORE_PATH}">/dev/null; then
       export NFS_SERVICE_NAME="nfs"
       export NFS_PLAN_NAME="Existing"
       export NFS_BROKER_USER="nfs-broker"
-      export NFS_BROKER_PASSWORD=$(${BOSH_CLI_NAME} interpolate --path /nfs-broker-password ${CF_VARS_STORE_PATH})
+      NFS_BROKER_PASSWORD="$("${BOSH_CLI_NAME}" interpolate --path /nfs-broker-password "${CF_VARS_STORE_PATH}")"
+      export NFS_BROKER_PASSWORD
       export NFS_BROKER_URL="http://nfs-broker.${CF_DOMAIN}"
   else
       echo "Skipping cf-nfsrboker testcase because nfs-broker-password is not present in ${CF_VARS_STORE_PATH}"
