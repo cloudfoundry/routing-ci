@@ -121,7 +121,11 @@ RUN sed -i 's/peer/trust/' "$(find /etc/postgresql -name pg_hba.conf)" \
 RUN mkdir -p /var/run/postgresql/9.3-main.pg_stat_tmp
 RUN chown postgres.postgres /var/run/postgresql/9.3-main.pg_stat_tmp -R
 
-# bbl (not all dependencies have been included because we only are using certain bbl commands)
+ENV TERRAFORM_VERSION 0.11.1
+RUN \
+  wget https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip -P /tmp && \
+  unzip /tmp/terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /usr/local/bin/
+
 ENV BBL_VERSION 5.11.0
 RUN \
   wget https://github.com/cloudfoundry/bosh-bootloader/releases/download/v${BBL_VERSION}/bbl-v${BBL_VERSION}_linux_x86-64 -P /tmp && \
