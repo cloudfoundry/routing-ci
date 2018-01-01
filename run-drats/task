@@ -36,6 +36,8 @@ pushd "$BBL_STATE"
 
   CF_ADMIN_PASSWORD="$("${BOSH_CLI_NAME}" interpolate --path /cf_admin_password "${CF_VARS_STORE_PATH}")"
   export CF_ADMIN_PASSWORD
+  export CF_DEPLOYMENT_NAME=cf
+  export CF_ADMIN_USERNAME=admin
   export BOSH_GW_USER="jumpbox"
   BOSH_GW_HOST="$(bbl jumpbox-address)"
   export BOSH_GW_HOST
