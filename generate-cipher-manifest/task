@@ -13,10 +13,10 @@ root_dir="${PWD}"
 # Inputs
 OUTPUT_DIR="${root_dir}/${OUTPUT_DIR:?"OUTPUT_DIR must be provided"}"
 
-ENVIRONMENT_DIR=$PWD/deployments-routing/${ENVIRONMENT}
+BBL_STATE_DIR=$PWD/deployments-routing/${ENVIRONMENT}/bbl-state
 
 set +x
-pushd $ENVIRONMENT_DIR
+pushd $BBL_STATE_DIR
 	BOSH_CA_CERT="$(bbl director-ca-cert)"
 	export BOSH_CA_CERT
 	BOSH_ENVIRONMENT=$(bbl director-address)
