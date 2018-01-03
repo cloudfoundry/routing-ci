@@ -12,6 +12,11 @@ pushd "${ENVIRONMENT_DIR}"
   bosh_login "${ENVIRONMENT}"
 popd
 
+function cleanup() {
+  pkill ssh || true
+}
+trap 'cleanup' EXIT
+
 pushd zero-downtime-release
     bosh create-release
     bosh -e "${ENVIRONMENT}" ur --rebase
