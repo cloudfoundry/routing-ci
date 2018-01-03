@@ -12,7 +12,7 @@ pushd "${ENVIRONMENT_DIR}"
   bosh_login "${ENVIRONMENT}"
 popd
 
-pushd zero-downtime
+pushd zero-downtime-release
     bosh create-release
     bosh -e "${ENVIRONMENT}" ur --rebase
     bosh -e "${ENVIRONMENT}" -d zero-downtime -n deploy "${ENVIRONMENT_DIR}/${ENVIRONMENT}/zero_downtime/zero_downtime.yml" --no-redact
