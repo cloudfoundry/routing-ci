@@ -16,18 +16,24 @@ pushd "${ENVIRONMENT_DIR}"
   bosh_login "${ENVIRONMENT}"
 popd
 
-bosh2 -n -e "${ENVIRONMENT}" us "${STEMCELL_PATH}"
+function cleanup() {
+  pkill ssh || true
+}
+trap 'cleanup' EXIT
+
+BOSH_DEPLOYMENT="${DEPLOYMENT:-$BOSH_DEPLOYMENT}"
+
+bosh -n us "${STEMCELL_PATH}"
 
 IFS=', ' read -r -a array <<< "${RELEASES_DIR}"
 
 for element in "${array[@]}"
 do
   RELEASE_PATH=$(ls $element)
-  bosh2 -n -e "${ENVIRONMENT}" ur "${RELEASE_PATH}"
+  bosh -n ur "${RELEASE_PATH}"
 done
 
-bosh2 -n -e "${ENVIRONMENT}" -d "${BOSH_DEPLOYMENT}" deploy "${MANIFEST}"
+bosh -n -e "${ENVIRONMENT}" deploy "${MANIFEST}"
 
 echo "Running cipher test suite"
-bosh2 -e "${ENVIRONMENT}" -d cipher run-errand run-cipher-test --keep-alive --download-logs
-
+bosh run-errand run-cipher-test --keep-alive --download-logs
