@@ -14,6 +14,11 @@ pushd deployments-routing
   bosh_login "${ENVIRONMENT}"
 popd
 
+function cleanup() {
+  pkill ssh || true
+}
+trap 'cleanup' EXIT
+
 bosh2 -e "${ENVIRONMENT}" ur "${CF_RELEASE_TARBALL_DIR}"/cf-*.tgz
 
 # discover routing-release SHA
