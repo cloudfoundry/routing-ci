@@ -9,6 +9,7 @@ image_resource:
 inputs:
 - name: deployments-routing
 - name: routing-ci
+- name: bosh-bootloader
 
 outputs:
 - name: modified-deployments-routing
