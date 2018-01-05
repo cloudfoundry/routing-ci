@@ -1,0 +1,28 @@
+#!/bin/bash
+set -e -x -u -o pipefail
+
+indir=./modified-deployments-routing
+outdir=./env-repo
+git clone "${indir}" "${outdir}"
+
+cp -r "${PWD}/routing-ci/add-stubs/stub-ops" "${outdir}/${ENVIRONMENT}/"
+cp -r "${PWD}/routing-ci/add-stubs/stubs" "${outdir}/${ENVIRONMENT}/"
+
+domain_stub="${outdir}/${ENVIRONMENT}/stubs/cf/domain.yml"
+updated_domain_stub="$(bosh int "${domain_stub}" -v system_domain="${ENVIRONMENT}.routing.cf-app.com")"
+echo "${updated_domain_stub}" > "${domain_stub}"
+
+admin_password_stub="${outdir}/${ENVIRONMENT}/stubs/cf/admin_password.yml"
+updated_admin_password_stub="$(bosh int "${admin_password_stub}" -v admin_password="${ADMIN_PASSWORD}" \
+  -v admin_client_secret="${ADMIN_CLIENT_SECRET}")"
+echo "${updated_admin_password_stub}" > "${admin_password_stub}"
+
+consul_certs_stub="${outdir}/${ENVIRONMENT}/stubs/cf/consul_certs.yml"
+updated_consul_certs_stub="$(bosh int "${consul_certs_stub}" \
+  --var-store="${outdir}/pipelines/shared-credentials.yml")"
+echo "${updated_consul_certs_stub}" > "${consul_certs_stub}"
+
+router_ssl_stub="${outdir}/${ENVIRONMENT}/stubs/cf/router_ssl.yml"
+updated_router_ssl_stub="$(bosh int "${router_ssl_stub}" \
+  --var-store="${outdir}/pipelines/shared-credentials.yml")"
+echo "${updated_router_ssl_stub}" > "${router_ssl_stub}"

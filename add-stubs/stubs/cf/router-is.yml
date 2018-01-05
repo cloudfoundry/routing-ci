@@ -1,0 +1,10 @@
+---
+jobs:
+- name: router_z2
+  instances: 1
+  properties:
+    router:
+      isolation_segments: [is1]
+      routing_table_sharding_mode: segments
+- name: ha_proxy_z1
+  instances: 0

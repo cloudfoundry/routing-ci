@@ -1,0 +1,8 @@
+properties:
+  router:
+    enable_ssl: true
+    tls_pem:
+    - cert_chain: |
+        ((router_cert))
+      private_key: |
+        ((router_private_key))

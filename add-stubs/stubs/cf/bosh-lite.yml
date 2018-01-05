@@ -1,0 +1,22 @@
+resource_pools:
+- name: router_z1
+  cloud_properties:
+    ports:
+    - host: 80
+    - host: 8080
+    - host: 443
+    - host: 4443
+      container: 443
+    - host: 2222
+- name: router_z2
+  cloud_properties:
+    ports:
+    - host: 81
+      container: 80
+    - host: 8081
+      container: 8080
+    - host: 444
+      container: 443
+    - host: 4444
+      container: 443
+    - host: 2223
