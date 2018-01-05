@@ -54,3 +54,4 @@ bosh2 -n -e "${ENVIRONMENT}" -d cf-warden deploy /tmp/cf-updated.yml
 
 bosh2 -e "${ENVIRONMENT}" -d cf-warden-routing run-errand routing_acceptance_tests --keep-alive --download-logs
 bosh2 -e "${ENVIRONMENT}" -d cf-warden-routing run-errand routing_smoke_tests --keep-alive --download-logs
+bosh2 -n clean-up --all
