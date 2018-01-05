@@ -46,7 +46,7 @@ function commit_stubs {
   local commit_message
   commit_message="${2}"
 
-  pushd "${root_dir}/env-repo"
+  pushd "${root_dir}/env-repo/${ENVIRONMENT}"
     if [[ -n $(git status --porcelain) ]]; then
     set_git_config
     git add stubs stub-ops
