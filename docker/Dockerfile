@@ -93,8 +93,7 @@ RUN \
   rm -rf /tmp/*
 
 RUN \
-  curl -sL https://cli.run.pivotal.io/stable\?release\=linux64-binary\&version\=6.20.0\&source\=github-rel | tar zxf - -C /usr/bin
-
+  curl -sL "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=6.33.1&source=github-rel" | tar zxf - -C /usr/bin
 
 # Add the PostgreSQL PGP key to verify their Debian packages.
 # # It should be the same key as https://www.postgresql.org/media/keys/ACCC4CF8.asc
