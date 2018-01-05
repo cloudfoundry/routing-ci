@@ -17,6 +17,8 @@ outputs:
 params:
   ENVIRONMENT: ~
   IS_BOSH_LITE: false
+  GIT_COMMIT_EMAIL:
+  GIT_COMMIT_USERNAME:
 
 run:
   path: routing-ci/add-parent-dns/task
