@@ -1,18 +1,10 @@
 #!/bin/bash
-set -ex
+set -ex -o pipefail
 
-# Cannot set -u before sourcing .bashrc because of all
-# the unbound variables in things beyond our control.
-source ~/.bashrc
-
-set -u
+source routing-ci/scripts/script_helpers.sh
 
 ENVIRONMENT="${ENVIRONMENT:?"ENVIRONMENT not set"}"
-
-pushd deployments-routing
-  source ./scripts/script_helpers.sh
-  bosh_login "${ENVIRONMENT}"
-popd
+bosh_login "${ENVIRONMENT}"
 
 function cleanup() {
   pkill ssh || true
@@ -26,7 +18,6 @@ CF_RELEASE_MANIFEST=/tmp/cf.yml
 
 bosh2 -e "${ENVIRONMENT}" -d cf-warden-diego manifest > /tmp/diego.yml
 DIEGO_RELEASE_MANIFEST=/tmp/diego.yml
-
 
 pushd "${CF_ROUTING_RELEASE_DIR}"
   mkdir -p bosh-lite/deployments

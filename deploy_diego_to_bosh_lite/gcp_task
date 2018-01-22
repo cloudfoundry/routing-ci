@@ -1,18 +1,10 @@
 #!/bin/bash
-set -ex
+set -ex -o pipefail
 
-# Cannot set -u before sourcing .bashrc because of all
-# the unbound variables in things beyond our control.
-source ~/.bashrc
-
-set -u
+source routing-ci/scripts/script_helpers.sh
 
 ENVIRONMENT="${ENVIRONMENT:?"ENVIRONMENT not set"}"
-
-pushd deployments-routing
-  source ./scripts/script_helpers.sh
-  bosh_login "${ENVIRONMENT}"
-popd
+bosh_login "${ENVIRONMENT}"
 
 function cleanup() {
   pkill ssh || true
@@ -23,10 +15,8 @@ bosh2 -e "${ENVIRONMENT}" ur "${DIEGO_RELEASE_TARBALL_DIR}"/garden-runc-*.tgz
 bosh2 -e "${ENVIRONMENT}" ur "${DIEGO_RELEASE_TARBALL_DIR}"/cflinuxfs2-*.tgz
 bosh2 -e "${ENVIRONMENT}" ur "${DIEGO_RELEASE_TARBALL_DIR}"/diego-*.tgz
 
-
 bosh2 -e "${ENVIRONMENT}" -d cf-warden manifest > /tmp/cf.yml
 CF_RELEASE_MANIFEST=/tmp/cf.yml
-
 
 pushd "${DIEGO_RELEASE_DIR}"
   bosh2 int -o ../deployments-routing/"${ENVIRONMENT}"/stub-ops/diego.yml manifest-generation/bosh-lite-stubs/property-overrides.yml > /tmp/property-overrides.yml

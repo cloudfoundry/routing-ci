@@ -1,21 +1,21 @@
 #!/bin/bash
-set -e -x
+set -ex -o pipefail
 
-source ~/.bashrc
-source "${PWD}/deployments-routing/scripts/script_helpers.sh"
+source routing-ci/scripts/script_helpers.sh
 
-if [ -n "${LOGS_DIR}" ]; then
-  mkdir "${LOGS_DIR}"
-fi
-
-num_runs="${NUMBER_OF_RUNS:-1}"
-
+ENVIRONMENT="${ENVIRONMENT:?"ENVIRONMENT not set"}"
 bosh_login "${ENVIRONMENT}"
 
 function cleanup() {
   pkill ssh || true
 }
 trap 'cleanup' EXIT
+
+if [ -n "${LOGS_DIR}" ]; then
+  mkdir "${LOGS_DIR}"
+fi
+
+num_runs="${NUMBER_OF_RUNS:-1}"
 
 export BOSH_DEPLOYMENT="${DEPLOYMENT:-cf}"
 

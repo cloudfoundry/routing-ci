@@ -1,23 +1,21 @@
 #!/bin/bash
-set -e -x
+set -ex -o pipefail
 
-source ~/.bashrc
-source "${PWD}/deployments-routing/scripts/script_helpers.sh"
+source routing-ci/scripts/script_helpers.sh
+
+ENVIRONMENT="${ENVIRONMENT:?"ENVIRONMENT not set"}"
+bosh_login "${ENVIRONMENT}"
+
+function cleanup() {
+  pkill ssh || true
+}
+trap 'cleanup' EXIT
 
 if [ -n "${LOGS_DIR}" ]; then
   mkdir "${LOGS_DIR}"
 fi
 
 STEMCELL_PATH="$(ls ${STEMCELL_REGEX})"
-
-set +x
-bosh_login "${ENVIRONMENT}"
-set -x
-
-function cleanup() {
-  pkill ssh || true
-}
-trap 'cleanup' EXIT
 
 export BOSH_DEPLOYMENT="${DEPLOYMENT:-cf}"
 bosh -n upload-stemcell "${STEMCELL_PATH}"
