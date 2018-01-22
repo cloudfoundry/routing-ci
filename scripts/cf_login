@@ -1,0 +1,27 @@
+#!/bin/bash
+
+set -e -u
+set -o pipefail
+
+extract_var()
+{
+  env=$1
+  var=$2
+  bosh int --path /$var ${HOME}/workspace/deployments-routing/$env/deployment-vars.yml
+}
+
+get_system_domain()
+{
+  local env
+  env=$1
+  if [ "$env" = "lite" ]; then
+    echo "bosh-lite.com"
+    return
+  fi
+
+  echo "${env}.routing.cf-app.com"
+}
+
+env=$1
+cf api "api.$(get_system_domain "$env")" --skip-ssl-validation
+cf auth admin "$(extract_var "$env" cf_admin_password)"
