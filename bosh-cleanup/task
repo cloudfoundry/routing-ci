@@ -3,4 +3,4 @@ set -e -x
 
 source ~/.bashrc
 
-bosh -n --color -t $BOSH_DIRECTOR -d cleanup
+bosh -n -t $BOSH_DIRECTOR cleanup
