@@ -1,0 +1,22 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: cloudfoundry/cf-routing-pipeline
+
+inputs:
+- name: istio-release
+- name: routing-ci
+- name: grpcurl
+
+outputs:
+- name: updated-istio-release
+
+run:
+  path: routing-ci/grpcurl-blob/update/task
+
+params:
+  AWS_BLOBSTORE_SECRET_ACCESS_KEY:
+  AWS_BLOBSTORE_ACCESS_KEY_ID:

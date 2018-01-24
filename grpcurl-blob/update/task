@@ -1,0 +1,22 @@
+#!/bin/bash
+set -euo pipefail
+
+cat > $PWD/istio-release/config/private.yml <<EOF
+---
+blobstore:
+  options:
+    secret_access_key: ${AWS_BLOBSTORE_SECRET_ACCESS_KEY}
+    access_key_id: ${AWS_BLOBSTORE_ACCESS_KEY_ID}
+EOF
+
+pushd istio-release
+  bosh add-blob ../grpcurl grpcurl-linux/grpcurl
+  bosh upload-blobs
+  bosh blobs
+  git --no-pager diff config/ packages/
+  git add config/blobs.yml packages/grpcurl
+  git config user.email "cf-routing-eng@pivotal.io"
+  git config user.name "Routing CI (Automated)"
+  git commit -m "Update grpcurl blob"
+  cp -a ./ ../updated-istio-release/
+popd
