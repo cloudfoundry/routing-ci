@@ -5,7 +5,8 @@ go get -u github.com/fullstorydev/grpcurl
 
 pushd grpcurl-source
   go build ./cmd/grpcurl/
-  cp ./grpcurl ../
 popd
+
+cp grpcurl-source/grpcurl grpcurl/grpcurl
 
 ls -la .
