@@ -55,7 +55,7 @@ RUN curl https://codeload.github.com/postmodern/ruby-install/tar.gz/v0.5.0 | tar
 RUN ruby-install ruby ${DOCKER_RUBY_VERSION} -- --disable-install-rdoc
 
 # Add ruby to PATH
-ENV PATH $PATH:/home/root/.gem/ruby/${DOCKER_RUBY_VERSION}/bin:/opt/rubies/ruby-2.2.3/lib/ruby/gems/${DOCKER_RUBY_VERSION}/bin:/opt/rubies/ruby-${DOCKER_RUBY_VERSION}/bin
+ENV PATH $PATH:/home/root/.gem/ruby/${DOCKER_RUBY_VERSION}/bin:/opt/rubies/ruby-${DOCKER_RUBY_VERSION}/lib/ruby/gems/${DOCKER_RUBY_VERSION}/bin:/opt/rubies/ruby-${DOCKER_RUBY_VERSION}/bin
 
 # Install gems
 RUN \
@@ -88,12 +88,6 @@ RUN wget https://bootstrap.pypa.io/get-pip.py -O /tmp/get-pip.py && \
           python /tmp/get-pip.py && \
           rm /tmp/get-pip.py && \
           pip install awscli
-
-RUN \
-  wget https://releases.hashicorp.com/vagrant/1.7.4/vagrant_1.7.4_x86_64.deb -P /tmp && \
-  dpkg --install /tmp/vagrant_1.7.4_x86_64.deb && \
-  vagrant plugin install vagrant-aws && \
-  rm -rf /tmp/*
 
 RUN \
   curl -sL "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=6.33.1&source=github-rel" | tar zxf - -C /usr/bin
