@@ -1,8 +1,11 @@
 #!/bin/bash
 set -ex -o pipefail
 
-go get -u github.com/fullstorydev/grpcurl
+#go get -u github.com/fullstorydev/grpcurl
 
-cp $(which grpcurl) .
+pushd grpcurl-source
+  go build ./cmd/grpcurl/
+  cp ./grpcurl ../
+popd
 
 ls -la .
