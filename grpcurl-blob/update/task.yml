@@ -18,5 +18,4 @@ run:
   path: routing-ci/grpcurl-blob/update/task
 
 params:
-  AWS_BLOBSTORE_SECRET_ACCESS_KEY:
-  AWS_BLOBSTORE_ACCESS_KEY_ID:
+  GCP_BLOBSTORE_SERVICE_ACCOUNT_KEY:
