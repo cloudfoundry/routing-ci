@@ -1,6 +1,12 @@
 FROM ubuntu:trusty
 MAINTAINER https://github.com/cloudfoundry-incubator/cf-routing-release
 
+ENV DOCKER_RUBY_VERSION 2.2.3
+ENV BOSH_CLI_VERSION 2.0.48
+ENV GO_VERSION 1.9.2
+ENV TERRAFORM_VERSION 0.11.1
+ENV BBL_VERSION 5.11.0
+
 RUN set -ex \
     && echo 'mysql-server mysql-server/root_password password password' | debconf-set-selections \
     && echo 'mysql-server mysql-server/root_password_again password password' | debconf-set-selections
@@ -45,8 +51,6 @@ RUN curl https://codeload.github.com/postmodern/ruby-install/tar.gz/v0.5.0 | tar
           cd /tmp/ruby-install-0.5.0 && \
           make install
 
-ENV DOCKER_RUBY_VERSION 2.2.3
-
 # Install Ruby
 RUN ruby-install ruby ${DOCKER_RUBY_VERSION} -- --disable-install-rdoc
 
@@ -60,7 +64,6 @@ RUN \
     debugger-ruby_core_source
 
 # Install go
-ENV GO_VERSION 1.9.2
 RUN curl https://storage.googleapis.com/golang/go${GO_VERSION}.linux-amd64.tar.gz | tar xvz -C /usr/local/
 
 # Add golang environment variables
@@ -120,12 +123,10 @@ RUN sed -i 's/peer/trust/' "$(find /etc/postgresql -name pg_hba.conf)" \
 RUN mkdir -p /var/run/postgresql/9.3-main.pg_stat_tmp
 RUN chown postgres.postgres /var/run/postgresql/9.3-main.pg_stat_tmp -R
 
-ENV TERRAFORM_VERSION 0.11.1
 RUN \
   wget https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip -P /tmp && \
   unzip /tmp/terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /usr/local/bin/
 
-ENV BBL_VERSION 5.11.0
 RUN \
   wget https://github.com/cloudfoundry/bosh-bootloader/releases/download/v${BBL_VERSION}/bbl-v${BBL_VERSION}_linux_x86-64 -P /tmp && \
   mv /tmp/bbl-* /usr/local/bin/bbl && \
@@ -147,9 +148,9 @@ RUN \
 
 # Install bosh v2 cli
 RUN \
-  wget https://s3.amazonaws.com/bosh-cli-artifacts/bosh-cli-2.0.45-linux-amd64 && \
-  chmod +x bosh-cli-2.0.45-linux-amd64 && \
-  mv bosh-cli-2.0.45-linux-amd64 /usr/local/bin/bosh2 && \
+  wget https://s3.amazonaws.com/bosh-cli-artifacts/bosh-cli-${BOSH_CLI_VERSION}-linux-amd64 && \
+  chmod +x bosh-cli-${BOSH_CLI_VERSION}-linux-amd64 && \
+  mv bosh-cli-${BOSH_CLI_VERSION}-linux-amd64 /usr/local/bin/bosh2 && \
   cp /usr/local/bin/bosh2 /usr/local/bin/bosh
 
 # setup mysql database for testing, then stop and clean up
