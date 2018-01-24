@@ -10,7 +10,7 @@ blobstore:
 EOF
 
 pushd istio-release
-  bosh add-blob ../grpcurl grpcurl-linux/grpcurl
+  bosh add-blob ../grpcurl-bin/grpcurl grpcurl-linux/grpcurl
   bosh upload-blobs
   bosh blobs
   git --no-pager diff config/ packages/

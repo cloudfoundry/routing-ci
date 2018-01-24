@@ -11,7 +11,7 @@ inputs:
 - name: grpcurl-source
 
 outputs:
-- name: grpcurl
+- name: grpcurl-bin
 
 run:
   path: routing-ci/grpcurl-blob/compile/task

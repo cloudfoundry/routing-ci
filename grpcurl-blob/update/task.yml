@@ -9,7 +9,7 @@ image_resource:
 inputs:
 - name: istio-release
 - name: routing-ci
-- name: grpcurl
+- name: grpcurl-bin
 
 outputs:
 - name: updated-istio-release

@@ -7,6 +7,6 @@ pushd grpcurl-source
   go build ./cmd/grpcurl/
 popd
 
-cp grpcurl-source/grpcurl grpcurl/grpcurl
+cp grpcurl-source/grpcurl grpcurl-bin/grpcurl
 
 ls -la .
