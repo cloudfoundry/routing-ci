@@ -8,7 +8,7 @@ git clone "${indir}" "${outdir}"
 modified_bbl_state_dir="${outdir}/${BBL_STATE_DIR}"
 mkdir -p "${modified_bbl_state_dir}"
 
-cp -r "plan-patches/${PLAN_PATCH_DIR}" "${modified_bbl_state_dir}"
+cp -r "plan-patches/${PLAN_PATCH_DIR}/." "${modified_bbl_state_dir}/"
 
 function set_git_config() {
   git config user.name "${GIT_COMMIT_USERNAME}"
