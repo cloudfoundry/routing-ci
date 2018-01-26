@@ -36,11 +36,11 @@ gimme_certs() {
     certstrap --depot-path "${depot_path}" sign --CA "${ca_common_name}" "${common_name}" --phassphrase "";
 }
 
+lb_certs="${outdir}/${ENVIRONMENT}/lb_certs"
 
 if ! [[ -a "${lb_certs}/key.pem" ]]; then
   gimme_certs "${ENVIRONMENT}" fakeCA /tmp
 
-  lb_certs="${outdir}/${ENVIRONMENT}/lb_certs"
   mkdir -p "$lb_certs"
 
   cp "/tmp/${ENVIRONMENT}.key" "${lb_certs}/key.pem"
