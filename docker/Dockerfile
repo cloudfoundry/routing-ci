@@ -180,3 +180,8 @@ RUN \
 RUN \
     go get \
         -u github.com/golang/dep/cmd/dep
+
+# install certstrap
+RUN \
+    go get \
+        -u github.com/square/certstrap
