@@ -1,15 +1,24 @@
 #!/bin/bash
-set -exu
+set -exu -o pipefail
+
+source routing-ci/scripts/script_helpers.sh
+
+ENVIRONMENT="${ENVIRONMENT:?"ENVIRONMENT not set"}"
+bosh_login "${ENVIRONMENT}"
+
+function cleanup() {
+  pkill ssh || true
+}
+trap 'cleanup' EXIT
 
 pushd "${PWD}/deployments-routing"
     set +x
-    ./scripts/bosh-exec "${ENVIRONMENT}" syslog_storer 'sudo chmod a+w /var/vcap/store/syslog_storer/syslog.log; tail -n 100 /var/vcap/store/syslog_storer/syslog.log > /var/vcap/store/syslog_storer/syslog.log'
+    cmd='sudo chmod a+w /var/vcap/store/syslog_storer/syslog.log; tail -n 100 /var/vcap/store/syslog_storer/syslog.log > /var/vcap/store/syslog_storer/syslog.log'
+    bosh ssh -c "$cmd" syslog_storer
     sleep 30
-    ./scripts/bosh-scp "${ENVIRONMENT}" syslog_storer:/var/vcap/store/syslog_storer/syslog.log .
+    bosh scp syslog_storer:/var/vcap/store/syslog_storer/syslog.log .
     set -x
     grep "$(date -u +%Y-%m-%dT)$(($(date -u +%H)-1))\|$(date -u +%Y-%m-%dT%H)" syslog.log | grep -m 1 "vcap.routing_api.stdout"
     grep "$(date -u +%Y-%m-%dT)$(($(date -u +%H)-1))\|$(date -u +%Y-%m-%dT%H)" syslog.log | grep -m 1 "vcap.gorouter.stdout"
     grep "$(date -u +%Y-%m-%dT)$(($(date -u +%H)-1))\|$(date -u +%Y-%m-%dT%H)" syslog.log | grep -m 1 "vcap.tcp_router.stdout"
 popd
-# this is to kill ssh tunnel that bbl establishes TODO: remove once bbl fixes this
-killall ssh
