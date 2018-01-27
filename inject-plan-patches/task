@@ -22,11 +22,12 @@ function commit {
   commit_message="${2}"
 
   pushd "${git_root_dir}"
-    if [[ -n $(git status --porcelain) ]]; then
     set_git_config
     git add .
-    git commit -m "${commit_message}"
-  fi
+    if [[ -n $(git status --porcelain) ]]; then
+      git commit -m "${commit_message}"
+    fi
+  popd
 }
 
 commit "${outdir}" "${GIT_COMMIT_MSG}"
