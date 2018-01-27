@@ -1,5 +1,5 @@
 #!/bin/bash
-set -exu -o pipefail
+set -eu -o pipefail
 
 source routing-ci/scripts/script_helpers.sh
 
