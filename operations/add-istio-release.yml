@@ -48,16 +48,15 @@
     - name: copilot
       release: istio
       properties:
-        copilot:
-          client_ca_cert: "((pilot.ca))"
-          server_cert: "((copilot.certificate))"
-          server_key: "((copilot.private_key))"
-          bbs:
-            server_ca_cert: "((diego_bbs_client.ca))"
-            client_cert: "((diego_bbs_client.certificate))"
-            client_key: "((diego_bbs_client.private_key))"
-        bpm:
-          enable: true
+        pilot_client_ca_cert: "((pilot.ca))"
+        # variable in cf-deployment on capi-release cloud_controller_ng job property 'cc.mutual_tls.ca_cert'
+        cloud_controller_client_ca_cert: "((service_cf_internal_ca.certificate))"
+        server_cert: "((copilot.certificate))"
+        server_key: "((copilot.private_key))"
+        bbs:
+          server_ca_cert: "((diego_bbs_client.ca))"
+          client_cert: "((diego_bbs_client.certificate))"
+          client_key: "((diego_bbs_client.private_key))"
 
 - type: replace
   path: /instance_groups/name=envoy-proxy?
