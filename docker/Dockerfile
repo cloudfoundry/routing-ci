@@ -12,6 +12,7 @@ ENV ETCD_VERSION 2.1.1
 ENV ROUTING_API_CLI_VERSION 2.9.0
 ENV CONSUL_VERSION 0.7.5
 ENV CF_CLI_VERSION 6.33.1
+ENV POSTGRES_VERSION 9.3
 
 RUN set -ex \
     && echo 'mysql-server mysql-server/root_password password password' | debconf-set-selections \
@@ -110,9 +111,9 @@ RUN \
   apt-get -y install --fix-missing \
     python-software-properties \
     software-properties-common \
-    postgresql-9.3 \
-    postgresql-client-9.3 \
-    postgresql-contrib-9.3 \
+    postgresql-${POSTGRES_VERSION} \
+    postgresql-client-${POSTGRES_VERSION} \
+    postgresql-contrib-${POSTGRES_VERSION} \
   && \
   apt-get clean
 
@@ -120,8 +121,8 @@ RUN sed -i 's/peer/trust/' "$(find /etc/postgresql -name pg_hba.conf)" \
     && sed -i 's/md5/trust/' "$(find /etc/postgresql -name pg_hba.conf)"
 
 # Correct the Error: could not open temporary statistics file "/var/run/postgresql/9.3-main.pg_stat_tmp/global.tmp": No such file or directory
-RUN mkdir -p /var/run/postgresql/9.3-main.pg_stat_tmp
-RUN chown postgres.postgres /var/run/postgresql/9.3-main.pg_stat_tmp -R
+RUN mkdir -p /var/run/postgresql/${POSTGRES_VERSION}-main.pg_stat_tmp
+RUN chown postgres.postgres /var/run/postgresql/${POSTGRES_VERSION}-main.pg_stat_tmp -R
 
 RUN \
   wget https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip -P /tmp && \
