@@ -84,11 +84,9 @@
     type: certificate
     options:
       ca: service_cf_internal_ca
-      common_name: copilot
+      common_name: istio.service.cf.internal
       extended_key_usage:
       - server_auth
-      alternative_names:
-      - 127.0.0.1
 
 - type: replace
   path: /variables?/-
@@ -97,8 +95,11 @@
     type: certificate
     options:
       ca: service_cf_internal_ca
-      common_name: pilot
+      common_name: istio.service.cf.internal
       extended_key_usage:
-      - client_auth
-      alternative_names:
-      - 127.0.0.1
+     - client_auth
+
+- type: replace
+  path: /addons/name=bosh-dns/jobs/name=bosh-dns/properties/aliases/istio.service.cf.internal?
+  value:
+    - "*.istio.default.cf.bosh"
