@@ -1,0 +1,18 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: cloudfoundry/cf-routing-pipeline
+
+inputs:
+  - name: deployments-routing
+  - name: release-version
+
+outputs:
+  - name: ops-file
+
+run:
+  path: routing-ci/set_routing_release_version/task
+

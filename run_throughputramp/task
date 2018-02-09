@@ -1,0 +1,25 @@
+#!/bin/bash
+
+set -eux -o pipefail
+
+FINAL_OUTPUT_DIR="${PWD}/final-comparison-report"
+CSV_DIR="${PWD}/csv-dir"
+mkdir -p "${FINAL_OUTPUT_DIR}" "${CSV_DIR}"
+
+bosh -n -t "${BOSH_DIRECTOR}" download manifest "${BOSH_DEPLOYMENT}" > /tmp/deployment.yml
+
+# remove the first line in the manifest for some unkown reasons
+sed -i -e "1d" /tmp/deployment.yml
+
+bosh -n --color -t "${BOSH_DIRECTOR}" -d /tmp/deployment.yml run errand throughputramp --download-logs --logs-dir "${FINAL_OUTPUT_DIR}" > output
+
+perfResults=$(grep "csv uploaded to" output | awk '{print $4}' | head -n 1)
+cpuResults=$(grep "cpu csv uploaded to" output | awk '{print $5}' | head -n 1)
+
+pushd "${FINAL_OUTPUT_DIR}"
+  log_file=$(find . -type f -print)
+  tar xvf "${log_file}"
+  mv cpuStats.csv "${CSV_DIR}/cpuStats.csv"
+  mv perfResults.csv "${CSV_DIR}/perfResults.csv"
+popd
+
