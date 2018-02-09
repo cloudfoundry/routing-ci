@@ -5,13 +5,18 @@ image_resource:
   type: docker-image
   source:
     repository: cloudfoundry/cf-routing-jupyter
-
-params:
-  BOSH_DIRECTOR: https://bosh.batman-perf.cf-app.com:25555
-  BOSH_USER: admin
-  BOSH_PASSWORD: {{batman_perf_bosh_password}}
-  BOSH_DEPLOYMENT: performance
-  RELEASE_DIR: routing-perf-release
+inputs:
+  - name: routing-ci
 
 outputs:
-  name: csv-dir
+  - name: csv-dir
+
+params:
+  BOSH_DIRECTOR:
+  BOSH_USER:
+  BOSH_PASSWORD:
+  BOSH_DEPLOYMENT:
+  RELEASE_DIR:
+
+run:
+  path: routing-ci/run_throughputramp/task

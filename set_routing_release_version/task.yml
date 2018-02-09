@@ -7,6 +7,7 @@ image_resource:
     repository: cloudfoundry/cf-routing-pipeline
 
 inputs:
+  - name: routing-ci
   - name: deployments-routing
   - name: release-version
 
