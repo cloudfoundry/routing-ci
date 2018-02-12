@@ -13,7 +13,7 @@ NEXT_VERSION=$(cat "${PWD}/rc-version/version")
 
 # Prepare path for Jupyter
 mv rc-csv-dir/*.csv "${JUPYTER_DIR}"
-mv master-csv-dir/cpuStats.csv "${JUPYTER_DIR}/old_cpustStats.csv"
+mv master-csv-dir/cpuStats.csv "${JUPYTER_DIR}/old_cpuStats.csv"
 mv master-csv-dir/perfResults.csv "${JUPYTER_DIR}/old_perfResults.csv"
 
 # Find version of latest RC and add it to Jupyter metadata
