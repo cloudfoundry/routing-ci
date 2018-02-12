@@ -10,8 +10,8 @@ inputs:
   - name: routing-release-master
   - name: routing-release-rc
   - name: routing-perf-release
-  - name: new-csv-dir
-  - name: old-csv-dir
+  - name: rc-csv-dir
+  - name: master-csv-dir
   - name: rc-version
   - name: final-version
   - name: routing-ci

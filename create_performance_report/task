@@ -12,9 +12,9 @@ METADATA_PREV_FILE_NAME="old_metadata.yml"
 NEXT_VERSION=$(cat "${PWD}/rc-version/version")
 
 # Prepare path for Jupyter
-mv new-csv-dir/*.csv "${JUPYTER_DIR}"
-mv old-csv-dir/cpuStats.csv "${JUPYTER_DIR}/old_cpustStats.csv"
-mv old-csv-dir/perfResults.csv "${JUPYTER_DIR}/old_perfResults.csv"
+mv rc-csv-dir/*.csv "${JUPYTER_DIR}"
+mv master-csv-dir/cpuStats.csv "${JUPYTER_DIR}/old_cpustStats.csv"
+mv master-csv-dir/perfResults.csv "${JUPYTER_DIR}/old_perfResults.csv"
 
 # Find version of latest RC and add it to Jupyter metadata
 CURRENT_METADATA_FILENAME="$JUPYTER_DIR/$METADATA_CUR_FILE_NAME"
