@@ -17,7 +17,8 @@ inputs:
   - name: routing-ci
 
 outputs:
-  - name: comparison-report
+  - name: final-comparison-report
+  - name: rc-comparison-report
 
 run:
   path: routing-ci/create_performance_report/task

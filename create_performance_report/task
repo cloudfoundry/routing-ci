@@ -6,7 +6,7 @@ JUPYTER_DIR="${PWD}/routing-perf-release/src/jupyter_notebook"
 REPORT_NAME="report.html"
 RC_REPORT_NAME="rc-report.html"
 RC_OUTPUT_DIR="${PWD}/rc-comparison-report"
-OUTPUT_DIR="${PWD}/comparison-report"
+OUTPUT_DIR="${PWD}/final-comparison-report"
 METADATA_CUR_FILE_NAME="metadata.yml"
 METADATA_PREV_FILE_NAME="old_metadata.yml"
 NEXT_VERSION=$(cat "${PWD}/rc-version/version")
@@ -50,7 +50,6 @@ cat > "${CURRENT_METADATA_FILENAME}"<<EOF
 sha: "${current_sha}"
 EOF
 popd
-
 
 # Create comparison report between most recent final release and latest RC
 pushd "${JUPYTER_DIR}"
