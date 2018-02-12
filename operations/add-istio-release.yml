@@ -95,11 +95,16 @@
     type: certificate
     options:
       ca: service_cf_internal_ca
-      common_name: copilot.service.cf.internal
+      common_name: pilot.service.cf.internal
       extended_key_usage:
       - client_auth
 
 - type: replace
   path: /addons/name=bosh-dns/jobs/name=bosh-dns/properties/aliases/copilot.service.cf.internal?
+  value:
+    - "*.istio.default.cf.bosh"
+
+- type: replace
+  path: /addons/name=bosh-dns/jobs/name=bosh-dns/properties/aliases/pilot.service.cf.internal?
   value:
     - "*.istio.default.cf.bosh"
