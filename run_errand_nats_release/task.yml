@@ -9,6 +9,7 @@ image_resource:
 inputs:
 - name: env-repo
 - name: routing-ci
+- name: cf-deployment-concourse-tasks
 
 run:
   path: routing-ci/run_errand_nats_release/task
