@@ -1,0 +1,20 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
+
+inputs:
+- name: env-repo
+- name: nats-release
+- name: routing-ci
+- name: stemcell
+- name: cf-deployment-concourse-tasks
+
+run:
+  path: routing-ci/bosh_deploy_nats/task
+
+params:
+  BBL_STATE_DIR: bbl-state
