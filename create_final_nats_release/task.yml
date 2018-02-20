@@ -18,6 +18,8 @@ run:
   path: routing-ci/create_final_nats_release/task
 
 params:
+  GIT_COMMIT_USERNAME: CI Bot
+  GIT_COMMIT_EMAIL: cf-routing-eng@pivotal.io
   RUNTIME_CI_DIR: routing-ci
   RELEASE_NAME:
   MASTER_BRANCH:

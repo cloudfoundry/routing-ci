@@ -29,8 +29,8 @@ EOF
 set -x
 
 pushd release-repo > /dev/null
-  git config user.name "CF MEGA BOT"
-  git config user.email "cf-mega@pivotal.io"
+  git config user.name "${GIT_COMMIT_USERTNAME}"
+  git config user.email "${GIT_COMMIT_EMAIL}"
 
   git remote add -f master-repo ../release-repo-master
   git merge "master-repo/${MASTER_BRANCH}" -m 'Merge with master'
