@@ -20,7 +20,7 @@ MASTER_BRANCH="${MASTER_BRANCH:-master}"
 FORMATTED_KEY="$(sed 's/^/      /' <(echo $GCP_NATS_BLOBSTORE_SERVICE_ACCOUNT_KEY))"
 
 set +x
-cat > "${RELEASE_REPO_DIR}/config//private.yml" <<EOF
+cat > "${RELEASE_REPO_DIR}/config/private.yml" <<EOF
 ---
 blobstore:
   options:
