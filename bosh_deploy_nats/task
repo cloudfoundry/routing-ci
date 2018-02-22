@@ -6,7 +6,7 @@ source cf-deployment-concourse-tasks/shared-functions
 function bosh_upload_nats_release() {
   pushd nats-release
     bosh create-release --force
-    bosh upload-release
+    bosh upload-release --rebase
   popd
 }
 
@@ -20,8 +20,7 @@ function bosh_deploy_nats() {
       -n \
       -d "nats" \
       deploy "${PWD}/example-manifests/nats.yml" \
-      --vars-store vars.yml \
-      -o create-nats-dev-release.yml
+      --vars-store vars.yml
   popd
 }
 
