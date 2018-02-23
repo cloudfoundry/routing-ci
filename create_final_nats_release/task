@@ -38,7 +38,7 @@ pushd release-repo > /dev/null
   git merge "master-repo/${MASTER_BRANCH}" -m 'Merge with master'
 
   for _ in {1..5}; do
-    bosh -n create release --with-tarball --final
+    bosh -n create-release --final
     EXIT_STATUS=${PIPESTATUS[0]}
     if [ "$EXIT_STATUS" = "0" ]; then
       break
