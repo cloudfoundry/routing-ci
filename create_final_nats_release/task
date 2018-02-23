@@ -31,7 +31,7 @@ EOF
 set -x
 
 pushd release-repo > /dev/null
-  git config user.name "${GIT_COMMIT_USERTNAME}"
+  git config user.name "${GIT_COMMIT_USERNAME}"
   git config user.email "${GIT_COMMIT_EMAIL}"
 
   git remote add -f master-repo ../release-repo-master
