@@ -1,10 +1,9 @@
 - type: replace
-  path: /instance_groups/name=api?/jobs/name=cloud_controller_ng/properties/-
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/copilot?
   value:
-    copilot:
-      enabled: true
-      host: copilot.service.cf.internal
-      port: 9001
-      client_ca_file: ((service_cf_internal_ca.certificate))
-      client_key_file: ((diego_bbs_client.certificate))
-      client_chain_file: ((diego_bbs_client.certificate))
+    enabled: true
+    host: copilot.service.cf.internal
+    port: 9001
+    client_ca_file: ((service_cf_internal_ca.certificate))
+    client_key_file: ((diego_bbs_client.certificate))
+    client_chain_file: ((diego_bbs_client.certificate))
