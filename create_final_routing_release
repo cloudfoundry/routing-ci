@@ -8,7 +8,7 @@ set -u
 
 #Copy private.yml from private repo before creating final bosh release
 echo "----- Copy private blobstore credentials into cf-routing-release"
-cp deployments-routing/batman-aws/private.yml ${CF_ROUTING_RELEASE_RC_DIR}/config/private.yml
+cp deployments-routing/routing-release-private.yml ${CF_ROUTING_RELEASE_RC_DIR}/config/private.yml
 
 FINAL_VERSION=`cat rc-version/version`
 
