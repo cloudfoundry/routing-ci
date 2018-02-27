@@ -1,0 +1,8 @@
+#!/bin/bash
+set -e -x -u -o pipefail
+
+pushd routing-release
+  bosh vendor-package golang-1.9-linux ../golang-release
+popd
+
+cp -R routing-release modified-routing-release

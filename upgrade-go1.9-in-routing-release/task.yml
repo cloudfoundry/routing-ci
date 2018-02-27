@@ -1,0 +1,17 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: cloudfoundry/cf-routing-pipeline
+
+inputs:
+- name: routing-release
+- name: golang-release
+
+outputs:
+- name: updated-routing-release
+
+run:
+  path: routing-ci/upgrade-go1.9-in-routing-release/task
