@@ -9,6 +9,7 @@ image_resource:
 inputs:
 - name: routing-release
 - name: golang-release
+- name: routing-ci
 
 outputs:
 - name: updated-routing-release
