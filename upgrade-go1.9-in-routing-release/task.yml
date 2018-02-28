@@ -12,7 +12,7 @@ inputs:
 - name: routing-ci
 
 outputs:
-- name: updated-routing-release
+- name: modified-routing-release
 
 run:
   path: routing-ci/upgrade-go1.9-in-routing-release/task
