@@ -6,4 +6,4 @@ pushd routing-release
 popd
 
 shopt -s dotglob
-cp -R routing-release/* modified-routing-release
+cp -R routing-release/* modified-routing-release/
