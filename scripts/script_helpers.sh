@@ -49,28 +49,33 @@ function bosh_login_bosh_vars() {
 }
 
 function bosh_login_bbl() {
+  if [ -z "${DEPLOYMENT_DIR}"  ]; then
+    echo "missing DEPLOYMENT_DIR. you probably meant to use bosh_login."
+    return
+  fi
+
   ENV=${1}
-  local BBL_STATE_DIR
+  local bbl_state_dir
   if [ -f "${DEPLOYMENT_DIR}/bbl-state.json" ]; then
-    BBL_STATE_DIR="${DEPLOYMENT_DIR}"
+    bbl_state_dir="${DEPLOYMENT_DIR}"
   else
-    BBL_STATE_DIR="${DEPLOYMENT_DIR}/bbl-state"
+    bbl_state_dir="${DEPLOYMENT_DIR}/bbl-state"
   fi
 
   JUMPBOX_PRIVATE_KEY="/tmp/${ENV}"
   touch "$JUMPBOX_PRIVATE_KEY"
   chmod 600 "${JUMPBOX_PRIVATE_KEY}"
   export JUMPBOX_PRIVATE_KEY
-  local DIRECTOR_IP
-  pushd "${BBL_STATE_DIR}"
+  local director_ip
+  pushd "${bbl_state_dir}"
     eval "$(bbl print-env)"
-    DIRECTOR_IP="$(bbl director-address | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')"
+    director_ip="$(bbl director-address | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')"
     bbl ssh-key > "$JUMPBOX_PRIVATE_KEY"
   popd
 
   export BOSH_DEPLOYMENT="cf"
   export BOSH_GW_USER="jumpbox"
-  export BOSH_GW_HOST="${DIRECTOR_IP}"
+  export BOSH_GW_HOST="${director_ip}"
 
 
   bosh -e "${BOSH_ENVIRONMENT}" --ca-cert <(echo "${BOSH_CA_CERT}") alias-env "${ENV}"
