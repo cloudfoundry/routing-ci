@@ -1,3 +1,4 @@
+# WARNING: Under active development and is hosted for cross-team sharing purposes only.
 ---
 - type: replace
   path: /releases/-
@@ -26,14 +27,6 @@
     - z2
     instances: 1
     jobs:
-    - consumes:
-        consul_client:
-          from: consul_client_link
-        consul_common:
-          from: consul_common_link
-        consul_server: nil
-      name: consul_agent
-      release: consul
     - name: bpm
       release: bpm
     - name: pilot-discovery
@@ -49,7 +42,6 @@
       release: istio
       properties:
         pilot_client_ca_cert: "((pilot.ca))"
-        # variable in cf-deployment on capi-release cloud_controller_ng job property 'cc.mutual_tls.ca_cert'
         cloud_controller_client_ca_cert: "((service_cf_internal_ca.certificate))"
         server_cert: "((copilot.certificate))"
         server_key: "((copilot.private_key))"
@@ -108,3 +100,24 @@
   path: /addons/name=bosh-dns/jobs/name=bosh-dns/properties/aliases/pilot.service.cf.internal?
   value:
     - "*.istio.default.cf.bosh"
+
+# enable copilot in CAPI
+- type: replace
+  path: /instance_groups/name=api/jobs/name=cloud_controller_ng/properties/copilot?
+  value:
+    enabled: true
+    host: copilot.service.cf.internal
+    port: 9001
+    client_ca_file: ((service_cf_internal_ca.certificate))
+    client_key_file: ((copilot_client.private_key))
+    client_chain_file: ((copilot_client.certificate))
+- type: replace
+  path: /variables/-
+  value:
+    name: copilot_client
+    options:
+      ca: service_cf_internal_ca
+      common_name: copilot.service.cf.internal
+      extended_key_usage:
+      - client_auth
+    type: certificate
