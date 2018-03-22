@@ -1,12 +1,14 @@
 #!/bin/bash
 set -euo pipefail
 
+FORMATTED_KEY="$(sed 's/^/      /' <(echo $GCP_BLOBSTORE_SERVICE_ACCOUNT_KEY))"
 cat > $PWD/istio-release/config/private.yml <<EOF
 ---
 blobstore:
   options:
-    secret_access_key: ${AWS_BLOBSTORE_SECRET_ACCESS_KEY}
-    access_key_id: ${AWS_BLOBSTORE_ACCESS_KEY_ID}
+    credentials_source: static
+    json_key: |
+$FORMATTED_KEY
 EOF
 
 new_envoy_version="$(cat envoy-tarball/version)"
