@@ -10,12 +10,15 @@ inputs:
   - name: cf-deployment
   - name: deployments-routing
   - name: routing-ci
+  - name: source1
+    optional: true
 
 outputs:
   - name: merged-operations
 
 params:
   ENVIRONMENT:
+  SOURCE1_DIR: ~
 
 run:
   path: routing-ci/merge_ops_files/task
