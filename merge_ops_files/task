@@ -4,10 +4,13 @@ set -e -x -u -o pipefail
 
 cp -R cf-deployment/operations/* merged-operations/
 cp -R routing-ci/operations/* merged-operations/
+
 OPS_DIR=deployments-routing/${ENVIRONMENT}/operations
 mkdir -p $OPS_DIR
 touch $OPS_DIR/empty.yml
 cp -R $OPS_DIR/* merged-operations/
+
+ls
 
 if [ -d source1 ]; then
   cp -R source1/${SOURCE1_DIR:-""}/* merged-operations/
