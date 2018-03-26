@@ -58,8 +58,9 @@
     - name: default
     stemcell: default
     vm_type: small
-    vm_extensions:
-    - cf-envoy-network-properties
+    # TODO: (gabe) uncomment once we have an automatic way to add the correct infrastructure to every environment
+    # vm_extensions:
+    # - cf-envoy-network-properties
     azs:
     - z1
     - z2
