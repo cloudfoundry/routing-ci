@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -e -x -u -o pipefail
+
+cp -R source1/${SOURCE1_DIR}/* merged-bbl-config/
+cp -R source2/${SOURCE2_DIR}/* merged-bbl-config/
+
+ls -R merged-bbl-config
