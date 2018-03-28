@@ -22,6 +22,7 @@ pushd deployments-routing
   "artifacts_directory": "logs",
   "skip_ssl_validation": true,
   "use_http": true,
+  "timeout_scale": 2,
   "backend": "diego",
   "include_apps": true,
   "include_backend_compatibility": false,
