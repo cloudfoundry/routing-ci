@@ -10,7 +10,7 @@ inputs:
   - name: routing-ci
   - name: deployments-routing
 
-output:
+outputs:
   - name: created-integration-configs
 
 run:
