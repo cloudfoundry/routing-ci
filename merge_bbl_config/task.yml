@@ -11,6 +11,8 @@ inputs:
   - name: source1
   - name: source2
     optional: true
+  - name: source3
+    optional: true
 
 outputs:
   - name: merged-bbl-config
@@ -18,6 +20,7 @@ outputs:
 params:
   SOURCE1_DIR: ~
   SOURCE2_DIR: ~
+  SOURCE3_DIR: ~
 
 run:
   path: routing-ci/merge_bbl_config/task
