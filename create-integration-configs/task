@@ -2,8 +2,18 @@
 
 set -eu -o pipefail
 
-echo "Output: ${DEPLOYMENT_DIR}/cats_integration_config.json"
-cat > "${DEPLOYMENT_DIR}/cats_integration_config.json" <<EOF
+# shellcheck disable=SC1091
+source cf-deployment-concourse-tasks/shared-functions
+
+SYSTEM_DOMAIN="${ENVIRONMENT}.routing.cf-app.com"
+CATS_INTEGRATION_CONFIG="${ENVIRONMENT}/cats_integration_config.json"
+RATS_INTEGRATION_CONFIG="${ENVIRONMENT}/rats_integration_config.json"
+
+pushd deployments-routing
+  set_git_config
+
+  echo "Creating ${CATS_INTEGRATION_CONFIG}"
+  cat > "${CATS_INTEGRATION_CONFIG}" <<EOF
 {
   "api": "api.${SYSTEM_DOMAIN}",
   "admin_user": "admin",
@@ -31,8 +41,10 @@ cat > "${DEPLOYMENT_DIR}/cats_integration_config.json" <<EOF
 }
 EOF
 
-echo "Output: ${DEPLOYMENT_DIR}/rats_integration_config.json"
-cat > "${DEPLOYMENT_DIR}/rats_integration_config.json" <<EOF
+  git add "${CATS_INTEGRATION_CONFIG}"
+
+  echo "Creating ${RATS_INTEGRATION_CONFIG}"
+  cat > "${RATS_INTEGRATION_CONFIG}" <<EOF
 {
   "addresses": [
     "tcp.${SYSTEM_DOMAIN}"
@@ -57,4 +69,9 @@ cat > "${DEPLOYMENT_DIR}/rats_integration_config.json" <<EOF
 }
 EOF
 
-cp -R ${DEPLOYMENT_DIR}/*_integration_config.json created-integration-configs/
+  git add "${CATS_INTEGRATION_CONFIG}"
+
+  git commit -m"creating integration configs for ${ENVIRONMENT}"
+popd
+
+git clone deployments-routing created-integration-configs/

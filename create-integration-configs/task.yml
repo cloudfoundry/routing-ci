@@ -9,6 +9,7 @@ image_resource:
 inputs:
   - name: routing-ci
   - name: deployments-routing
+  - name: cf-deployment-concourse-tasks
 
 outputs:
   - name: created-integration-configs
@@ -17,5 +18,4 @@ run:
   path: routing-ci/create-integration-configs/task
 
 params:
-  SYSTEM_DOMAIN:
-  DEPLOYMENT_DIR:
+  ENVIRONMENT:
