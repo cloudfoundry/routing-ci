@@ -19,3 +19,5 @@ run:
 
 params:
   ENVIRONMENT:
+  GIT_COMMIT_EMAIL: cf-routing-eng@pivotal.io
+  GIT_COMMIT_USERNAME: "CI Bot"
