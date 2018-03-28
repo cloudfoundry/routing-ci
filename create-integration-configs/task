@@ -69,7 +69,7 @@ EOF
 }
 EOF
 
-  git add "${CATS_INTEGRATION_CONFIG}"
+  git add "${RATS_INTEGRATION_CONFIG}"
 
   git commit -m"creating integration configs for ${ENVIRONMENT}"
 popd
