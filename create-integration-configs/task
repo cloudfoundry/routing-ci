@@ -2,9 +2,8 @@
 
 set -eu -o pipefail
 
-if [ ! -f "${DEPLOYMENT_DIR}/cats_integration_config.json" ]; then
-  echo "Output: ${DEPLOYMENT_DIR}/cats_integration_config.json"
-  cat > "${DEPLOYMENT_DIR}/cats_integration_config.json" <<EOF
+echo "Output: ${DEPLOYMENT_DIR}/cats_integration_config.json"
+cat > "${DEPLOYMENT_DIR}/cats_integration_config.json" <<EOF
 {
   "api": "api.${SYSTEM_DOMAIN}",
   "admin_user": "admin",
@@ -31,11 +30,9 @@ if [ ! -f "${DEPLOYMENT_DIR}/cats_integration_config.json" ]; then
   "include_zipkin": true
 }
 EOF
-fi
 
-if [ ! -f "${DEPLOYMENT_DIR}/rats_integration_config.json" ]; then
-  echo "Output: ${DEPLOYMENT_DIR}/rats_integration_config.json"
-  cat > "${DEPLOYMENT_DIR}/rats_integration_config.json" <<EOF
+echo "Output: ${DEPLOYMENT_DIR}/rats_integration_config.json"
+cat > "${DEPLOYMENT_DIR}/rats_integration_config.json" <<EOF
 {
   "addresses": [
     "tcp.${SYSTEM_DOMAIN}"
@@ -59,4 +56,5 @@ if [ ! -f "${DEPLOYMENT_DIR}/rats_integration_config.json" ]; then
   }
 }
 EOF
-fi
+
+cp -R ${DEPLOYMENT_DIR}/*_integration_config.json created-integration-configs/
