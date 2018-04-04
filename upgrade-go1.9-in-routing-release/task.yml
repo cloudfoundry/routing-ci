@@ -10,6 +10,7 @@ inputs:
 - name: routing-release
 - name: golang-release
 - name: routing-ci
+- name: deployments-routing
 
 outputs:
 - name: modified-routing-release
