@@ -22,5 +22,5 @@ pushd "${gopath_dir}/istio-acceptance-tests"
 }
 EOF
 
-  ./scripts/test
+  CONFIG="${PWD}/config.json" ./scripts/test
 popd
