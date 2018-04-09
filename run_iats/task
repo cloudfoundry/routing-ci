@@ -4,7 +4,9 @@ set -eo pipefail
 
 cf_admin_password=$(bosh interpolate "${PWD}/${VARS_LOCATION}" --path=/cf_admin_password)
 
-pushd istio-acceptance-tests
+cp -R istio-acceptance-tests /root/go/src/github.com/
+
+pushd /root/go/src/github.com/istio-acceptance-tests
   cat << EOF > ${PWD}/config.json
 {
   "cf_api": "${API_DOMAIN}",
