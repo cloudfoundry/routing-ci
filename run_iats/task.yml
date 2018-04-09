@@ -19,7 +19,7 @@ params:
   VARS_LOCATION:
   CF_ADMIN_USER: admin
   INTERNAL_DOMAIN: apps.internal
-  PRODUCT_PAGE_DOCKER_REPO: cfrouting/productpage:latest
-  REVIEWS_DOCKER_REPO: cfrouting/reviews:latest
-  RATINGS_DOCKER_REPO: cfrouting/ratings:latest
-  DETAILS_DOCKER_REPO: cfrouting/details:latest
+  PRODUCT_PAGE_DOCKER_REPO: cfrouting/examples-bookinfo-productpage-v1:latest
+  REVIEWS_DOCKER_REPO: cfrouting/examples-bookinfo-reviews-v3:latest
+  RATINGS_DOCKER_REPO: istio/examples-bookinfo-ratings-v2:1.5.0
+  DETAILS_DOCKER_REPO: istio/examples-bookinfo-details-v2:1.5.0

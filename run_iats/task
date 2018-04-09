@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -exo pipefail
+set -eo pipefail
 
 cf_admin_password=$(bosh interpolate "${PWD}/${VARS_LOCATION}" --path=/cf_admin_password)
 
