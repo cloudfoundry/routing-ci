@@ -4,7 +4,7 @@ set -eo pipefail
 
 cf_admin_password=$(bosh interpolate "${PWD}/${VARS_LOCATION}" --path=/cf_admin_password)
 
-cp -R istio-acceptance-tests /root/go/src/code.cloudfoundry.org/
+cp -R istio-acceptance-tests /root/go/src/code.cloudfoundry.org
 
 pushd /root/go/src/code.cloudfoundry.org/istio-acceptance-tests
   cat << EOF > ${PWD}/config.json
