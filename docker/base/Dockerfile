@@ -186,3 +186,4 @@ RUN \
 RUN \
     go get \
         -u github.com/square/certstrap
+
