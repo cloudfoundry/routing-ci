@@ -1,0 +1,25 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: cfrouting/cf-routing-webdriver
+
+inputs:
+  - name: routing-ci
+  - name: deployments-routing
+  - name: istio-acceptance-tests
+
+run:
+  path: routing-ci/run_iats/task
+
+params:
+  API_DOMAIN: bosh-lite.com
+  VARS_LOCATION:
+  CF_ADMIN_USER: admin
+  INTERNAL_DOMAIN: apps.internal
+  PRODUCT_PAGE_DOCKER_REPO: cfrouting/productpage:latest
+  REVIEWS_DOCKER_REPO: cfrouting/reviews:latest
+  RATINGS_DOCKER_REPO: cfrouting/ratings:latest
+  DETAILS_DOCKER_REPO: cfrouting/details:latest

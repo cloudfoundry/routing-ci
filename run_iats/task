@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+set -exo pipefail
+
+cf_admin_password=$(bosh interpolate "${PWD}/${VARS_LOCATION}" --path=/cf_admin_password)
+
+pushd istio-acceptance-tests
+  cat << EOF > ${PWD}/config.json
+{
+  "cf_api": "${API_DOMAIN}",
+  "cf_admin_user": "${CF_ADMIN_USER}",
+  "cf_admin_password": "${cf_admin_password}",
+  "cf_apps_domain": "${INTERNAL_DOMAIN}",
+  "product_page_docker_tag": "${PRODUCT_PAGE_DOCKER_REPO}",
+  "reviews_docker_tag": "${REVIEWS_DOCKER_REPO}",
+  "ratings_docker_tag": "${RATINGS_DOCKER_REPO}",
+  "details_docker_tag": "${DETAILS_DOCKER_REPO}"
+}
+EOF
+
+  ./scripts/test
+popd
