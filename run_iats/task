@@ -4,11 +4,11 @@ set -eo pipefail
 
 cf_admin_password=$(bosh interpolate "${PWD}/${VARS_LOCATION}" --path=/cf_admin_password)
 
-istio_gopath_dir="/root/go/src/code.cloudfoundry.org/istio-acceptance-tests"
-mkdir -p "${istio_gopath_dir}"
-cp -R istio-acceptance-tests "${istio_gopath_dir}"
+gopath_dir="/root/go/src/code.cloudfoundry.org"
+mkdir -p "${gopath_dir}"
+cp -R istio-acceptance-tests "${gopath_dir}"
 
-pushd "${istio_gopath_dir}"
+pushd "${gopath_dir}/istio-acceptance-tests"
   cat << EOF > "${PWD}/config.json"
 {
   "cf_api": "${API_DOMAIN}",
