@@ -21,5 +21,5 @@ params:
   INTERNAL_DOMAIN: apps.internal
   PRODUCT_PAGE_DOCKER_REPO: cfrouting/examples-bookinfo-productpage-v1:latest
   REVIEWS_DOCKER_REPO: cfrouting/examples-bookinfo-reviews-v3:latest
-  RATINGS_DOCKER_REPO: istio/examples-bookinfo-ratings-v2:1.5.0
+  RATINGS_DOCKER_REPO: istio/examples-bookinfo-ratings-v1:1.5.0
   DETAILS_DOCKER_REPO: istio/examples-bookinfo-details-v2:1.5.0
