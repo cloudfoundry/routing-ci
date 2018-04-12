@@ -1,7 +1,6 @@
 #!/bin/bash
 
-set -e -u
-set -o pipefail
+set -euo pipefail
 
 env_dir=${HOME}/workspace/deployments-routing/lite
 cf_deployment_dir=${HOME}/workspace/cf-deployment
