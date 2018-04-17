@@ -18,7 +18,16 @@ echo "---
   path: /releases/name=capi/version
   value: create" > $env_dir/extra-ops-files/local-capi.yml
 
-ln -sf ${HOME}/workspace/istio-release/deploy/cf-deployment-operations/add-istio-bosh-lite.yml $env_dir/extra-ops-files/add-istio.yml
+echo "---
+- type: replace
+  path: /releases/name=istio
+  value:
+    name: istio
+    url: file:///${HOME}/workspace/istio-release
+    version: create" > $env_dir/extra-ops-files/local-istio.yml
+
+ln -sf ${HOME}/workspace/istio-release/deploy/cf-deployment-operations/add-istio.yml $env_dir/extra-ops-files/add-istio.yml
+ln -sf ${HOME}/workspace/istio-release/deploy/cf-deployment-operations/add-route-syncer.yml $env_dir/extra-ops-files/add-route-syncer.yml
 ln -sf ${HOME}/workspace/cf-deployment/operations/experimental/use-bosh-dns-for-containers.yml $env_dir/extra-ops-files/use-bosh-dns.yml
 ln -sf ${HOME}/workspace/cf-deployment/operations/experimental/enable-service-discovery.yml $env_dir/extra-ops-files/enable-service-discovery.yml
 
