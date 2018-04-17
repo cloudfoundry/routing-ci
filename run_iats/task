@@ -11,6 +11,7 @@ cp -R istio-acceptance-tests "${gopath_dir}"
 pushd "${gopath_dir}/istio-acceptance-tests"
   cat << EOF > "${PWD}/config.json"
 {
+  "cf_login_domain": "${CF_LOGIN_DOMAIN}",
   "cf_api": "${API_DOMAIN}",
   "cf_admin_user": "${CF_ADMIN_USER}",
   "cf_admin_password": "${cf_admin_password}",

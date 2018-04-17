@@ -15,6 +15,7 @@ run:
   path: routing-ci/run_iats/task
 
 params:
+  CF_LOGIN_DOMAIN:
   API_DOMAIN: bosh-lite.com
   VARS_LOCATION:
   CF_ADMIN_USER: admin
