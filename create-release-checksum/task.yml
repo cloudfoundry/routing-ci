@@ -7,15 +7,13 @@ image_resource:
     repository: cloudfoundry/cf-routing-pipeline
 
 inputs:
+  - name: rc-version
   - name: deployments-routing
+  - name: cf-routing-bosh-release
   - name: routing-ci
 
-run:
-  path: routing-ci/emit-datadog-event
+outputs:
+  - name: release-checksum
 
-params:
-  TITLE:
-  TEXT:
-  PRIORITY:
-  AWS_ENV:
-  DATADOG_API_KEY:
+run:
+  path: routing-ci/create-release-checksum/task

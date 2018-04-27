@@ -5,17 +5,19 @@ image_resource:
   type: docker-image
   source:
     repository: cloudfoundry/cf-routing-pipeline
+    tag: bbl3
 
 inputs:
   - name: deployments-routing
   - name: routing-ci
 
 run:
-  path: routing-ci/emit-datadog-event
+  path: routing-ci/bosh-command/task
 
 params:
-  TITLE:
-  TEXT:
-  PRIORITY:
-  AWS_ENV:
-  DATADOG_API_KEY:
+  NUMBER_OF_RUNS:
+  BOSH_DIRECTOR:
+  BOSH_USER:
+  BOSH_PASSWORD:
+  DEPLOYMENT:
+  COMMAND:

@@ -7,15 +7,18 @@ image_resource:
     repository: cloudfoundry/cf-routing-pipeline
 
 inputs:
+  - name: cf-deployment
   - name: deployments-routing
   - name: routing-ci
+  - name: source1
+    optional: true
 
-run:
-  path: routing-ci/emit-datadog-event
+outputs:
+  - name: merged-operations
 
 params:
-  TITLE:
-  TEXT:
-  PRIORITY:
-  AWS_ENV:
-  DATADOG_API_KEY:
+  ENVIRONMENT:
+  SOURCE1_DIR: ~
+
+run:
+  path: routing-ci/merge-ops-files/task

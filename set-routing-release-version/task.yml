@@ -7,15 +7,13 @@ image_resource:
     repository: cloudfoundry/cf-routing-pipeline
 
 inputs:
-  - name: deployments-routing
   - name: routing-ci
+  - name: deployments-routing
+  - name: release-version
+
+outputs:
+  - name: ops-file
 
 run:
-  path: routing-ci/emit-datadog-event
+  path: routing-ci/set-routing-release-version/task
 
-params:
-  TITLE:
-  TEXT:
-  PRIORITY:
-  AWS_ENV:
-  DATADOG_API_KEY:

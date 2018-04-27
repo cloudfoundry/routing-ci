@@ -8,14 +8,14 @@ image_resource:
 
 inputs:
   - name: deployments-routing
+  - name: routing-perf-release
   - name: routing-ci
 
+outputs:
+  - name: routing-perf-release-tarball
+
 run:
-  path: routing-ci/emit-datadog-event
+  path: routing-ci/create-perf-release-tarball/task
 
 params:
-  TITLE:
-  TEXT:
-  PRIORITY:
-  AWS_ENV:
-  DATADOG_API_KEY:
+  ROUTING_PERF_RELEASE_DIR: routing-perf-release

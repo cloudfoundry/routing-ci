@@ -15,4 +15,4 @@ outputs:
   - name: cf-routing-release-mergedmaster
 
 run:
-  path: routing-ci/merge_routing_release_master_into_develop
+  path: routing-ci/merge-routing-release-master-into-develop

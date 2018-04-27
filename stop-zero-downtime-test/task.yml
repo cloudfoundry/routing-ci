@@ -11,11 +11,8 @@ inputs:
   - name: routing-ci
 
 run:
-  path: routing-ci/emit-datadog-event
+  path: routing-ci/stop-zero-downtime-test/task
 
 params:
-  TITLE:
-  TEXT:
-  PRIORITY:
-  AWS_ENV:
-  DATADOG_API_KEY:
+  CF_APP_DOMAIN:
+  CF_APP_NAME:

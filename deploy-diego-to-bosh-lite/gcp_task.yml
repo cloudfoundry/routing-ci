@@ -7,16 +7,15 @@ image_resource:
     repository: cloudfoundry/cf-routing-pipeline
 
 inputs:
-- name: cf-release-source
 - name: deployments-routing
+- name: diego-github-release
+- name: diego-release-src
 - name: routing-ci
 
-outputs:
-- name: cf-manifest
-
 run:
-  path: routing-ci/create-cf-release-manifest
+  path: routing-ci/deploy-diego-to-bosh-lite/gcp_task
 
 params:
-  INFRASTRUCTURE:
+  DIEGO_RELEASE_TARBALL_DIR: diego-github-release
+  DIEGO_RELEASE_DIR: diego-release-src
   ENVIRONMENT:

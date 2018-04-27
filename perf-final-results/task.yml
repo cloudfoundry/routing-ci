@@ -7,16 +7,15 @@ image_resource:
     repository: cloudfoundry/cf-routing-pipeline
 
 inputs:
-- name: cf-release-source
 - name: deployments-routing
+- name: rc-perf-results
+- name: rc-version
+- name: routing-release-master
 - name: routing-ci
 
 outputs:
-- name: cf-manifest
+- name: results
 
 run:
-  path: routing-ci/create-cf-release-manifest
+  path: routing-ci/perf-final-results/task
 
-params:
-  INFRASTRUCTURE:
-  ENVIRONMENT:

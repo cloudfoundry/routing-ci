@@ -7,21 +7,19 @@ image_resource:
     repository: cloudfoundry/cf-routing-pipeline
 
 inputs:
-  - name: cf-release-source
+  - name: routing-release
   - name: deployments-routing
-  - name: diego-release-src
   - name: routing-ci
 
 outputs:
-  - name: diego-manifest
+  - name: routing-manifest
 
 params:
-  DEPLOYMENTS_DIR: ~
   ENVIRONMENT: ~
-  INFRASTRUCTURE: ~
   BOSH_TARGET: ~
   BOSH_USER: ~
   BOSH_PASSWORD: ~
+  INFRASTRUCTURE: ~
 
 run:
-  path: routing-ci/generate-diego-manifest
+  path: routing-ci/create-routing-manifest/task

@@ -7,16 +7,16 @@ image_resource:
     repository: cloudfoundry/cf-routing-pipeline
 
 inputs:
-- name: cf-release-source
 - name: deployments-routing
+- name: cf-release-tarball
+- name: cf-release
+- name: routing-release
 - name: routing-ci
 
-outputs:
-- name: cf-manifest
-
 run:
-  path: routing-ci/create-cf-release-manifest
+  path: routing-ci/deploy-cf-to-bosh-lite/gcp_task
 
 params:
-  INFRASTRUCTURE:
+  CF_RELEASE_TARBALL_DIR: cf-release-tarball
+  CF_RELEASE_DIR: cf-release
   ENVIRONMENT:

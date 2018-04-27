@@ -8,14 +8,15 @@ image_resource:
 
 inputs:
   - name: deployments-routing
+  - name: cf-release-source
+  - name: version
   - name: routing-ci
 
+outputs:
+  - name: cf-release-tarball
+
 run:
-  path: routing-ci/emit-datadog-event
+  path: routing-ci/create-cf-release-tarball/task
 
 params:
-  TITLE:
-  TEXT:
-  PRIORITY:
-  AWS_ENV:
-  DATADOG_API_KEY:
+  CF_RELEASE_DIR: cf-release-source
