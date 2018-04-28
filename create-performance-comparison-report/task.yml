@@ -21,4 +21,4 @@ outputs:
   - name: rc-comparison-report
 
 run:
-  path: routing-ci/create-stemcell-performance-report/task
+  path: routing-ci/create-performance-comparison-report/task
