@@ -11,11 +11,11 @@ cp -R istio-acceptance-tests "${gopath_dir}"
 pushd "${gopath_dir}/istio-acceptance-tests"
   cat << EOF > "${PWD}/config.json"
 {
-  "cf_login_domain": "${CF_LOGIN_DOMAIN}",
-  "cf_api": "${API_DOMAIN}",
+  "cf_system_domain": "${CF_LOGIN_DOMAIN}",
+  "cf_istio_domain": "${API_DOMAIN}",
   "cf_admin_user": "${CF_ADMIN_USER}",
   "cf_admin_password": "${cf_admin_password}",
-  "cf_apps_domain": "${INTERNAL_DOMAIN}",
+  "cf_internal_apps_domain": "${INTERNAL_DOMAIN}",
   "product_page_docker_tag": "${PRODUCT_PAGE_DOCKER_REPO}",
   "reviews_docker_tag": "${REVIEWS_DOCKER_REPO}",
   "ratings_docker_tag": "${RATINGS_DOCKER_REPO}",
