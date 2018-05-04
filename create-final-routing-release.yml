@@ -18,7 +18,7 @@ outputs:
   - name: routing-release-final
 
 run:
-  path: routing-ci/create_final_routing_release
+  path: routing-ci/create-final-routing-release
 
 params:
   CF_ROUTING_RELEASE_RC_DIR:
