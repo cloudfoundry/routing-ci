@@ -7,12 +7,12 @@ image_resource:
     repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
 
 inputs:
-- name: env-repo
+- name: bbl-state
 - name: routing-ci
 - name: plan-patches
 
 outputs:
-- name: modified-env-repo
+- name: updated-bbl-state
 
 params:
   BBL_STATE_DIR:  # relative to env-repo input

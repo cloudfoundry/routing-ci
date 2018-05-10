@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e -x -u -o pipefail
 
-indir=./env-repo
-outdir=./modified-env-repo
+indir=./bbl-state
+outdir=./updated-bbl-state
 git clone "${indir}" "${outdir}"
 
 function set_git_config() {

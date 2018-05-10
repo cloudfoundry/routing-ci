@@ -7,12 +7,12 @@ image_resource:
     repository: relintdockerhubpushbot/cf-deployment-concourse-tasks
 
 inputs:
-- name: deployments-routing
+- name: bbl-state
 - name: routing-ci
 - name: bosh-bootloader
 
 outputs:
-- name: modified-deployments-routing
+- name: updated-bbl-state
 
 params:
   ENVIRONMENT: ~

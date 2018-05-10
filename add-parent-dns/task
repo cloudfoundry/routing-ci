@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e -x -u -o pipefail
 
-indir=./deployments-routing
-outdir=./modified-deployments-routing
+indir=./bbl-state
+outdir=./updated-bbl-state
 git clone "${indir}" "${outdir}"
 
 dest_dir="${outdir}/${ENVIRONMENT}/bbl-state/terraform/"

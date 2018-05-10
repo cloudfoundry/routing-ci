@@ -7,11 +7,11 @@ image_resource:
     repository: cloudfoundry/cf-routing-pipeline
 
 inputs:
-- name: env-repo
+- name: bbl-state
 - name: routing-ci
 
 outputs:
-- name: modified-env-repo
+- name: updated-bbl-state
 
 params:
   ENVIRONMENT: ~  # name of the CI environment
