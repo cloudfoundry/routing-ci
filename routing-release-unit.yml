@@ -9,7 +9,6 @@ image_resource:
 inputs:
   - name: routing-release
   - name: deployments-routing
-  - name: old-routing-release
   - name: routing-ci
 
 params:
