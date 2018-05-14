@@ -6,6 +6,7 @@ set -e -o pipefail
 source cf-deployment-concourse-tasks/shared-functions
 
 SYSTEM_DOMAIN="${ENVIRONMENT}.routing.cf-app.com"
+CF_SMOKE_TESTS_CONFIG="${ENVIRONMENT}/cf_smoke_tests_config.json"
 CATS_INTEGRATION_CONFIG="${ENVIRONMENT}/cats_integration_config.json"
 RATS_INTEGRATION_CONFIG="${ENVIRONMENT}/rats_integration_config.json"
 
@@ -71,6 +72,35 @@ EOF
 EOF
 
   git add "${RATS_INTEGRATION_CONFIG}"
+
+  echo "Create ${CF_SMOKE_TESTS_CONFIG}"
+  cat > "${CF_SMOKE_TESTS_CONFIG}" <<EOF
+{
+  "suite_name": "CF_SMOKE_TESTS",
+  "api": "api.${SYSTEM_DOMAIN}",
+  "apps_domain": "bosh-lite.com",
+  "user": "admin",
+  "password": "REPLACE ME",
+  "org": "",
+  "space": "",
+  "isolation_segment_space": "",
+  "cleanup": true,
+  "use_existing_org": false,
+  "use_existing_space": false,
+  "logging_app": "",
+  "runtime_app": "",
+  "enable_windows_tests": false,
+  "windows_stack": "windows2012R2",
+  "enable_etcd_cluster_check_tests": false,
+  "etcd_ip_address": "",
+  "backend": "diego",
+  "isolation_segment_name": "${ISO_SEG_NAME}",
+  "isolation_segment_domain": "${ISO_SEG_NAME}.${SYSTEM_DOMAIN}",
+  "enable_isolation_segment_tests": true
+}
+EOF
+
+  git add "${CF_SMOKE_TESTS_CONFIG}"
 
   git commit -m"creating integration configs for ${ENVIRONMENT}"
 popd
