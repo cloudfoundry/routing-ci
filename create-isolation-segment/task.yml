@@ -14,6 +14,7 @@ run:
   path: routing-ci/create-isolation-segment/task
 
 params:
+  CF_API:
   VARS_FILE: deployment-vars.yml
   CF_ADMIN_USER: admin
   CF_SKIP_SSL_VALIDATION:
