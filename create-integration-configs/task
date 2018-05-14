@@ -100,6 +100,13 @@ EOF
 }
 EOF
 
+ ADMIN_PASS=$(bosh interpolate ${ENVIRONMENT}/${VARS_STORE_FILE} --path=/cf_admin_password)
+
+ tmpfile=$(mktemp /tmp/replace-result.json.XXXXXX)
+
+ jq --arg admin_pass "$ADMIN_PASS" '.password=$admin_pass' "${CF_SMOKE_TESTS_CONFIG}" > "${tmpfile}" \
+   && mv "${tmpfile}" "${CF_SMOKE_TESTS_CONFIG}"
+
   git add "${CF_SMOKE_TESTS_CONFIG}"
 
   git commit -m"creating integration configs for ${ENVIRONMENT}"
