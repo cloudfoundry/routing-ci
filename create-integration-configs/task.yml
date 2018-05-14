@@ -19,6 +19,7 @@ run:
 
 params:
   ISO_SEG_NAME:
+  ISO_SEG_DOMAIN_PREFIX: iso-seg
   ENVIRONMENT:
   VARS_STORE_FILE: deployment-vars.yml
   GIT_COMMIT_EMAIL: cf-routing-eng@pivotal.io
