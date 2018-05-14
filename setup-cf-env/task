@@ -1,21 +1,34 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -ex
- # Cannot set -u before sourcing .bashrc because of all
- # the unbound variables in things beyond our control.
- source ~/.bashrc
 
- if [ ${CF_SKIP_SSL_VALIDATION} == 'true' ] ;
+ CF_API="api.${ENVIRONMENT}.${SYSTEM_DOMAIN}"
+
+ if [[ "${CF_SKIP_SSL_VALIDATION}" == 'true' ]];
  then
-   cf api ${CF_API} --skip-ssl-validation
+   cf api "${CF_API}" --skip-ssl-validation
  else
-   cf api ${CF_API}
+   cf api "${CF_API}"
  fi
 
- cf auth ${CF_ADMIN_USER} ${CF_ADMIN_PASSWORD}
- cf create-org ${CF_ORG}
- cf target -o ${CF_ORG}
- cf create-space ${CF_SPACE}
- cf target -o ${CF_ORG} -s ${CF_SPACE}
- cf create-user ${CF_USERNAME} ${CF_PASSWORD}
- cf set-space-role ${CF_USERNAME} ${CF_ORG} ${CF_SPACE} ${CF_SPACE_ROLE}
+VARS_STORE="${PWD}/deployments-routing/${ENVIRONMENT}/${VARS_FILE}"
+set +x
+  admin_password=$(bosh interpolate "${VARS_STORE}" --path=/cf_admin_password)
+  cf auth "${CF_ADMIN_USER}" "${admin_password}"
+set -x
+
+ cf create-org "${CF_ORG}"
+ cf target -o "${CF_ORG}"
+ cf create-space "${CF_SPACE}"
+ cf target -o "${CF_ORG}" -s "${CF_SPACE}"
+ cf create-user "${CF_USERNAME}" "${CF_PASSWORD}"
+ cf set-space-role "${CF_USERNAME}" "${CF_ORG}" "${CF_SPACE}" "${CF_SPACE_ROLE}"
+
+cf create-quota "${CF_ORG}_quota" -m 10G -r 1000 -s 100
+
+ORG_DEF_GUID=$(cf curl /v2/quota_definitions?q=name:${CF_ORG}_quota | grep guid | cut -f 4 -d"\"")
+
+cf curl "/v2/quota_definitions/${ORG_DEF_GUID}" -X PUT -d '{"total_reserved_route_ports": 10}'
+
+cf set-quota "${CF_ORG}" "${CF_ORG}_quota"
+

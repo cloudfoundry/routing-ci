@@ -14,10 +14,11 @@ run:
   path: routing-ci/create-http-app/task
 
 params:
-  CF_API:
+  CF_APP_DOMAIN:
+  CF_APP_NAME:
   CF_ORG:
-  CF_USER:
   CF_PASSWORD:
   CF_SKIP_SSL_VALIDATION:
-  CF_APP_NAME:
-  CF_APP_DOMAIN:
+  CF_USER:
+  ENVIRONMENT:
+  SYSTEM_DOMAIN:

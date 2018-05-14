@@ -1,4 +1,3 @@
-
 ---
 platform: linux
 
@@ -15,11 +14,12 @@ run:
   path: routing-ci/setup-cf-env/task
 
 params:
-  CF_API:
+  CF_ADMIN_PASSWORD:
+  CF_ADMIN_USER: admin
   CF_ORG:
+  CF_PASSWORD:
+  CF_SKIP_SSL_VALIDATION: true
   CF_SPACE:
   CF_USERNAME:
-  CF_PASSWORD:
-  CF_ADMIN_USER:
-  CF_ADMIN_PASSWORD:
-  CF_SKIP_SSL_VALIDATION:
+  ENVIRONMENT:
+  SYSTEM_DOMAIN:
