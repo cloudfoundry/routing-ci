@@ -23,5 +23,6 @@ pushd "${gopath_dir}/istio-acceptance-tests"
 }
 EOF
 
-  CONFIG="${PWD}/config.json" ./scripts/test
+  CONFIG="${PWD}/config.json" ginkgo -v -r -failOnPending \
+    -randomizeAllSpecs -nodes="${NODES}" -keepGoing
 popd
