@@ -8,6 +8,8 @@ gopath_dir="/root/go/src/code.cloudfoundry.org"
 mkdir -p "${gopath_dir}"
 cp -R istio-acceptance-tests "${gopath_dir}"
 
+go install github.com/onsi/ginkgo/ginkgo
+
 pushd "${gopath_dir}/istio-acceptance-tests"
   cat << EOF > "${PWD}/config.json"
 {
