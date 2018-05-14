@@ -12,8 +12,8 @@ else
 fi
 
 set +x
-  admin_password=$(bosh interpolate ${VARS_STORE} --path=/cf_admin_password)
+  admin_password=$(bosh interpolate "${VARS_STORE}" --path=/cf_admin_password)
   cf auth "${CF_ADMIN_USER}" "${admin_password}"
 set -x
 
-cf create-isolation-segment "${ENVIRONMENT}-iso-seg"
+cf create-isolation-segment "${ISO_SEG_NAME}"
