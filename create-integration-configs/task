@@ -18,7 +18,7 @@ pushd deployments-routing
 {
   "api": "api.${SYSTEM_DOMAIN}",
   "admin_user": "admin",
-  "admin_password": "REPLACE ME",
+  "admin_password": "PROGRAMMATICALLY REPLACED",
   "apps_domain": "${SYSTEM_DOMAIN}",
   "artifacts_directory": "logs",
   "skip_ssl_validation": true,
@@ -53,7 +53,7 @@ EOF
   ],
   "api": "api.${SYSTEM_DOMAIN}",
   "admin_user": "admin",
-  "admin_password": "REPLACE ME",
+  "admin_password": "PROGRAMMATICALLY REPLACED",
   "skip_ssl_validation": true,
   "use_http": true,
   "apps_domain": "${SYSTEM_DOMAIN}",
@@ -64,7 +64,7 @@ EOF
   "oauth": {
     "token_endpoint": "https://uaa.${SYSTEM_DOMAIN}",
     "client_name": "routing_api_client",
-    "client_secret": "REPLACE ME",
+    "client_secret": "PROGRAMMATICALLY REPLACED",
     "port": 443,
     "skip_ssl_validation": true
   }
@@ -78,9 +78,9 @@ EOF
 {
   "suite_name": "CF_SMOKE_TESTS",
   "api": "api.${SYSTEM_DOMAIN}",
-  "apps_domain": "bosh-lite.com",
+  "apps_domain": "${SYSTEM_DOMAIN}",
   "user": "admin",
-  "password": "REPLACE ME",
+  "password": "PROGRAMMATICALLY REPLACED",
   "org": "",
   "space": "",
   "isolation_segment_space": "",
