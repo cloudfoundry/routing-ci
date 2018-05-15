@@ -11,7 +11,7 @@ inputs:
   - name: routing-ci
 
 run:
-  path: routing-ci/emit-datadog-event
+  path: routing-ci/emit-datadog-event/task
 
 params:
   TITLE:

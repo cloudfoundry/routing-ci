@@ -1,20 +1,18 @@
----
 platform: linux
 
 image_resource:
   type: docker-image
   source:
     repository: cloudfoundry/cf-routing-pipeline
-    tag: bbl3
 
 inputs:
-  - name: cf-release-dev
+  - name: cf-routing-release-develop
   - name: deployments-routing
-  - name: routing-release
+  - name: cf-routing-release-master
   - name: routing-ci
 
 outputs:
-  - name: bumped
+  - name: cf-routing-release-mergedmaster
 
 run:
-  path: routing-ci/bump
+  path: routing-ci/merge-routing-release-master-into-develop/task

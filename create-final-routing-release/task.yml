@@ -18,7 +18,7 @@ outputs:
   - name: routing-release-final
 
 run:
-  path: routing-ci/create-final-routing-release
+  path: routing-ci/create-final-routing-release/task
 
 params:
   CF_ROUTING_RELEASE_RC_DIR:
