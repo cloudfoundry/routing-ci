@@ -12,6 +12,14 @@ popd
 
 mkdir -p $env_dir/extra-ops-files
 
+echo "---
+- type: replace
+  path: /releases/name=routing
+  value:
+    name: routing
+    url: file:///${HOME}/workspace/routing-release
+    version: create" > $env_dir/extra-ops-files/local-routing.yml
+
 extra_ops_files=""
 
 shopt -s nullglob
