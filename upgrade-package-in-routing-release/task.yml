@@ -8,12 +8,15 @@ image_resource:
 
 inputs:
 - name: routing-release
-- name: golang-release
+- name: package-release
 - name: routing-ci
 - name: deployments-routing
 
 outputs:
 - name: modified-routing-release
 
+params:
+  PACKAGE:
+
 run:
-  path: routing-ci/upgrade-go1.9-in-routing-release/task
+  path: routing-ci/upgrade-package-in-routing-release/task
