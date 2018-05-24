@@ -16,15 +16,16 @@ mv rc-csv-dir/*.csv "${JUPYTER_DIR}"
 mv master-csv-dir/cpuStats.csv "${JUPYTER_DIR}/old_cpuStats.csv"
 mv master-csv-dir/perfResults.csv "${JUPYTER_DIR}/old_perfResults.csv"
 
+pushd routing-release-rc
 # Find sha of RC and add it to Jupyter metadata
 CURRENT_METADATA_FILENAME="$JUPYTER_DIR/$METADATA_CUR_FILE_NAME"
+current_sha=$(git log --pretty=format:'%h' -n 1)
 touch "${CURRENT_METADATA_FILENAME}"
 cat > "${CURRENT_METADATA_FILENAME}"<<EOF
 ---
 sha: "${current_sha}"
 EOF
 
-pushd routing-release-rc
 PREVIOUS_METADATA_FILENAME="${JUPYTER_DIR}/${METADATA_PREV_FILE_NAME}"
 CURRENT_VERSION=$(git describe --tags | cut -d '-' -f1)
 touch "${PREVIOUS_METADATA_FILENAME}"
@@ -41,10 +42,9 @@ popd
 
 cp "${JUPYTER_DIR}/Performance_Data.html" "${RC_OUTPUT_DIR}/${RC_REPORT_NAME}"
 
-# Find version of next final release and add it to Jupyter metadata
+# Get version of next final release and add it to Jupyter metadata
 pushd routing-release-master
 PREVIOUS_METADATA_FILENAME="${JUPYTER_DIR}/${METADATA_PREV_FILE_NAME}"
-current_sha=$(git log --pretty=format:'%h' -n 1)
 cat > "${CURRENT_METADATA_FILENAME}"<<EOF
 ---
 sha: "${NEXT_VERSION}"
