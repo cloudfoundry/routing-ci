@@ -24,4 +24,4 @@ params:
   REVIEWS_DOCKER_REPO: istio/examples-bookinfo-reviews-v3:1.6.0
   RATINGS_DOCKER_REPO: istio/examples-bookinfo-ratings-v1:1.6.0
   DETAILS_DOCKER_REPO: istio/examples-bookinfo-details-v1:1.6.0
-  NODES: 12
+  NODES: 7
