@@ -15,7 +15,3 @@ ls
 if [ -d source1 ]; then
   cp -R source1/${SOURCE1_DIR:-""}/* merged-operations/
 fi
-
-if [ -d cf-networking-opsfiles ]; then
-    cp -R cf-networking-opsfiles/ci/opsfiles/use-cf-networking-2-for-istio-release.yml merged-operations/
-fi

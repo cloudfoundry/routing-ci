@@ -10,8 +10,6 @@ inputs:
   - name: cf-deployment
   - name: deployments-routing
   - name: routing-ci
-  - name: cf-networking-opsfiles
-    optional: true
   - name: source1
     optional: true
 
