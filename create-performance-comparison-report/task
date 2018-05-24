@@ -44,7 +44,6 @@ cp "${JUPYTER_DIR}/Performance_Data.html" "${RC_OUTPUT_DIR}/${RC_REPORT_NAME}"
 
 # Get version of next final release and add it to Jupyter metadata
 pushd routing-release-master
-PREVIOUS_METADATA_FILENAME="${JUPYTER_DIR}/${METADATA_PREV_FILE_NAME}"
 cat > "${CURRENT_METADATA_FILENAME}"<<EOF
 ---
 sha: "${NEXT_VERSION}"
