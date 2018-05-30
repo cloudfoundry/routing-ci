@@ -3,6 +3,7 @@
 set -eo pipefail
 
 pushd "${PWD}/${VARS_LOCATION}" > /dev/null
+  eval "$(bbl print-env)"
   cf_admin_password=$(credhub find -j -n cf_admin_password | jq -r .credentials[].name | xargs credhub get -j -n | jq -r .value)
 popd > /dev/null
 
