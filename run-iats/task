@@ -2,7 +2,9 @@
 
 set -eo pipefail
 
-cf_admin_password=$(bosh interpolate "${PWD}/${VARS_LOCATION}" --path=/cf_admin_password)
+pushd "${PWD}/${VARS_LOCATION}" > /dev/null
+  cf_admin_password=$(credhub find -j -n cf_admin_password | jq -r .credentials[].name | xargs credhub get -j -n | jq -r .value)
+popd > /dev/null
 
 gopath_dir="/root/go/src/code.cloudfoundry.org"
 mkdir -p "${gopath_dir}"
