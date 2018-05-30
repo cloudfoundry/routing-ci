@@ -13,6 +13,7 @@ ENV ROUTING_API_CLI_VERSION 2.9.0
 ENV CONSUL_VERSION 0.7.5
 ENV CF_CLI_VERSION 6.34.1
 ENV POSTGRES_VERSION 9.3
+ENV CREDHUB_CLI_VERSION 1.7.5
 
 RUN set -ex \
     && echo 'mysql-server mysql-server/root_password password password' | debconf-set-selections \
@@ -132,6 +133,12 @@ RUN \
   wget https://github.com/cloudfoundry/bosh-bootloader/releases/download/v${BBL_VERSION}/bbl-v${BBL_VERSION}_linux_x86-64 -P /tmp && \
   mv /tmp/bbl-* /usr/local/bin/bbl && \
   chmod +x /usr/local/bin/bbl
+
+RUN \
+  wget https://github.com/cloudfoundry-incubator/credhub-cli/releases/download/${CREDHUB_CLI_VERSION}/credhub-linux-${CREDHUB_CLI_VERSION}.tgz -P /tmp && \
+  tar -xvf /tmp/credhub-linux-${CREDHUB_CLI_VERSION}.tgz -C /tmp && \
+  mv /tmp/credhub /usr/local/bin/credhub && \
+  chmod +x /usr/local/bin/credhub
 
 RUN \
   wget https://github.com/cloudfoundry-incubator/routing-api-cli/releases/download/${ROUTING_API_CLI_VERSION}/rtr-linux-amd64.tgz && \
