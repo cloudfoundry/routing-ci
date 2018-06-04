@@ -122,16 +122,7 @@ extract_var()
 {
   local env=$1
   local var=$2
-  local dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-  local deployment_dir="${dir}/../../deployments-routing/${env}"
-  local deployment_vars_file="${deployment_dir}/deployment-vars.yml"
 
-  if [[ -f "${deployment_vars_file}" ]]; then
-    bosh int --path /"${var}" "${deployment_vars_file}"
-  else
-    pushd "${deployment_dir}/bbl-state" > /dev/null
-      eval "$(bbl print-env)"
-    popd > /dev/null
-    credhub find -j -n "${var}" | jq -r .credentials[].name | xargs credhub get -j -n | jq -r .value
-  fi
+  bosh_login "${env}"
+  credhub find -j -n "${var}" | jq -r .credentials[].name | xargs credhub get -j -n | jq -r .value
 }
