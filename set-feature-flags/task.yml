@@ -9,6 +9,7 @@ image_resource:
 
 inputs:
 - name: routing-ci # - This repo
+- name: deployments-routing # - For env creds
 
 params:
   SYSTEM_DOMAIN:
