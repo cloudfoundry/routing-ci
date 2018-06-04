@@ -120,9 +120,28 @@ bosh_logout ()
 
 extract_var()
 {
-  local env=$1
-  local var=$2
+  local env=${1}
+  local var=${2}
 
   bosh_login "${env}" > /dev/null
   credhub find -j -n "${var}" | jq -r .credentials[].name | xargs credhub get -j -n | jq -r .value
+}
+
+get_system_domain()
+{
+  local env
+  env=${1}
+  if [ "${env}" = "lite" ]; then
+    echo "bosh-lite.com"
+    return
+  fi
+
+  echo "${env}.routing.cf-app.com"
+}
+
+cf_login()
+{
+  env=${1}
+  cf api "api.$(get_system_domain "${env}")" --skip-ssl-validation
+  cf auth admin "$(extract_var "${env}" cf_admin_password)"
 }
