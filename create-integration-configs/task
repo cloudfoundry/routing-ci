@@ -4,6 +4,7 @@ set -e -o pipefail
 
 # shellcheck disable=SC1091
 source cf-deployment-concourse-tasks/shared-functions
+source routing-ci/scripts/script_helpers.sh
 
 SYSTEM_DOMAIN="${ENVIRONMENT}.routing.cf-app.com"
 CF_SMOKE_TESTS_CONFIG="${ENVIRONMENT}/cf_smoke_tests_config.json"
