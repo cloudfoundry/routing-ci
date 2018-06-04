@@ -120,20 +120,16 @@ bosh_logout ()
 
 extract_var()
 {
-  local workspace="${HOME}/workspace"
-  if [[ ! -d "${workspace}" ]]; then
-    workspace="${PWD}"
-  fi
-
-  env=$1
-  var=$2
-  local env_root="${workspace}/deployments-routing/${env}"
-  local deployment_vars_file="${env_root}/deployment-vars.yml"
+  local env=$1
+  local var=$2
+  local dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+  local deployment_dir="${dir}/../../deployments-routing/${env}"
+  local deployment_vars_file="${deployment_dir}/deployment-vars.yml"
 
   if [[ -f "${deployment_vars_file}" ]]; then
     bosh int --path /"${var}" "${deployment_vars_file}"
   else
-    pushd "${env_root}/bbl-state" > /dev/null
+    pushd "${deployment_dir}/bbl-state" > /dev/null
       eval "$(bbl print-env)"
     popd > /dev/null
     credhub find -j -n "${var}" | jq -r .credentials[].name | xargs credhub get -j -n | jq -r .value
