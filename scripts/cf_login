@@ -5,10 +5,16 @@ set -o pipefail
 
 extract_var()
 {
+  local workspace="${HOME}/workspace"
+  if [[ ! -d "${workspace}" ]]; then
+    workspace="${HOME}"
+  fi
+
   env=$1
   var=$2
-  local env_root="${HOME}/workspace/deployments-routing/${env}"
+  local env_root="${workspace}/deployments-routing/${env}"
   local deployment_vars_file="${env_root}/deployment-vars.yml"
+
   if [[ -f "${deployment_vars_file}" ]]; then
     bosh int --path /"${var}" "${deployment_vars_file}"
   else
