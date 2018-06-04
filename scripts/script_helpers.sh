@@ -123,6 +123,6 @@ extract_var()
   local env=$1
   local var=$2
 
-  bosh_login "${env}"
+  bosh_login "${env}" > /dev/null
   credhub find -j -n "${var}" | jq -r .credentials[].name | xargs credhub get -j -n | jq -r .value
 }

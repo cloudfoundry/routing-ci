@@ -10,6 +10,7 @@ SYSTEM_DOMAIN="${ENVIRONMENT}.routing.cf-app.com"
 CF_SMOKE_TESTS_CONFIG="${ENVIRONMENT}/cf_smoke_tests_config.json"
 CATS_INTEGRATION_CONFIG="${ENVIRONMENT}/cats_integration_config.json"
 RATS_INTEGRATION_CONFIG="${ENVIRONMENT}/rats_integration_config.json"
+ADMIN_PASS=$(extract_var "${ENVIRONMENT}" cf_admin_password)
 
 pushd deployments-routing
   set_git_config
@@ -74,7 +75,7 @@ EOF
 
   git add "${RATS_INTEGRATION_CONFIG}"
 
-  echo "Create ${CF_SMOKE_TESTS_CONFIG}"
+  echo "Creating ${CF_SMOKE_TESTS_CONFIG}"
   cat > "${CF_SMOKE_TESTS_CONFIG}" <<EOF
 {
   "suite_name": "CF_SMOKE_TESTS",
@@ -102,7 +103,6 @@ EOF
 }
 EOF
 
- ADMIN_PASS=$(extract_var "${ENVIRONMENT}" cf_admin_password)
 
  tmpfile=$(mktemp /tmp/replace-result.json.XXXXXX)
 
