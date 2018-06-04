@@ -2,18 +2,10 @@
 
 set -ex
 
-VARS_STORE="${PWD}/deployments-routing/${ENVIRONMENT}/${VARS_FILE}"
-
-if [[ "${CF_SKIP_SSL_VALIDATION}" == 'true' ]];
-then
-  cf api "${CF_API}" --skip-ssl-validation
-else
-  cf api "${CF_API}"
-fi
+cf_login="${PWD}/routing-ci/scripts/cf_login"
 
 set +x
-  admin_password=$(bosh interpolate "${VARS_STORE}" --path=/cf_admin_password)
-  cf auth "${CF_ADMIN_USER}" "${admin_password}"
+  "${cf_login}" "${ENVIRONMENT}"
 set -x
 
 cf create-isolation-segment "${ISO_SEG_NAME}"
