@@ -72,7 +72,7 @@ function main() {
     echo "updating RATs integration config file: ${RATS_INTEGRATION_CONFIG_FILE}..."
 
     local uaa_clients_routing_api_client_secret
-    uaa_clients_routing_api_client_secret=$(uaa_clients_routing_api_client_secret)
+    uaa_clients_routing_api_client_secret=$(extract_var "${ENVIRONMENT}" uaa_clients_routing_api_client_secret)
 
     local new_rats_integration_config
     new_rats_integration_config=$(cat "integration-configs/${RATS_INTEGRATION_CONFIG_FILE}")
