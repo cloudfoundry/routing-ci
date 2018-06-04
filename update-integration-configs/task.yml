@@ -9,6 +9,7 @@ image_resource:
 
 inputs:
 - name: routing-ci # - This repo
+- name: cf-deployment-concourse-tasks # - Other repo with some helper functions
 - name: integration-configs # - Integration configs to be updated
 
 outputs:
