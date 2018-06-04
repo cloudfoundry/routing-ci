@@ -7,7 +7,7 @@ extract_var()
 {
   local workspace="${HOME}/workspace"
   if [[ ! -d "${workspace}" ]]; then
-    workspace="${HOME}"
+    workspace="${PWD}"
   fi
 
   env=$1
@@ -29,7 +29,7 @@ get_system_domain()
 {
   local env
   env=$1
-  if [ "$env" = "lite" ]; then
+  if [ "${env}" = "lite" ]; then
     echo "bosh-lite.com"
     return
   fi
@@ -38,5 +38,5 @@ get_system_domain()
 }
 
 env=$1
-cf api "api.$(get_system_domain "$env")" --skip-ssl-validation
-cf auth admin "$(extract_var "$env" cf_admin_password)"
+cf api "api.$(get_system_domain "${env}")" --skip-ssl-validation
+cf auth admin "$(extract_var "${env}" cf_admin_password)"
