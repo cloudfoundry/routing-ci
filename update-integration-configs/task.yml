@@ -11,6 +11,7 @@ inputs:
 - name: routing-ci # - This repo
 - name: cf-deployment-concourse-tasks # - Other repo with some helper functions
 - name: integration-configs # - Integration configs to be updated
+- name: deployments-routing # - Needed for bosh_login
 
 outputs:
 - name: updated-integration-configs
