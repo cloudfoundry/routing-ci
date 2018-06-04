@@ -1,0 +1,30 @@
+---
+# this task is similar to cf-deployment-concourse-tasks but uses credhub
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: cloudfoundry/cf-routing-pipeline
+
+inputs:
+- name: routing-ci # - This repo
+
+params:
+  SYSTEM_DOMAIN:
+  # - Required
+  # - CF system base domain e.g. `my-cf.com`
+
+  ENVIRONMENT: deployment-vars.yml
+  # - Required
+
+  ENABLED_FEATURE_FLAGS:
+  # - Optional
+  # - Space seperated list of feature flag names to enable
+
+  DISABLED_FEATURE_FLAGS:
+  # - Optional
+  # - Space seperated list of feature flag names to disable
+
+run:
+  path: routing-ci/set-feature-flags/task
