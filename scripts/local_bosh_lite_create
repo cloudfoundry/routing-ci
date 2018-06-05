@@ -6,6 +6,16 @@ env_dir=${HOME}/workspace/deployments-routing/lite
 cf_deployment_dir=${HOME}/workspace/cf-deployment
 bosh_deployment_dir=${HOME}/workspace/bosh-deployment
 
+pushd "${bosh_deployment_dir}"
+  echo "updating bosh-deployment..."
+  git pull
+popd
+
+pushd "${cf_deployment_dir}"
+  echo "updating cf-deployment..."
+  git pull
+popd
+
 bosh create-env ${bosh_deployment_dir}/bosh.yml \
 --state $env_dir/state.json \
 -o ${bosh_deployment_dir}/virtualbox/cpi.yml \

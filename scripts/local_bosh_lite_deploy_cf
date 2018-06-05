@@ -4,6 +4,12 @@ set -euo pipefail
 
 env_dir=${HOME}/workspace/deployments-routing/lite
 cf_deployment_dir=${HOME}/workspace/cf-deployment
+
+pushd ${cf_deployment_dir}
+  echo "updating cf-deployment..."
+  git pull
+popd
+
 mkdir -p $env_dir/extra-ops-files
 
 extra_ops_files=""
