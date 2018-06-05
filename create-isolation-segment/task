@@ -2,10 +2,10 @@
 
 set -ex
 
-cf_login="${PWD}/routing-ci/scripts/cf_login"
+source routing-ci/scripts/script_helpers.sh
 
 set +x
-  "${cf_login}" "${ENVIRONMENT}"
+  cf_login "${ENVIRONMENT}"
 set -x
 
 cf create-isolation-segment "${ISO_SEG_NAME}"
