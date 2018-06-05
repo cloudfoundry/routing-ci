@@ -78,7 +78,6 @@ function main() {
     local new_rats_integration_config
     new_rats_integration_config=$(cat "integration-configs/${RATS_INTEGRATION_CONFIG_FILE}")
     new_rats_integration_config=$(echo "${new_rats_integration_config}" | jq ".admin_password=\"${admin_password}\"")
-    new_rats_integration_config=$(echo "${new_rats_integration_config}" | jq ".oauth*={\"client_secret\":\"${uaa_clients_routing_api_client_secret}\"}")
     new_rats_integration_config=$(echo $new_rats_integration_config | jq --arg client_secret "${uaa_clients_routing_api_client_secret}" '.oauth.client_secret|="\($client_secret)"')
 
     echo "${new_rats_integration_config}" > "integration-configs/${RATS_INTEGRATION_CONFIG_FILE}"
