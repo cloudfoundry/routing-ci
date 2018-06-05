@@ -110,12 +110,14 @@ bosh_logout ()
   unset BOSH_PASSWORD
   unset BOSH_ENVIRONMENT
   unset BOSH_GW_HOST
+  unset BOSH_GW_USER
   unset BOSH_GW_PRIVATE_KEY
   unset BOSH_CA_CERT
   unset BOSH_DEPLOYMENT
   unset BOSH_CLIENT
   unset BOSH_CLIENT_SECRET
   unset JUMPBOX_PRIVATE_KEY
+  unset BOSH_ALL_PROXY
 }
 
 extract_var()
