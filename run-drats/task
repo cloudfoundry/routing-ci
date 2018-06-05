@@ -1,17 +1,14 @@
 #!/bin/bash
-set -eu -o pipefail
+set -euo pipefail
 
-ENVIRONMENT="${ENVIRONMENT:?"ENVIRONMENT not set"}"
+: "${SKIP_SUITE_NAME:=}"
+: "${ENVIRONMENT:?"ENVIRONMENT not set"}"
+: "${SSH_DESTINATION_CIDR:=10.0.0.0/8}"
 
 export GOPATH="${PWD}"
 export PATH="${PATH}:${GOPATH}/bin"
 
 source routing-ci/scripts/script_helpers.sh
-
-CF_VARS_STORE_PATH="$PWD/deployments-routing/${ENVIRONMENT}/deployment-vars.yml"
-export CF_VARS_STORE_PATH
-
-BBL_STATE="$PWD/deployments-routing/${ENVIRONMENT}/bbl-state"
 
 pushd bbr-binary-release
   tar xvf ./*.tar
@@ -25,6 +22,8 @@ rm -f ~/.gitconfig
 
 bosh_login "${ENVIRONMENT}"
 
+export CF_DEPLOYMENT_NAME="${BOSH_DEPLOYMENT}"
+export CF_ADMIN_USERNAME="admin"
 export CF_ADMIN_PASSWORD=$(extract_var "${ENVIRONMENT}" cf_admin_password)
 export NFS_BROKER_PASSWORD=$(extract_var "${ENVIRONMENT}" nfs-broker-password)
 if [[ ! -z "${NFS_BROKER_PASSWORD}" ]]; then
@@ -33,7 +32,7 @@ if [[ ! -z "${NFS_BROKER_PASSWORD}" ]]; then
   export NFS_BROKER_USER="nfs-broker"
   export NFS_BROKER_URL="http://nfs-broker.${CF_DOMAIN}"
 else
-  echo "Skipping cf-nfsrboker testcase because nfs-broker-password is not present in ${CF_VARS_STORE_PATH}"
+  echo "Skipping cf-nfsrboker testcase because nfs-broker-password is not present"
   if [[ -z "${SKIP_SUITE_NAME}" ]]; then
       export SKIP_SUITE_NAME="cf-nfsbroker"
   else
@@ -41,11 +40,32 @@ else
   fi
 fi
 
-pushd "$BBL_STATE"
+echo "${BOSH_CA_CERT}" > bosh.cert
+export BOSH_CERT_PATH="$PWD/bosh.cert"
+
+BBL_STATE="$PWD/deployments-routing/${ENVIRONMENT}/bbl-state"
+pushd "${BBL_STATE}"
   bbl version
   CF_DOMAIN=$(jq .lb.domain bbl-state.json -r)
   export CF_API_URL="https://api.${CF_DOMAIN}"
+  export JUMPBOX_PUBLIC_IP="$(bbl jumpbox-address)"
+
+  tmpdir="$( mktemp -d /tmp/run-drats.XXXXXXXXXX )"
+  ssh_key="${tmpdir}/bosh.pem"
+  bbl ssh-key > "${ssh_key}"
+  chmod 600 "${ssh_key}"
 popd
+
+echo "Starting SSH tunnel, you may be prompted for your OS password..."
+# sudo true # prompt for password
+sshuttle -e "ssh -i ${ssh_key} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ServerAliveInterval=600" -r "${BOSH_GW_USER}@${JUMPBOX_PUBLIC_IP}" ${SSH_DESTINATION_CIDR} &
+tunnel_pid="$!"
+
+full_cleanup() {
+  kill "${tunnel_pid}"
+  rm -rf "${tmpdir}"
+}
+trap 'full_cleanup' EXIT
 
 echo "Running DRATs..."
 cd src/github.com/cloudfoundry-incubator/disaster-recovery-acceptance-tests
