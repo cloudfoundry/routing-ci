@@ -1,7 +1,0 @@
-# yes, this is an ops file to patch a stub file :-(
-#
-# this says "tcp_emitter" but is actually going to enable TCP routes from the Diego route emitter
----
-- type: replace
-  path: /property_overrides/tcp_emitter?/enabled
-  value: true
