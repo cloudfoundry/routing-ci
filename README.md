@@ -6,8 +6,6 @@ Public configuration for the CF Routing team's CI pipelines
 
 # routing-ci
 
-# routing-ci
-
 To login as admin
 
 - use `source ~/workspace/routing-ci/scripts/script_helpers.sh`
