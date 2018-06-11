@@ -11,7 +11,7 @@ Public configuration for the CF Routing team's CI pipelines
 To login as admin
 
 - use `source ~/workspace/routing-ci/scripts/script_helpers.sh`
-- cf_login <ENV>
+- cf_login ENV NAME (e.g. cf_login superman)
 
 ### Dashboard config
 
