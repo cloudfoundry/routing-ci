@@ -4,6 +4,15 @@ Public configuration for the CF Routing team's CI pipelines
 
 [CI Dashboard: `dashboard.routing.cf-app.com`](http://dashboard.routing.cf-app.com)
 
+# routing-ci
+
+# routing-ci
+
+To login as admin
+
+- use `source ~/workspace/routing-ci/scripts/script_helpers.sh`
+- cf_login <ENV>
+
 ### Dashboard config
 
 #### DNS
