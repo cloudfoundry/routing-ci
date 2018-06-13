@@ -4,13 +4,6 @@ Public configuration for the CF Routing team's CI pipelines
 
 [CI Dashboard: `dashboard.routing.cf-app.com`](http://dashboard.routing.cf-app.com)
 
-# routing-ci
-
-To login as admin
-
-- use `source ~/workspace/routing-ci/scripts/script_helpers.sh`
-- cf_login ENV NAME (e.g. cf_login superman)
-
 ### Dashboard config
 
 #### DNS
@@ -32,3 +25,19 @@ To login as admin
 
 ### Why use two layers of indirection?
 We could put the Concourse iframes directly in the `index.html` file.  But that file is difficult to update: you have to use the GCP console, or GCP API.  This way, we can make changes to the dashboard layout with a simple `git push` to this repo.
+
+## Helper Scripts
+
+There are a handful of helper scripts and functions in the `/scripts` directory. To use them, add the directory to your path and source the directory:
+
+For `cf_login` and `bosh_login` to environments:
+```bash
+source ~/workspace/routing-ci/scripts/script_helpers.sh
+cf_login <env_name>
+```
+
+For local bosh-lite management:
+```bash
+export PATH=$PATH:$(pwd)/scripts
+local_bosh_lite_create
+```
