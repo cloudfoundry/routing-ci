@@ -98,7 +98,7 @@ EOF
   "backend": "diego",
   "isolation_segment_name": "${ISO_SEG_NAME}",
   "isolation_segment_domain": "${ISO_SEG_DOMAIN_PREFIX}.${SYSTEM_DOMAIN}",
-  "enable_isolation_segment_tests": true,
+  "enable_isolation_segment_tests": "${ENABLE_ISOLATION_SEGMENT_TESTS}",
   "skip_ssl_validation": true
 }
 EOF
