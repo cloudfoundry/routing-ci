@@ -38,8 +38,8 @@ set +x
     fi
 
     json_output=$(credhub get -n /jubilee/cf-user -j)
-    ${CF_USERNAME}="$(${json_output} | jq .values.username)"
-    ${CF_PASSWORD}="$(${json_output} | jq .values.password)"
+    CF_USERNAME="$(${json_output} | jq .values.username)"
+    CF_PASSWORD="$(${json_output} | jq .values.password)"
   fi
 
   cf create-user "${CF_USERNAME}" "${CF_PASSWORD}"
