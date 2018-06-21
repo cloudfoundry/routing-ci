@@ -13,16 +13,20 @@ fi
 ENV_ROOT="${PWD}/deployments-routing/${ENVIRONMENT}"
 
 pushd "${ENV_ROOT}/bbl-state" > /dev/null
-  eval "$(bbl print-env)"
-  admin_password=$(credhub find -j -n cf_admin_password | jq -r .credentials[].name | xargs credhub get -j -n | jq -r .value)
+  set +x
+    eval "$(bbl print-env)"
+    admin_password=$(credhub find -j -n cf_admin_password | jq -r .credentials[].name | xargs credhub get -j -n | jq -r .value)
+  set -x
 popd > /dev/null
 
 
-if [[ -z ${CF_USERNAME} && -z ${CF_PASSWORD} ]]; then
-  json_output=$(credhub get -n /jubilee/cf-user -j)
-  ${CF_USERNAME}="$(${json_output} | jq .values.username)"
-  ${CF_PASSWORD}="$(${json_output} | jq .values.password)"
-fi
+set +x
+  if [[ -z ${CF_USERNAME} && -z ${CF_PASSWORD} ]]; then
+    json_output=$(credhub get -n /jubilee/cf-user -j)
+    ${CF_USERNAME}="$(${json_output} | jq .values.username)"
+    ${CF_PASSWORD}="$(${json_output} | jq .values.password)"
+  fi
+set -x
 
 set +x
   cf auth "${CF_USER}" "${CF_PASSWORD}"

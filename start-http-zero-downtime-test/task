@@ -17,14 +17,18 @@ echo "Authenticating with CF"
 ENV_ROOT="${PWD}/deployments-routing/${ENVIRONMENT}"
 
 pushd "${ENV_ROOT}/bbl-state" > /dev/null
-  eval "$(bbl print-env)"
+  set +x
+    eval "$(bbl print-env)"
+  set -x
 popd
 
-if [[ -z ${CF_USERNAME} && -z ${CF_PASSWORD} ]]; then
-  json_output=$(credhub get -n /jubilee/cf-user -j)
-  ${CF_USERNAME}="$(${json_output} | jq .values.username)"
-  ${CF_PASSWORD}="$(${json_output} | jq .values.password)"
-fi
+set +x
+  if [[ -z ${CF_USERNAME} && -z ${CF_PASSWORD} ]]; then
+    json_output=$(credhub get -n /jubilee/cf-user -j)
+    ${CF_USERNAME}="$(${json_output} | jq .values.username)"
+    ${CF_PASSWORD}="$(${json_output} | jq .values.password)"
+  fi
+set -x
 
 set +x
   cf auth "${CF_USERNAME}" "${CF_PASSWORD}"

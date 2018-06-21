@@ -16,8 +16,8 @@ ENV_ROOT="${PWD}/deployments-routing/${ENVIRONMENT}"
 pushd "${ENV_ROOT}/bbl-state" > /dev/null
   set +x
     eval "$(bbl print-env)"
+    admin_password=$(credhub find -j -n cf_admin_password | jq -r .credentials[].name | xargs credhub get -j -n | jq -r .value)
   set -x
-  admin_password=$(credhub find -j -n cf_admin_password | jq -r .credentials[].name | xargs credhub get -j -n | jq -r .value)
 popd > /dev/null
 
 if [[ -z ${admin_password} ]]; then
@@ -39,9 +39,10 @@ set +x
     ${CF_USERNAME}="$(${json_output} | jq .values.username)"
     ${CF_PASSWORD}="$(${json_output} | jq .values.password)"
   fi
+
+  cf create-user "${CF_USERNAME}" "${CF_PASSWORD}"
 set -x
 
-cf create-user "${CF_USERNAME}" "${CF_PASSWORD}"
 
 cf create-org "${CF_ORG}"
 cf target -o "${CF_ORG}"
