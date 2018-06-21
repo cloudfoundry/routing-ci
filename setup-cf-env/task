@@ -28,9 +28,12 @@ set +x
   cf auth "${CF_ADMIN_USER}" "${admin_password}"
 
   if [[ -z ${CF_USERNAME} && -z ${CF_PASSWORD} ]]; then
-    credhub get -n /jubilee/cf-user -j
+    set +e
+      credhub get -n /jubilee/cf-user
+      exit_code=$?
+    set -e
 
-    if [[ $? -eq 1 ]]; then
+    if [[ ${exit_code} == "1" ]]; then
       credhub generate -t user -n /jubilee/cf-user
     fi
 
@@ -56,4 +59,3 @@ ORG_DEF_GUID=$(cf curl /v2/quota_definitions?q=name:${CF_ORG}_quota | grep guid 
 cf curl "/v2/quota_definitions/${ORG_DEF_GUID}" -X PUT -d '{"total_reserved_route_ports": 10}'
 
 cf set-quota "${CF_ORG}" "${CF_ORG}_quota"
-
