@@ -14,30 +14,32 @@ fi
 ENV_ROOT="${PWD}/deployments-routing/${ENVIRONMENT}"
 
 pushd "${ENV_ROOT}/bbl-state" > /dev/null
-  eval "$(bbl print-env)"
+  set +x
+    eval "$(bbl print-env)"
+  set -x
   admin_password=$(credhub find -j -n cf_admin_password | jq -r .credentials[].name | xargs credhub get -j -n | jq -r .value)
 popd > /dev/null
 
 if [[ -z ${admin_password} ]]; then
-    admin_password=$(bosh interpolate  "${ENV_ROOT}/creds.yml" --path=/cf_admin_password)
+  admin_password=$(bosh interpolate  "${ENV_ROOT}/creds.yml" --path=/cf_admin_password)
 fi
 
 set +x
- cf auth "${CF_ADMIN_USER}" "${admin_password}"
-set -x
+   cf auth "${CF_ADMIN_USER}" "${admin_password}"
 
-if [[ -z ${CF_USERNAME} && -z ${CF_PASSWORD} ]]; then
-  credhub get -n /jubilee/cf-user -j > /dev/null
-  is_credential_there=$?
+  if [[ -z ${CF_USERNAME} && -z ${CF_PASSWORD} ]]; then
+    credhub get -n /jubilee/cf-user -j > /dev/null
+    is_credential_there=$?
 
-  if [[ ${is_credential_there} -eq "1" ]]; then
-    credhub generate -t user -name /jubilee/cf-user
+    if [[ ${is_credential_there} -eq "1" ]]; then
+      credhub generate -t user -n /jubilee/cf-user
+    fi
+
+    json_output=$(credhub get -n /jubilee/cf-user -j)
+    ${CF_USERNAME}="$(${json_output} | jq .values.username)"
+    ${CF_PASSWORD}="$(${json_output} | jq .values.password)"
   fi
-
-  json_output=$(credhub get -n /jubilee/cf-user -j)
-  ${CF_USERNAME}="$(${json_output} | jq .values.username)"
-  ${CF_PASSWORD}="$(${json_output} | jq .values.password)"
-fi
+set -x
 
 cf create-user "${CF_USERNAME}" "${CF_PASSWORD}"
 
