@@ -2,27 +2,50 @@
 
 set -ex
 
- CF_API="api.${ENVIRONMENT}.${SYSTEM_DOMAIN}"
+CF_API="api.${ENVIRONMENT}.${SYSTEM_DOMAIN}"
 
- if [[ "${CF_SKIP_SSL_VALIDATION}" == 'true' ]];
- then
-   cf api "${CF_API}" --skip-ssl-validation
- else
-   cf api "${CF_API}"
- fi
+if [[ "${CF_SKIP_SSL_VALIDATION}" == 'true' ]];
+then
+ cf api "${CF_API}" --skip-ssl-validation
+else
+ cf api "${CF_API}"
+fi
 
-VARS_STORE="${PWD}/deployments-routing/${ENVIRONMENT}/${VARS_FILE}"
+ENV_ROOT="${PWD}/deployments-routing/${ENVIRONMENT}"
+
+pushd "${ENV_ROOT}/bbl-state" > /dev/null
+  eval "$(bbl print-env)"
+  admin_password=$(credhub find -j -n cf_admin_password | jq -r .credentials[].name | xargs credhub get -j -n | jq -r .value)
+popd > /dev/null
+
+if [[ -z ${admin_password} ]]; then
+    admin_password=$(bosh interpolate  "${ENV_ROOT}/creds.yml" --path=/cf_admin_password)
+fi
+
 set +x
-  admin_password=$(bosh interpolate "${VARS_STORE}" --path=/cf_admin_password)
-  cf auth "${CF_ADMIN_USER}" "${admin_password}"
+ cf auth "${CF_ADMIN_USER}" "${admin_password}"
 set -x
 
- cf create-org "${CF_ORG}"
- cf target -o "${CF_ORG}"
- cf create-space "${CF_SPACE}"
- cf target -o "${CF_ORG}" -s "${CF_SPACE}"
- cf create-user "${CF_USERNAME}" "${CF_PASSWORD}"
- cf set-space-role "${CF_USERNAME}" "${CF_ORG}" "${CF_SPACE}" "${CF_SPACE_ROLE}"
+if [[ -z ${CF_USERNAME} && -z ${CF_PASSWORD} ]]; then
+  credhub get -n /jubilee/cf-user -j > /dev/null
+  is_credential_there=$?
+
+  if [[ ${is_credential_there} -eq "1" ]]; then
+    credhub generate -t user -name /jubilee/cf-user
+  fi
+
+  json_output=$(credhub get -n /jubilee/cf-user -j)
+  ${CF_USERNAME}="$(${json_output} | jq .values.username)"
+  ${CF_PASSWORD}="$(${json_output} | jq .values.password)"
+fi
+
+cf create-user "${CF_USERNAME}" "${CF_PASSWORD}"
+
+cf create-org "${CF_ORG}"
+cf target -o "${CF_ORG}"
+cf create-space "${CF_SPACE}"
+cf target -o "${CF_ORG}" -s "${CF_SPACE}"
+cf set-space-role "${CF_USERNAME}" "${CF_ORG}" "${CF_SPACE}" "${CF_SPACE_ROLE}"
 
 cf create-quota "${CF_ORG}_quota" -m 10G -r 1000 -s 100
 

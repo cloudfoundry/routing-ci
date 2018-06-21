@@ -10,6 +10,20 @@ else
   cf api "${CF_API}"
 fi
 
+ENV_ROOT="${PWD}/deployments-routing/${ENVIRONMENT}"
+
+pushd "${ENV_ROOT}/bbl-state" > /dev/null
+  eval "$(bbl print-env)"
+  admin_password=$(credhub find -j -n cf_admin_password | jq -r .credentials[].name | xargs credhub get -j -n | jq -r .value)
+popd > /dev/null
+
+
+if [[ -z ${CF_USERNAME} && -z ${CF_PASSWORD} ]]; then
+  json_output=$(credhub get -n /jubilee/cf-user -j)
+  ${CF_USERNAME}="$(${json_output} | jq .values.username)"
+  ${CF_PASSWORD}="$(${json_output} | jq .values.password)"
+fi
+
 set +x
   cf auth "${CF_USER}" "${CF_PASSWORD}"
 set -x
@@ -26,10 +40,12 @@ pushd doctorroute
 	EXIT_STATUS=$?
 	set -e
   # If domain does not exist create new tcp domain
-	if [ ${EXIT_STATUS} != "0" ]; then
+	if [[ ${EXIT_STATUS} != "0" ]]; then
 	    VARS_STORE="${PWD}/deployments-routing/${ENVIRONMENT}/${VARS_FILE}"
 	    set +x
-	      admin_password=$(bosh interpolate "${VARS_STORE}" --path=/cf_admin_password)
+	      if [[ -z ${admin_password}  ]]; then
+	        admin_password=$(bosh interpolate "${ENV_ROOT}/creds.yml" --path=/cf_admin_password)
+	      fi
 	      cf auth "${CF_ADMIN_USER}" "${admin_password}"
 	    set -x
 	    cf create-shared-domain "${TCP_DOMAIN}" --router-group default-tcp

@@ -14,9 +14,21 @@ fi
 
 echo "Authenticating with CF"
 
-# Expects tcp domain to be present
+ENV_ROOT="${PWD}/deployments-routing/${ENVIRONMENT}"
 
-cf auth ${CF_USERNAME} ${CF_PASSWORD}
+pushd "${ENV_ROOT}/bbl-state" > /dev/null
+  eval "$(bbl print-env)"
+popd
+
+if [[ -z ${CF_USERNAME} && -z ${CF_PASSWORD} ]]; then
+  json_output=$(credhub get -n /jubilee/cf-user -j)
+  ${CF_USERNAME}="$(${json_output} | jq .values.username)"
+  ${CF_PASSWORD}="$(${json_output} | jq .values.password)"
+fi
+
+set +x
+  cf auth ${CF_USERNAME} ${CF_PASSWORD}
+set -x
 
 cf target -o ${CF_ORG} -s ${CF_SPACE}
 
