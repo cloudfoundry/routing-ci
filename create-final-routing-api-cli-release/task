@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e -x -u
+set -exu
 
 export GOROOT=/usr/local/go
 export PATH=$GOROOT/bin:$PATH
@@ -10,14 +10,16 @@ OUTPUT_DIR="${root_dir}/${OUTPUT_DIR:?"OUTPUT_DIR must be provided"}"
 
 export RTR_VERSION=$(cat version/version)
 
-pushd $CF_ROUTING_RELEASE_DIR/
+pushd "${CF_ROUTING_RELEASE_DIR}/"
 
 export GOPATH=$PWD
 export PATH=$GOPATH/bin:$PATH
 
-	pushd src/code.cloudfoundry.org/routing-api-cli
-		git checkout master
-		git pull origin master
+	cli_src_dir="src/code.cloudfoundry.org/routing-api-cli"
+  rm -rf "${cli_src_dir}"
+	cp -r "${root_dir}/routing-api-cli-src" "${cli_src_dir}"
+
+	pushd "${cli_src_dir}"
 		./bin/build-all.sh
 
 		pushd out
@@ -32,7 +34,7 @@ export PATH=$GOPATH/bin:$PATH
 	popd
 popd
 
-mkdir -p $OUTPUT_DIR
+mkdir -p "${OUTPUT_DIR}"
 
-cp -r $CLI_BINARY $OUTPUT_DIR
-ls $OUTPUT_DIR
+cp -r "${CLI_BINARY}" "${OUTPUT_DIR}"
+ls "${OUTPUT_DIR}"
