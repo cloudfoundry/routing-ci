@@ -5,8 +5,8 @@ set_username_password() {
   set +x
     local json_output
     json_output=$(credhub get -n /jubilee/cf-user -j)
-    CF_USERNAME=$(echo ${json_output} | jq .value.username)
-    CF_PASSWORD=$(echo ${json_output} | jq .value.password)
+    CF_USERNAME=$(echo ${json_output} | jq -r .value.username)
+    CF_PASSWORD=$(echo ${json_output} | jq -r .value.password)
   set -x
 }
 
@@ -36,10 +36,10 @@ set +x
   cf auth "${CF_ADMIN_USER}" "${admin_password}"
 
   if [[ -z ${CF_USERNAME} && -z ${CF_PASSWORD} ]]; then
-    set +e
+    set +ex
       credhub get -n /jubilee/cf-user
       exit_code=$?
-    set -e
+    set -ex
 
     if [[ ${exit_code} == "1" ]]; then
       credhub generate -t user -n /jubilee/cf-user

@@ -5,8 +5,8 @@ set_username_password() {
   set +x
     local json_output
     json_output=$(credhub get -n /jubilee/cf-user -j)
-    CF_USERNAME=$(echo ${json_output} | jq .value.username)
-    CF_PASSWORD=$(echo ${json_output} | jq .value.password)
+    CF_USERNAME=$(echo ${json_output} | jq -r .value.username)
+    CF_PASSWORD=$(echo ${json_output} | jq -r .value.password)
   set -x
 }
 
