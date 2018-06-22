@@ -14,12 +14,12 @@ run:
   path: routing-ci/start-http-zero-downtime-test/task
 
 params:
-  CF_APP_DOMAIN:
   CF_APP_NAME:
   CF_POLL_APP_NAME:
   CF_USERNAME:
   CF_PASSWORD:
   CF_SKIP_SSL_VALIDATION:
-  CF_API:
   CF_ORG:
   CF_SPACE:
+  SYSTEM_DOMAIN:
+  ENVIRONMENT:

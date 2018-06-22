@@ -1,14 +1,7 @@
 #!/usr/bin/env bash
 set -ex
 
-set_username_password() {
-  set +x
-    local json_output
-    json_output=$(credhub get -n /jubilee/cf-user -j)
-    CF_USERNAME=$(echo ${json_output} | jq -r .value.username)
-    CF_PASSWORD=$(echo ${json_output} | jq -r .value.password)
-  set -x
-}
+source routing-ci/scripts/script_helpers.sh
 
 CF_API="api.${ENVIRONMENT}.${SYSTEM_DOMAIN}"
 
@@ -19,13 +12,9 @@ else
   cf api "${CF_API}"
 fi
 
-ENV_ROOT="${PWD}/deployments-routing/${ENVIRONMENT}"
-
-pushd "${ENV_ROOT}/bbl-state" > /dev/null
-  set +x
-    eval "$(bbl print-env)"
-  set -x
-popd
+set +x
+  bosh_login "${ENVIRONMENT}"
+set -x
 
 set +x
   if [[ -z ${CF_USERNAME} && -z ${CF_PASSWORD} ]]; then

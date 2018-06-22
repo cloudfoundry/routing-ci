@@ -152,3 +152,12 @@ cf_login()
   cf api "api.$(get_system_domain "${env}")" --skip-ssl-validation
   cf auth admin "$(extract_var "${env}" cf_admin_password)"
 }
+
+set_username_password() {
+  set +x
+    local json_output
+    json_output=$(extract_var ${ENVIRONMENT} /jubilee/cf-user)
+    CF_USERNAME=$(echo ${json_output} | jq -r .username)
+    CF_PASSWORD=$(echo ${json_output} | jq -r .password)
+  set -x
+}

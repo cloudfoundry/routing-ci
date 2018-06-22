@@ -1,14 +1,7 @@
 #!/usr/bin/env bash
 set -ex
 
-set_username_password() {
-  set +x
-    local json_output
-    json_output=$(credhub get -n /jubilee/cf-user -j)
-    CF_USERNAME=$(echo ${json_output} | jq -r .value.username)
-    CF_PASSWORD=$(echo ${json_output} | jq -r .value.password)
-  set -x
-}
+source routing-ci/scripts/script_helpers.sh
 
 CF_API="api.${ENVIRONMENT}.${SYSTEM_DOMAIN}"
 
@@ -21,18 +14,14 @@ fi
 
 ENV_ROOT="${PWD}/deployments-routing/${ENVIRONMENT}"
 
-pushd "${ENV_ROOT}/bbl-state" > /dev/null
-  set +ex
-    eval "$(bbl print-env)"
-    admin_password=$(credhub find -j -n cf_admin_password | jq -r .credentials[].name | xargs credhub get -j -n | jq -r .value)
-  set -ex
-popd > /dev/null
+set +ex
+  bosh_login "${ENVIRONMENT}"
+  admin_password=$(credhub find -j -n cf_admin_password | jq -r .credentials[].name | xargs credhub get -j -n | jq -r .value)
 
-if [[ -z ${admin_password}  ]]; then
-  set +ex
+  if [[ -z ${admin_password}  ]]; then
     admin_password=$(bosh interpolate "${ENV_ROOT}/creds.yml" --path=/cf_admin_password)
-  set -ex
-fi
+  fi
+set -ex
 
 
 set +x
@@ -41,6 +30,7 @@ set +x
   fi
 set -x
 
+echo "Logging in..."
 set +x
   cf auth "${CF_USERNAME}" "${CF_PASSWORD}"
 set -x
