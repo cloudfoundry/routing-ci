@@ -118,6 +118,11 @@ bosh_logout ()
   unset BOSH_CLIENT_SECRET
   unset JUMPBOX_PRIVATE_KEY
   unset BOSH_ALL_PROXY
+  unset CREDHUB_SERVER
+  unset CREDHUB_CA_CERT
+  unset CREDHUB_PROXY
+  unset CREDHUB_CLIENT
+  unset CREDHUB_SECRET
 }
 
 extract_var()
