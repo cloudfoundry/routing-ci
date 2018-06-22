@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
-
 set -ex
+
+set_username_password() {
+  set +x
+    local json_output
+    json_output=$(credhub get -n /jubilee/cf-user -j)
+    CF_USERNAME=$(echo ${json_output} | jq .value.username)
+    CF_PASSWORD=$(echo ${json_output} | jq .value.password)
+  set -x
+}
 
 CF_API="api.${ENVIRONMENT}.${SYSTEM_DOMAIN}"
 
@@ -37,9 +45,7 @@ set +x
       credhub generate -t user -n /jubilee/cf-user
     fi
 
-    json_output=$(credhub get -n /jubilee/cf-user -j)
-    CF_USERNAME="$(echo ${json_output} | jq .values.username)"
-    CF_PASSWORD="$(echo ${json_output} | jq .values.password)"
+    set_username_password
   fi
 
   cf create-user "${CF_USERNAME}" "${CF_PASSWORD}"

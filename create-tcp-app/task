@@ -1,9 +1,18 @@
 #!/usr/bin/env bash
 set -ex
 
+set_username_password() {
+  set +x
+    local json_output
+    json_output=$(credhub get -n /jubilee/cf-user -j)
+    CF_USERNAME=$(echo ${json_output} | jq .value.username)
+    CF_PASSWORD=$(echo ${json_output} | jq .value.password)
+  set -x
+}
+
 CF_API="api.${ENVIRONMENT}.${SYSTEM_DOMAIN}"
 
-if [ "${CF_SKIP_SSL_VALIDATION}" == 'true' ] ;
+if [[ "${CF_SKIP_SSL_VALIDATION}" == 'true' ]];
 then
   cf api "${CF_API}" --skip-ssl-validation
 else
@@ -13,23 +22,27 @@ fi
 ENV_ROOT="${PWD}/deployments-routing/${ENVIRONMENT}"
 
 pushd "${ENV_ROOT}/bbl-state" > /dev/null
-  set +x
+  set +ex
     eval "$(bbl print-env)"
     admin_password=$(credhub find -j -n cf_admin_password | jq -r .credentials[].name | xargs credhub get -j -n | jq -r .value)
-  set -x
+  set -ex
 popd > /dev/null
+
+if [[ -z ${admin_password}  ]]; then
+  set +ex
+    admin_password=$(bosh interpolate "${ENV_ROOT}/creds.yml" --path=/cf_admin_password)
+  set -ex
+fi
 
 
 set +x
   if [[ -z ${CF_USERNAME} && -z ${CF_PASSWORD} ]]; then
-    json_output=$(credhub get -n /jubilee/cf-user -j)
-    ${CF_USERNAME}="$(${json_output} | jq .values.username)"
-    ${CF_PASSWORD}="$(${json_output} | jq .values.password)"
+    set_username_password
   fi
 set -x
 
 set +x
-  cf auth "${CF_USER}" "${CF_PASSWORD}"
+  cf auth "${CF_USERNAME}" "${CF_PASSWORD}"
 set -x
 
 cf target -o "${CF_ORG}" -s "${CF_SPACE}"
@@ -40,16 +53,12 @@ git clone https://github.com/cf-routing/doctorroute.git
 pushd doctorroute
 	TCP_DOMAIN=tcp.${CF_APP_DOMAIN}
 	set +e
-	cf domains | grep "${TCP_DOMAIN}"
-	EXIT_STATUS=$?
+	  cf domains | grep "${TCP_DOMAIN}"
+	  EXIT_STATUS=$?
 	set -e
   # If domain does not exist create new tcp domain
 	if [[ ${EXIT_STATUS} != "0" ]]; then
-	    VARS_STORE="${PWD}/deployments-routing/${ENVIRONMENT}/${VARS_FILE}"
 	    set +x
-	      if [[ -z ${admin_password}  ]]; then
-	        admin_password=$(bosh interpolate "${ENV_ROOT}/creds.yml" --path=/cf_admin_password)
-	      fi
 	      cf auth "${CF_ADMIN_USER}" "${admin_password}"
 	    set -x
 	    cf create-shared-domain "${TCP_DOMAIN}" --router-group default-tcp

@@ -1,10 +1,18 @@
 #!/usr/bin/env bash
-
 set -ex
+
+set_username_password() {
+  set +x
+    local json_output
+    json_output=$(credhub get -n /jubilee/cf-user -j)
+    CF_USERNAME=$(echo ${json_output} | jq .value.username)
+    CF_PASSWORD=$(echo ${json_output} | jq .value.password)
+  set -x
+}
 
 CF_API="api.${ENVIRONMENT}.${SYSTEM_DOMAIN}"
 
-if [ "${CF_SKIP_SSL_VALIDATION}" == 'true' ] ;
+if [[ "${CF_SKIP_SSL_VALIDATION}" == 'true' ]];
 then
   cf api "${CF_API}" --skip-ssl-validation
 else
@@ -21,14 +29,12 @@ popd
 
 set +x
   if [[ -z ${CF_USERNAME} && -z ${CF_PASSWORD} ]]; then
-    json_output=$(credhub get -n /jubilee/cf-user -j)
-    ${CF_USER}="$(${json_output} | jq .values.username)"
-    ${CF_PASSWORD}="$(${json_output} | jq .values.password)"
+    set_username_password
   fi
 set -x
 
 set +x
-  cf auth "${CF_USER}" "${CF_PASSWORD}"
+  cf auth "${CF_USERNAME}" "${CF_PASSWORD}"
 set -x
 
 cf target -o "${CF_ORG}" -s "${CF_SPACE}"
