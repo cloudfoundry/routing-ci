@@ -4,7 +4,9 @@ set -ex -o pipefail
 source routing-ci/scripts/script_helpers.sh
 
 ENVIRONMENT="${ENVIRONMENT:?"ENVIRONMENT not set"}"
-bosh_login "${ENVIRONMENT}"
+set +x
+  bosh_login "${ENVIRONMENT}"
+set -x
 
 function cleanup() {
   pkill ssh || true

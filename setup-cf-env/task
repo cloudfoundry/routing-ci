@@ -1,12 +1,17 @@
 #!/usr/bin/env bash
 set -ex
 
+source routing-ci/scripts/script_helpers.sh
+
+ENVIRONMENT="${ENVIRONMENT:?"ENVIRONMENT not set"}"
+ENV_ROOT="${PWD}/deployments-routing/${ENVIRONMENT}"
+
 set_username_password() {
   set +x
     local json_output
-    json_output=$(credhub get -n /jubilee/cf-user -j)
-    CF_USERNAME=$(echo ${json_output} | jq -r .value.username)
-    CF_PASSWORD=$(echo ${json_output} | jq -r .value.password)
+    json_output=$(extract_var ${ENVIRONMENT} /jubilee/cf-user)
+    CF_USERNAME=$(echo ${json_output} | jq -r .username)
+    CF_PASSWORD=$(echo ${json_output} | jq -r .password)
   set -x
 }
 
@@ -19,14 +24,10 @@ else
  cf api "${CF_API}"
 fi
 
-ENV_ROOT="${PWD}/deployments-routing/${ENVIRONMENT}"
-
-pushd "${ENV_ROOT}/bbl-state" > /dev/null
-  set +x
-    eval "$(bbl print-env)"
-    admin_password=$(credhub find -j -n cf_admin_password | jq -r .credentials[].name | xargs credhub get -j -n | jq -r .value)
-  set -x
-popd > /dev/null
+set +ex
+  bosh_login "{ENVIRONMENT}"
+  admin_password=$(extract_var ${ENVIRONMENT} cf_admin_password)
+set -ex
 
 set +x
   if [[ -z ${admin_password} ]]; then
