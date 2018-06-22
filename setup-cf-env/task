@@ -25,11 +25,9 @@ else
 fi
 
 set +ex
-  bosh_login "{ENVIRONMENT}"
+  bosh_login "${ENVIRONMENT}"
   admin_password=$(extract_var ${ENVIRONMENT} cf_admin_password)
-set -ex
 
-set +x
   if [[ -z ${admin_password} ]]; then
     admin_password=$(bosh interpolate  "${ENV_ROOT}/creds.yml" --path=/cf_admin_password)
   fi
@@ -37,18 +35,18 @@ set +x
   cf auth "${CF_ADMIN_USER}" "${admin_password}"
 
   if [[ -z ${CF_USERNAME} && -z ${CF_PASSWORD} ]]; then
-    set +ex
-      credhub get -n /jubilee/cf-user
-      exit_code=$?
-    set -ex
+    credhub get -n /jubilee/cf-user > /dev/null
+    exit_code=$?
 
     if [[ ${exit_code} == "1" ]]; then
-      credhub generate -t user -n /jubilee/cf-user
+      credhub generate -t user -n /jubilee/cf-user > /dev/null
     fi
 
     set_username_password
   fi
+set -ex
 
+set +x
   cf create-user "${CF_USERNAME}" "${CF_PASSWORD}"
 set -x
 
