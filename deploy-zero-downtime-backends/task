@@ -15,10 +15,10 @@ cat <<EOF >> "${ZERODOWNTIME_DEPLOYMENT}"
 name: zero-downtime
 update:
   canaries: 1
-  canary_watch_time: 3000-15000
+  canary_watch_time: 10000-300000
   max_in_flight: 5
   serial: false
-  update_watch_time: 10000-15000
+  update_watch_time: 10000-300000
 instance_groups:
 - name: drroute_tcp_zero_downtime
   azs:

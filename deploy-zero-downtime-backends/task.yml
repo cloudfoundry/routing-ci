@@ -12,7 +12,7 @@ inputs:
   - name: routing-ci
 
 run:
-  path: routing-ci/deploy-http-app/task
+  path: routing-ci/deploy-zero-downtime-backends/task
 
 params:
   ENVIRONMENT:
