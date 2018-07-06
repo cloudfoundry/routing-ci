@@ -7,7 +7,7 @@ image_resource:
     repository: cloudfoundry/cf-routing-pipeline
 
 inputs:
-- name: env-repo
+- name: bbl-state
 - name: nats-release
 - name: routing-ci
 - name: stemcell
