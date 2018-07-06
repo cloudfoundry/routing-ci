@@ -30,6 +30,4 @@ function main() {
   bosh-deploy-nats
 }
 
-trap close_bbl_ssh_connection EXIT
-
 main
