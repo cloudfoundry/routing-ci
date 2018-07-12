@@ -8,5 +8,22 @@ pushd routing-release
   bosh vendor-package ${PACKAGE} ../package-release
 popd
 
-shopt -s dotglob
-cp -R routing-release/* modified-routing-release/
+pushd routing-release
+  git config user.name "${GIT_COMMIT_USERNAME}"
+  git config user.email "${GIT_COMMIT_EMAIL}"
+
+  git checkout "${BRANCH}"
+
+  if git diff-index --quiet HEAD --
+  then
+   echo "no changes in repo, no commit necessary"
+  else
+    echo "changes detected, will commit..."
+    git add .
+    git commit -m "Upgrade ${PACKAGE} in routing-release"
+
+    git log -1 --color | cat
+  fi
+popd
+
+git clone routing-release modified-routing-release
