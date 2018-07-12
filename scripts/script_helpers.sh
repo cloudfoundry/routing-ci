@@ -127,11 +127,22 @@ bosh_logout ()
 
 extract_var()
 {
+  local workspace="${HOME}/workspace"
+  if [[ ! -d "${workspace}" ]]; then
+    workspace="${PWD}"
+  fi
+
   local env=${1}
   local var=${2}
+  local env_root="${workspace}/deployments-routing/${env}"
+  local deployment_vars_file="${env_root}/../deployment-vars.yml"
 
-  bosh_login "${env}" > /dev/null
-  credhub find -j -n "${var}" | jq -r .credentials[].name | xargs credhub get -j -n | jq -r .value
+  if [[ ${env} = *"-lite"* ]] && [[ -f "${deployment_vars_file}" ]]; then
+    bosh int --path /"${var}" "${deployment_vars_file}"
+  else
+    bosh_login "${env}" > /dev/null
+    credhub find -j -n "${var}" | jq -r .credentials[].name | xargs credhub get -j -n | jq -r .value
+  fi
 }
 
 get_system_domain()
