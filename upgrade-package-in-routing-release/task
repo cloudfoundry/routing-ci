@@ -15,13 +15,13 @@ pushd routing-release
   git checkout "${BRANCH}"
 
   if [[ -n $(git status --porcelain) ]]; then
-   echo "no changes in repo, no commit necessary"
-  else
     echo "changes detected, will commit..."
     git add --all
     git commit -m "Upgrade ${PACKAGE} in routing-release"
 
     git log -1 --color | cat
+  else
+   echo "no changes in repo, no commit necessary"
   fi
 popd
 
