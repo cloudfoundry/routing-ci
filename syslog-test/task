@@ -18,7 +18,7 @@ pushd "${PWD}/deployments-routing"
   sleep 60
   bosh scp syslog_storer:/var/vcap/store/syslog_storer/syslog.log .
   set -x
-  grep "$(date -u +%Y-%m-%dT)$(($(date -u +%H)-1))\|$(date -u +%Y-%m-%dT%H)" syslog.log | grep "vcap.routing_api.stdout"
+  grep "$(date -u +%Y-%m-%dT)$(($(date -u +%H)-1))\|$(date -u +%Y-%m-%dT%H)" syslog.log | grep "routing-api"
   grep "$(date -u +%Y-%m-%dT)$(($(date -u +%H)-1))\|$(date -u +%Y-%m-%dT%H)" syslog.log | grep "vcap.gorouter.stdout"
   grep "$(date -u +%Y-%m-%dT)$(($(date -u +%H)-1))\|$(date -u +%Y-%m-%dT%H)" syslog.log | grep "vcap.tcp_router.stdout"
 popd
