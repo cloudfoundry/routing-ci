@@ -13,6 +13,14 @@ ZERODOWNTIME_DEPLOYMENT=$(mktemp -t zero_downtime.XXXX.yml)
 cat <<EOF >> "${ZERODOWNTIME_DEPLOYMENT}"
 ---
 name: zero-downtime
+addons:
+- include:
+    stemcell:
+    - os: ubuntu-trusty
+  jobs:
+  - name: bpm
+    release: bpm
+  name: bpm
 update:
   canaries: 1
   canary_watch_time: 10000-300000
@@ -77,6 +85,8 @@ instance_groups:
           uris:
           - "drroute_zero_downtime_release.${ENVIRONMENT}.routing.cf-app.com"
 releases:
+- name: bpm
+  version: latest
 - name: routing
   version: latest
 - name: zero-downtime
