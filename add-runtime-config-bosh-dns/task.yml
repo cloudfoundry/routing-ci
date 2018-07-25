@@ -7,4 +7,4 @@ image_resource:
     repository: cloudfoundry/cf-routing-pipeline
 
 run:
-  path: routing-ci/add-runtime-config-bosh-dns/task 
+  path: routing-ci/add-runtime-config-bosh-dns/task
