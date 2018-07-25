@@ -7,8 +7,8 @@ image_resource:
     repository: cloudfoundry/cf-routing-pipeline
 
 inputs:
-  - name: routing-ci
-  - name: bosh-deployment
+- name: routing-ci
+- name: bosh-deployment
 
 run:
   path: routing-ci/update-runtime-config/task
