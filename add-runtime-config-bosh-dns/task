@@ -1,0 +1,41 @@
+bosh update-runtime-config bosh-deployment/runtime-configs/dns.yml --name=dns
+
+set -eu
+
+create_ca() {
+  cred_name=$1
+
+  old_cred_name=$(credhub find -n $cred_name -j | jq .credentials[0].name -r)
+  json=$(credhub get -n $old_cred_name -j)
+
+  certificate=$(echo "$json" | jq .value.certificate -r)
+  private_key=$(echo "$json" | jq .value.private_key -r)
+
+  credhub set -n "${cred_name}" -t certificate -c "${certificate}" -p "${private_key}" -r "${certificate}"
+}
+
+create_cert() {
+  cred_name=$1
+  ca_name=$2
+
+  old_cred_name=$(credhub find -n $cred_name -j | jq .credentials[0].name -r)
+  json=$(credhub get -n $old_cred_name -j)
+
+  certificate=$(echo "$json" | jq .value.certificate -r)
+  private_key=$(echo "$json" | jq .value.private_key -r)
+
+  credhub set -n "${cred_name}" -t certificate -c "${certificate}" -p "${private_key}" -m "${ca_name}"
+}
+
+main() {
+  create_ca "dns_healthcheck_tls_ca"
+  create_ca "dns_api_tls_ca"
+
+  create_cert "dns_healthcheck_server_tls" "dns_healthcheck_tls_ca"
+  create_cert "dns_healthcheck_client_tls" "dns_healthcheck_tls_ca"
+
+  create_cert "dns_api_server_tls" "dns_api_tls_ca"
+  create_cert "dns_api_client_tls" "dns_api_tls_ca"
+}
+
+main
