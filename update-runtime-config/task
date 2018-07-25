@@ -1,0 +1,3 @@
+#!/bin/bash
+
+bosh update-runtime-config bosh-deployment/runtime-configs/dns.yml --name=dns
