@@ -12,3 +12,6 @@ inputs:
 
 run:
   path: routing-ci/update-runtime-config/task
+
+params:
+  ENVIRONMENT: batman
