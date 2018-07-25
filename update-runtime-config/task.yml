@@ -9,6 +9,7 @@ image_resource:
 inputs:
 - name: routing-ci
 - name: bosh-deployment
+- name: bbl-state
 
 run:
   path: routing-ci/update-runtime-config/task
