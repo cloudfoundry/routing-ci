@@ -5,4 +5,4 @@ source routing-ci/scripts/script_helpers.sh
 ENVIRONMENT="${ENVIRONMENT:?"ENVIRONMENT not set"}"
 bosh_login "${ENVIRONMENT}"
 
-bosh update-runtime-config bosh-deployment/runtime-configs/dns.yml --name=dns
+bosh -n update-runtime-config bosh-deployment/runtime-configs/dns.yml --name=dns
