@@ -45,6 +45,8 @@ export BOSH_CERT_PATH="$PWD/bosh.cert"
 
 BBL_STATE="$PWD/deployments-routing/${ENVIRONMENT}/bbl-state"
 pushd "${BBL_STATE}"
+  unset BOSH_ALL_PROXY
+
   bbl version
   CF_DOMAIN=$(jq .lb.domain bbl-state.json -r)
   export CF_API_URL="https://api.${CF_DOMAIN}"
