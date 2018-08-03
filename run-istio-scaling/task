@@ -11,7 +11,7 @@ gopath_dir="/root/go/src/code.cloudfoundry.org"
 mkdir -p "${gopath_dir}"
 cp -R istio-scaling "${gopath_dir}"
 
-go install code.cloudfoundry.org/istio-acceptance-tests/vendor/github.com/onsi/ginkgo/ginkgo
+go install code.cloudfoundry.org/istio-scaling/vendor/github.com/onsi/ginkgo/ginkgo
 
 pushd "${gopath_dir}/istio-scaling"
 cat << EOF > "${PWD}/config.json"
