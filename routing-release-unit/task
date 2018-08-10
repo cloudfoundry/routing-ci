@@ -2,12 +2,10 @@
 
 set -e -x
 
-root_dir=$PWD
-
 cd routing-release/
 
-export GOPATH=$PWD
-export PATH=$GOPATH/bin:$PATH
+export GOPATH="${PWD}"
+export PATH="${GOPATH}/bin:${PATH}"
 
 go get github.com/nats-io/gnatsd
 
@@ -21,4 +19,4 @@ chown -R root:ssl-cert /etc/ssl/private
 service mysql restart
 service postgresql restart
 
-./scripts/run-unit-tests
+./scripts/run-unit-tests "${PACKAGE}"
