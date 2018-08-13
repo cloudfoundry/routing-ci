@@ -22,10 +22,11 @@ bosh create-env ${bosh_deployment_dir}/bosh.yml \
 -o ${bosh_deployment_dir}/virtualbox/outbound-network.yml \
 -o ${bosh_deployment_dir}/bosh-lite.yml \
 -o ${bosh_deployment_dir}/bosh-lite-runc.yml \
+-o ${bosh_deployment_dir}/uaa.yml \
+-o ${bosh_deployment_dir}/credhub.yml \
 -o ${bosh_deployment_dir}/jumpbox-user.yml \
--o ${bosh_deployment_dir}/local-dns.yml \
 --vars-store $env_dir/bosh-vars.yml \
--v director_name="Bosh Lite Director" \
+-v director_name="bosh-lite" \
 -v internal_ip=192.168.50.6 \
 -v internal_gw=192.168.50.1 \
 -v internal_cidr=192.168.50.0/24 \
@@ -44,11 +45,12 @@ export BOSH_ENVIRONMENT
 export BOSH_DEPLOYMENT
 export BOSH_CA_CERT
 
+bosh -e vbox -n update-cloud-config "${cf_deployment_dir}/iaas-support/bosh-lite/cloud-config.yml"
+# bosh -e vbox -n update-cloud-config "${bosh_deployment_dir}/warden/cloud-config.yml"
+
 STEMCELL_VERSION="$(bosh int ${cf_deployment_dir}/cf-deployment.yml --path=/stemcells/0/version)"
 echo "will upload stemcell ${STEMCELL_VERSION}"
 bosh -e vbox upload-stemcell "https://bosh.io/d/stemcells/bosh-warden-boshlite-ubuntu-trusty-go_agent?v=${STEMCELL_VERSION}"
-
-bosh -e vbox -n update-cloud-config "${cf_deployment_dir}/iaas-support/bosh-lite/cloud-config.yml"
 
 # mac specific
 sudo route add -net "10.244.0.0/16" "192.168.50.6"

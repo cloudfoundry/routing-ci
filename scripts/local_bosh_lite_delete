@@ -12,10 +12,11 @@ bosh delete-env ${bosh_deployment_dir}/bosh.yml \
 -o ${bosh_deployment_dir}/virtualbox/outbound-network.yml \
 -o ${bosh_deployment_dir}/bosh-lite.yml \
 -o ${bosh_deployment_dir}/bosh-lite-runc.yml \
+-o ${bosh_deployment_dir}/uaa.yml \
+-o ${bosh_deployment_dir}/credhub.yml \
 -o ${bosh_deployment_dir}/jumpbox-user.yml \
--o ${bosh_deployment_dir}/local-dns.yml \
 --vars-store $env_dir/bosh-vars.yml \
--v director_name="Bosh Lite Director" \
+-v director_name="bosh-lite" \
 -v internal_ip=192.168.50.6 \
 -v internal_gw=192.168.50.1 \
 -v internal_cidr=192.168.50.0/24 \
