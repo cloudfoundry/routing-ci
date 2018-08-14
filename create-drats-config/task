@@ -45,9 +45,7 @@ pushd deployments-routing
   "bosh_client_secret": "${BOSH_CLIENT_SECRET}",
 EOF
 
-cat <(echo -n "\"bosh_ca_cert\": \""; echo -n "${BOSH_CA_CERT}"; echo "\",") \
-  | sed "s/ /\\\n/g" | sed "s/\\\n/ /" | sed "s/\\\n/ /" | rev | sed "s/n\\\/ /" \
-  | rev >> "${DRATS_INTEGRATION_CONFIG}"
+cat <(echo -n "\"bosh_ca_cert\": \""; echo -n "${BOSH_CA_CERT}"; echo "\",") | sed "s/ /\\\n/g" | sed "s/\\\n/ /" | sed "s/\\\n/ /" | rev | sed "s/n\\\/ /" | rev >> "${DRATS_INTEGRATION_CONFIG}"
 
 if [[ ! -z "${NFS_BROKER_PASSWORD}" ]]; then
   cat << EOF >> "${DRATS_INTEGRATION_CONFIG}"
