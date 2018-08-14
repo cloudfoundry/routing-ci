@@ -22,6 +22,11 @@ fi
 
 DRATS_INTEGRATION_CONFIG="${ENVIRONMENT}/drats_integration_config.json"
 
+pushd "deployments-routing/${ENVIRONMENT}/bbl-state"
+  bbl version
+  CF_DOMAIN=$(jq .lb.domain bbl-state.json -r)
+popd
+
 pushd deployments-routing
   set_git_config
 
@@ -38,8 +43,10 @@ pushd deployments-routing
   "bosh_environment": "${BOSH_ENVIRONMENT}",
   "bosh_client": "${BOSH_CLIENT}",
   "bosh_client_secret": "${BOSH_CLIENT_SECRET}",
-  "bosh_ca_cert": "${BOSH_CA_CERT}",
 EOF
+
+cat <(echo -n "\"bosh_ca_cert\": \""; echo -n $BOSH_CA_CERT; echo "\",") | sed "s/ /\\\n/g" | sed "s/\\\n/ /" | sed "s/\\\n/ /" | rev | sed "s/n\\\/
+/" | rev >> "${DRATS_INTEGRATION_CONFIG}"
 
 if [[ ! -z "${NFS_BROKER_PASSWORD}" ]]; then
   cat << EOF >> "${DRATS_INTEGRATION_CONFIG}"
