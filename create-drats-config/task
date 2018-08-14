@@ -12,7 +12,7 @@ bosh_login "${ENVIRONMENT}"
 CF_DEPLOYMENT_NAME="${BOSH_DEPLOYMENT}"
 CF_ADMIN_USERNAME="admin"
 CF_ADMIN_PASSWORD=$(extract_var "${ENVIRONMENT}" cf_admin_password)
-NFS_BROKER_PASSWORD=$(extract_var "${ENVIRONMENT}" nfs-broker-password)
+NFS_BROKER_PASSWORD=$(extract_var "${ENVIRONMENT}" nfs-broker-password) || true
 if [[ ! -z "${NFS_BROKER_PASSWORD}" ]]; then
   NFS_SERVICE_NAME="nfs"
   NFS_PLAN_NAME="Existing"
