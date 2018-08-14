@@ -1,8 +1,9 @@
 #!/bin/bash
-set -euo pipefail
+set -e -o pipefail
 
 : "${ENVIRONMENT:?"ENVIRONMENT not set"}"
 
+# shellcheck disable=SC1091
 source cf-deployment-concourse-tasks/shared-functions
 source routing-ci/scripts/script_helpers.sh
 
