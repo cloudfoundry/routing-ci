@@ -131,7 +131,7 @@ extract_var()
   local var=${2}
 
   bosh_login "${env}" > /dev/null
-  credhub find -j -n "${var}" | jq -r .credentials[].name | xargs credhub get -j -n | jq -r .value
+  credhub find -j -n "${var}" | jq -r .credentials[].name | xargs -n 1 -I {} credhub get -j -n {} | jq -r .value
 }
 
 get_system_domain()
