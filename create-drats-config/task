@@ -1,0 +1,68 @@
+#!/bin/bash
+set -euo pipefail
+
+: "${ENVIRONMENT:?"ENVIRONMENT not set"}"
+
+source cf-deployment-concourse-tasks/shared-functions
+source routing-ci/scripts/script_helpers.sh
+
+bosh_login "${ENVIRONMENT}"
+
+CF_DEPLOYMENT_NAME="${BOSH_DEPLOYMENT}"
+CF_ADMIN_USERNAME="admin"
+CF_ADMIN_PASSWORD=$(extract_var "${ENVIRONMENT}" cf_admin_password)
+NFS_BROKER_PASSWORD=$(extract_var "${ENVIRONMENT}" nfs-broker-password)
+if [[ ! -z "${NFS_BROKER_PASSWORD}" ]]; then
+  NFS_SERVICE_NAME="nfs"
+  NFS_PLAN_NAME="Existing"
+  NFS_BROKER_USER="nfs-broker"
+  NFS_BROKER_URL="http://nfs-broker.${CF_DOMAIN}"
+fi
+
+DRATS_INTEGRATION_CONFIG="${ENVIRONMENT}/drats_integration_config.json"
+
+pushd deployments-routing
+  set_git_config
+
+  rm "${DRATS_INTEGRATION_CONFIG}"
+
+  echo "Creating ${DRATS_INTEGRATION_CONFIG}"
+
+  cat << EOF > "${DRATS_INTEGRATION_CONFIG}"
+ {
+  "cf_api_url": "api.${CF_DOMAIN}",
+  "cf_deployment_name": "${CF_DEPLOYMENT_NAME}",
+  "cf_admin_username": "${CF_ADMIN_USERNAME}",
+  "cf_admin_password": "${CF_ADMIN_PASSWORD}",
+  "bosh_environment": "${BOSH_ENVIRONMENT}",
+  "bosh_client": "${BOSH_CLIENT}",
+  "bosh_client_secret": "${BOSH_CLIENT_SECRET}",
+  "bosh_ca_cert": "${BOSH_CA_CERT}",
+EOF
+
+if [[ ! -z "${NFS_BROKER_PASSWORD}" ]]; then
+  cat << EOF >> "${DRATS_INTEGRATION_CONFIG}"
+  "nfs_service_name": "${NFS_SERVICE_NAME}",
+  "nfs_plan_name": "${NFS_PLAN_NAME}",
+  "nfs_broker_user": "${NFS_BROKER_USER}",
+  "nfs_broker_password": "${NFS_BROKER_PASSWORD}",
+  "nfs_broker_url": "${NFS_BROKER_URL}",
+  "include_cf-nfsbroker": true,
+EOF
+fi
+
+  cat << EOF >> "${DRATS_INTEGRATION_CONFIG}"
+  "include_cf-app": false,
+  "include_cf-networking": false,
+  "include_cf-uaa": false,
+  "include_cf-credhub": false,
+  "include_cf-routing": true,
+  "include_app-uptime": false
+}
+EOF
+
+  git add "${DRATS_INTEGRATION_CONFIG}"
+  git commit -m "creating drats config for ${ENVIRONMENT}"
+popd
+
+git clone deployments-routing created-drats-config/
