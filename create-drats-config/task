@@ -25,7 +25,7 @@ DRATS_INTEGRATION_CONFIG="${ENVIRONMENT}/drats_integration_config.json"
 pushd deployments-routing
   set_git_config
 
-  rm "${DRATS_INTEGRATION_CONFIG}"
+  rm -f "${DRATS_INTEGRATION_CONFIG}"
 
   echo "Creating ${DRATS_INTEGRATION_CONFIG}"
 
