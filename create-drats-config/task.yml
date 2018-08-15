@@ -9,7 +9,6 @@ image_resource:
 inputs:
   - name: routing-ci
   - name: deployments-routing
-  - name: cf-deployment-concourse-tasks
 
 outputs:
   - name: created-drats-config
