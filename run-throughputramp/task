@@ -7,7 +7,7 @@ CSV_DIR="${PWD}/csv-dir"
 mkdir -p "${FINAL_OUTPUT_DIR}" "${CSV_DIR}"
 
 source routing-ci/scripts/script_helpers.sh
-bosh_login "${ENVRIONMENT}"
+bosh_login "${ENVIRONMENT}"
 
 bosh -n download manifest "${BOSH_DEPLOYMENT}" > /tmp/deployment.yml
 
