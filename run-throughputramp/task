@@ -11,7 +11,7 @@ set +ex
   bosh_login "${ENVIRONMENT}"
 set -ex
 
-bosh -n -d "${BOSH_DEPLOYMENT}" manifest > /tmp/deployment.yml
+bosh -n -d "${DEPLOYMENT}" manifest > /tmp/deployment.yml
 
 # remove the first line in the manifest for some unkown reasons
 sed -i -e "1d" /tmp/deployment.yml
@@ -27,4 +27,3 @@ pushd "${FINAL_OUTPUT_DIR}"
   mv cpuStats.csv "${CSV_DIR}/cpuStats.csv"
   mv perfResults.csv "${CSV_DIR}/perfResults.csv"
 popd
-

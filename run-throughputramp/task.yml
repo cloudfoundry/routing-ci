@@ -15,7 +15,7 @@ outputs:
 
 params:
   ENVIRONMENT:
-  BOSH_DEPLOYMENT:
+  DEPLOYMENT:
   RELEASE_DIR:
 
 run:
