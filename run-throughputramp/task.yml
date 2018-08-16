@@ -12,9 +12,7 @@ outputs:
   - name: csv-dir
 
 params:
-  BOSH_DIRECTOR:
-  BOSH_USER:
-  BOSH_PASSWORD:
+  ENVIRONMENT:
   BOSH_DEPLOYMENT:
   RELEASE_DIR:
 
