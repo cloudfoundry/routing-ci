@@ -8,9 +8,7 @@ CSV_DIR="${PWD}/csv-dir"
 mkdir -p "${FINAL_OUTPUT_DIR}" "${CSV_DIR}"
 
 set +ex
-  pushd "${PWD}/deployments-routing"
-    bosh_login "${ENVIRONMENT}"
-  popd
+  bosh_login "${ENVIRONMENT}"
 set -ex
 
 bosh -n download manifest "${BOSH_DEPLOYMENT}" > /tmp/deployment.yml

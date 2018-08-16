@@ -5,8 +5,10 @@ image_resource:
   type: docker-image
   source:
     repository: cloudfoundry/cf-routing-jupyter
+
 inputs:
   - name: routing-ci
+  - name: deployments-routing
 
 outputs:
   - name: csv-dir
