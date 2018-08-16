@@ -28,7 +28,7 @@ drats_integration_config="${ENVIRONMENT}/drats_integration_config.json"
 
 pushd "deployments-routing/${ENVIRONMENT}/bbl-state"
   bbl version
-  cf_api_url="api.$(jq .lb.domain bbl-state.json -r)"
+  cf_api_url="https://api.$(jq .lb.domain bbl-state.json -r)"
   ssh_proxy_host="$(bbl jumpbox-address)"
   ssh_proxy_private_key="$(bbl ssh-key)"
 popd
