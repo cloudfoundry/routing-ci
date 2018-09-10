@@ -15,6 +15,7 @@ run:
   path: routing-ci/run-istio-scaling/task
 
 params:
+  DEPLOYMENT_NAME:
   VARS_LOCATION:
   SYSTEM_DOMAIN:
   NUMBER_OF_APPS:
