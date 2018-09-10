@@ -3,17 +3,14 @@ MAINTAINER https://github.com/cloudfoundry-incubator/cf-routing-release
 
 ENV DOCKER_RUBY_VERSION 2.4.4
 ENV BOSH_CLI_VERSION 4.0.1
-ENV GO_VERSION 1.10.3
+ENV GO_VERSION 1.11.0
 ENV TERRAFORM_VERSION 0.11.4
-ENV BBL_VERSION 6.4.3
+ENV BBL_VERSION 6.9.16
 ENV RUBY_INSTALLER_VERSION 0.5.0
-ENV SPIFF_VERSION 1.0.7
-ENV ETCD_VERSION 2.1.1
 ENV ROUTING_API_CLI_VERSION 2.9.0
-ENV CONSUL_VERSION 0.7.5
-ENV CF_CLI_VERSION 6.37.0
+ENV CF_CLI_VERSION 6.38.0
 ENV POSTGRES_VERSION 9.3
-ENV CREDHUB_CLI_VERSION 1.7.5
+ENV CREDHUB_CLI_VERSION 1.7.7
 
 RUN set -ex \
     && echo 'mysql-server mysql-server/root_password password password' | debconf-set-selections \
@@ -87,10 +84,6 @@ RUN \
   go get \
     golang.org/x/tools/cmd/cover
 
-# Install spiff
-RUN wget -O /tmp/spiff.zip https://github.com/cloudfoundry-incubator/spiff/releases/download/v${SPIFF_VERSION}/spiff_linux_amd64.zip
-RUN unzip /tmp/spiff.zip -d /tmp/ && mv /tmp/spiff $GOPATH/bin/
-
 # Install aws cli
 RUN wget https://bootstrap.pypa.io/get-pip.py -O /tmp/get-pip.py && \
           python /tmp/get-pip.py && \
@@ -144,15 +137,6 @@ RUN \
   wget https://github.com/cloudfoundry-incubator/routing-api-cli/releases/download/${ROUTING_API_CLI_VERSION}/rtr-linux-amd64.tgz && \
   tar -xvf rtr-linux-amd64.tgz && \
   mv rtr-linux-amd64 /usr/local/bin/rtr
-
-RUN \
-  wget https://github.com/coreos/etcd/releases/download/v${ETCD_VERSION}/etcd-v${ETCD_VERSION}-linux-amd64.tar.gz && \
-  tar xvf etcd-v${ETCD_VERSION}-linux-amd64.tar.gz -C /tmp && \
-  mv /tmp/etcd-v${ETCD_VERSION}-linux-amd64/etcd /usr/bin/etcd
-
-RUN \
-  wget https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip && \
-  unzip consul_${CONSUL_VERSION}_linux_amd64.zip -d /usr/bin
 
 RUN \
   wget https://s3.amazonaws.com/bosh-cli-artifacts/bosh-cli-${BOSH_CLI_VERSION}-linux-amd64 && \
