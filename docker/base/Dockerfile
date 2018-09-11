@@ -1,4 +1,4 @@
-FROM ubuntu:trusty
+FROM ubuntu:xenial
 MAINTAINER https://github.com/cloudfoundry-incubator/cf-routing-release
 
 ENV DOCKER_RUBY_VERSION 2.4.4
@@ -17,8 +17,8 @@ RUN set -ex \
     && echo 'mysql-server mysql-server/root_password_again password password' | debconf-set-selections
 
 RUN \
-      apt-get update && \
-      apt-get -y install --fix-missing \
+      apt update && \
+      apt -y install --fix-missing \
             mysql-server \
             build-essential \
             curl \
@@ -35,21 +35,20 @@ RUN \
             wget \
             unzip \
             libmysqlclient-dev \
-            libicu52 \
             libfontconfig1-dev libfreetype6 libssl-dev libpng-dev libjpeg-dev \
             jq \
             libssl-dev \
-            libssl-dev/trusty \
-            libssl1.0.0/trusty \
+            libssl-dev/xenial \
+            libssl1.0.0/xenial \
             libxml2-dev \
             libxslt-dev \
             libyaml-dev \
-            openssl/trusty \
+            openssl/xenial \
             zip \
             python-pip \
             zlib1g-dev \
       && \
-      apt-get clean
+      apt clean
 
 # Install ruby-install
 RUN curl https://codeload.github.com/postmodern/ruby-install/tar.gz/v${RUBY_INSTALLER_VERSION} | tar xvz -C /tmp/ && \
@@ -149,8 +148,9 @@ RUN set -ex \
     && mkdir -p /var/lib/mysql/tmp /var/log/mysql /var/run/mysqld \
     && chown -R mysql:mysql /var/lib/mysql /var/log/mysql /var/run/mysqld \
     && chmod -R 755 /var/lib/mysql \
+    && chmod -R 777 /tmp \
     && sed -i 's%/tmp%/var/lib/mysql/tmp%' /etc/mysql/my.cnf \
-    && service mysql restart \
+    && service mysql start \
     && echo 'CREATE DATABASE routing_api_test;' | mysql -u root -ppassword \
     && rm -rf /tmp/* /var/tmp/* /var/run/mysqld/* /var/lib/mysql/tmp/*
 
@@ -160,13 +160,6 @@ RUN \
   apt-get -y install iptables && \
   apt-get clean && \
   pip install sshuttle
-
-# install glide
-RUN \
-  add-apt-repository ppa:masterminds/glide && \
-  apt-get update && \
-  apt-get -y install glide && \
-  apt-get clean
 
 # install go dep
 RUN \
