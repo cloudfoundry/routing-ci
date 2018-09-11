@@ -23,6 +23,7 @@ RUN \
             build-essential \
             curl \
             git \
+            netcat-openbsd \
             htop \
             graphviz \
             libpython-dev \
