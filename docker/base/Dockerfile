@@ -20,6 +20,7 @@ RUN \
       apt update && \
       apt -y install --fix-missing \
             mysql-server \
+            rsyslog \
             build-essential \
             curl \
             git \
