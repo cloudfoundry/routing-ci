@@ -7,15 +7,16 @@ image_resource:
     repository: cloudfoundry/cf-routing-pipeline
 
 inputs:
-- name: routing-release
+- name: release
 - name: package-release
 - name: routing-ci
 - name: deployments-routing
 
 outputs:
-- name: modified-routing-release
+- name: modified-release
 
 params:
+  RELEASE: routing-release
   PACKAGE:
   BRANCH: develop
 
@@ -24,4 +25,4 @@ params:
   GIT_COMMIT_EMAIL: "cf-routing-eng@pivotal.io"
 
 run:
-  path: routing-ci/upgrade-package-in-routing-release/task
+  path: routing-ci/upgrade-package-in-release/task
