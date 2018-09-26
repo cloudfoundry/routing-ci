@@ -2,13 +2,11 @@
 set -exuo pipefail
 
 
-cp deployments-routing/routing-release-private.yml routing-release/config/private.yml
+cp deployments-routing/${RELEASE}-private.yml release/config/private.yml
 
-pushd routing-release
+pushd release
   bosh vendor-package ${PACKAGE} ../package-release
-popd
 
-pushd routing-release
   git config user.name "${GIT_COMMIT_USERNAME}"
   git config user.email "${GIT_COMMIT_EMAIL}"
 
@@ -17,7 +15,7 @@ pushd routing-release
   if [[ -n $(git status --porcelain) ]]; then
     echo "changes detected, will commit..."
     git add --all
-    git commit -m "Upgrade ${PACKAGE} in routing-release"
+    git commit -m "Upgrade ${PACKAGE} in ${RELEASE}"
 
     git log -1 --color | cat
   else
@@ -26,4 +24,4 @@ pushd routing-release
 popd
 
 shopt -s dotglob
-cp -R routing-release/* modified-routing-release/
+cp -R release/* modified-release/
