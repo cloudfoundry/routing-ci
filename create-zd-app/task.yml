@@ -11,14 +11,12 @@ inputs:
   - name: routing-ci
 
 run:
-  path: routing-ci/create-http-app/task
+  path: routing-ci/create-zd-app/task
 
 params:
   CF_APP_DOMAIN:
   CF_APP_NAME:
   CF_ORG:
-  CF_PASSWORD:
-  CF_SKIP_SSL_VALIDATION:
-  CF_USERNAME:
+  CF_SPACE:
   ENVIRONMENT:
-  SYSTEM_DOMAIN:
+  TCP: # set to 'true' if TCP route is desired
