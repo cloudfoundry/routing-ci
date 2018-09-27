@@ -55,7 +55,7 @@ pushd doctorroute
 	fi
 
 	set +e
-	  cf apps | grep "${CF_APP_NAME}"
+	  cf apps | grep "${CF_APP_NAME}" | grep "started"
 	  EXIT_STATUS=$?
 	set -e
   # If app does not exist push and map-route
