@@ -38,4 +38,4 @@ echo "Starting zero downtime test..."
 POLL_URL="http://${CF_POLL_APP_NAME}.${CF_APP_DOMAIN}/health"
 APP_URL="http://${CF_APP_NAME}.${CF_APP_DOMAIN}"
 
-curl "${APP_URL}"/start -X POST -d'{"Endpoint":"'${POLL_URL}'"}'
+curl -vvv "${APP_URL}/start" -X POST -d'{"Endpoint":"'${POLL_URL}'"}'
