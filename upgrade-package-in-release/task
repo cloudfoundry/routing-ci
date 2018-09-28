@@ -2,7 +2,27 @@
 set -exuo pipefail
 
 set +x
-echo "${PRIVATE_YAML}" > release/config/private.yml
+if [[ -z "${GCP_BLOBSTORE_SERVICE_ACCOUNT_KEY}" ]]; then
+cat > ${PWD}/${RELEASE}/config/private.yml <<EOF
+---
+blobstore:
+  options:
+    secret_access_key: "${AWS_SECRET_ACCESS_KEY}"
+    access_key_id: "${AWS_ACCESS_KEY_ID}"
+EOF
+fi
+
+if [[ -z ${AWS_ACCESS_KEY_ID} ]]; then
+FORMATTED_KEY="$(sed 's/^/      /' <(echo ${GCP_BLOBSTORE_SERVICE_ACCOUNT_KEY}))"
+cat > ${PWD}/${RELEASE}/config/private.yml <<EOF
+---
+blobstore:
+  options:
+    credentials_source: static
+    json_key: |
+${FORMATTED_KEY}
+EOF
+fi
 set -x
 
 pushd release

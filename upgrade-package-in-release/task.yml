@@ -19,7 +19,9 @@ params:
   RELEASE: routing-release
   PACKAGE:
   BRANCH: develop
-  PRIVATE_YAML:
+  GCP_BLOBSTORE_SERVICE_ACCOUNT_KEY:
+  AWS_SECRET_ACCESS_KEY:
+  AWS_ACCESS_KEY_ID:
 
   # Identity to use for the git commit
   GIT_COMMIT_USERNAME: "CF Routing Team CI Bot"
