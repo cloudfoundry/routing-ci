@@ -1,7 +1,9 @@
 #!/bin/bash
 set -exuo pipefail
 
+set +x
 echo "${PRIVATE_YAML}" > release/config/private.yml
+set -x
 
 pushd release
   bosh vendor-package "${PACKAGE}" ../package-release
