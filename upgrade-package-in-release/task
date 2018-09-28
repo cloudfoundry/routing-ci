@@ -1,11 +1,10 @@
 #!/bin/bash
 set -exuo pipefail
 
-
-cp deployments-routing/${RELEASE}-private.yml release/config/private.yml
+echo "${PRIVATE_YAML}" > release/config/private.yml
 
 pushd release
-  bosh vendor-package ${PACKAGE} ../package-release
+  bosh vendor-package "${PACKAGE}" ../package-release
 
   git config user.name "${GIT_COMMIT_USERNAME}"
   git config user.email "${GIT_COMMIT_EMAIL}"
