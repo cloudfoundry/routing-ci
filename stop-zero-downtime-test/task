@@ -1,10 +1,6 @@
 #!/bin/bash
 set -ex
 
-# Cannot set -u before sourcing .bashrc because of all
-# the unbound variables in things beyond our control.
-source ~/.bashrc
-
 echo "Stopping zero downtime test..."
 APP_URL="http://${CF_APP_NAME}.${CF_APP_DOMAIN}"
-curl $APP_URL/stop -X POST -d '{}'
+curl "${APP_URL}/stop" -d '{}'
