@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -x
+
 gcloud container clusters create ${CLUSTER_NAME} --cluster-version=${CLUSTER_VERSION} --zone ${ZONE} --project ${PROJECT}
 
 gcloud components update
