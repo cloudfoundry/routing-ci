@@ -1,0 +1,21 @@
+#!/bin/bash
+
+gcloud container clusters create ${CLUSTER_NAME} --cluster-version=${CLUSTER_VERSION} --zone ${ZONE} --project ${PROJECT}
+
+gcloud components update
+
+gcloud container clusters get-credentials ${CLUSTER_NAME} --zone ${ZONE} --project ${PROJECT}
+
+kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=$(gcloud config get-value core/account)
+
+kubectl apply -f install/kubernetes/helm/istio/templates/crds.yaml
+
+kubectl apply -f install/kubernetes/helm/istio/charts/certmanager/templates/crds.yaml
+
+helm template install/kubernetes/helm/istio --name istio --namespace istio-system > /tmp/istio.yaml
+
+kubectl create namespace istio-system
+
+kubectl apply -f /tmp/istio.yaml
+
+
