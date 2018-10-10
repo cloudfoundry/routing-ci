@@ -6,8 +6,6 @@ image_resource:
   source:
     repository: cloudfoundry/cf-routing-pipeline
 
-inputs:
-
 run:
   path: routing-ci/deploy-k8s-istio/task
 
