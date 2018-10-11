@@ -11,7 +11,7 @@ inputs:
   - name: istio-source
 
 run:
-  path: routing-ci/deploy-k8s-istio/task
+  path: routing-ci/deploy-k8s-cluster/task
 
 params:
   ZONE: us-west1-a
