@@ -14,6 +14,6 @@ run:
 
 params:
   ZONE: us-west1-a
-  CLUSTER_NAME: pks-dev
+  CLUSTER_NAME:
   PROJECT: cf-routing
   GCP_PKS_SERVICE_ACCOUNT_KEY:
