@@ -179,5 +179,30 @@ RUN export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)" && \
     curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - && \
     apt-get update -y && apt-get install google-cloud-sdk -y
 
+# install kubectl using gcloud
 RUN apt-get install kubectl
+
+# install Helm
+ENV VERSION v2.11.0
+ENV FILENAME helm-${VERSION}-linux-amd64.tar.gz
+ENV HELM_URL https://storage.googleapis.com/kubernetes-helm/${FILENAME}
+
+RUN echo $HELM_URL
+
+RUN curl -o /tmp/$FILENAME ${HELM_URL} \
+  && tar -zxvf /tmp/${FILENAME} -C /tmp \
+  && mv /tmp/linux-amd64/helm /bin/helm \
+  && rm -rf /tmp
+
+# helm plugins require git
+# helm-diff requires bash, curl
+RUN apk --update add git bash
+
+# install Helm plugins
+RUN helm init --client-only
+# plugin is downloaded to /tmp, which must exist
+RUN mkdir /tmp
+RUN helm plugin install https://github.com/viglesiasce/helm-gcs.git
+RUN helm plugin install https://github.com/databus23/helm-diff
+
 
