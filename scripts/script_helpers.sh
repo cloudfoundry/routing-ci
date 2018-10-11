@@ -159,3 +159,10 @@ cf_login()
   cf api "api.$(get_system_domain "${env}")" --skip-ssl-validation
   cf auth admin "${cf_admin_password}"
 }
+
+gke_login()
+{
+  local env
+  env=${1}
+  gcloud container clusters get-credentials ${env} --zone=us-west1-a --project=cf-routing
+}
