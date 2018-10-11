@@ -193,16 +193,3 @@ RUN curl -o /tmp/$FILENAME ${HELM_URL} \
   && tar -zxvf /tmp/${FILENAME} -C /tmp \
   && mv /tmp/linux-amd64/helm /bin/helm \
   && rm -rf /tmp
-
-# helm plugins require git
-# helm-diff requires bash, curl
-RUN apk --update add git bash
-
-# install Helm plugins
-RUN helm init --client-only
-# plugin is downloaded to /tmp, which must exist
-RUN mkdir /tmp
-RUN helm plugin install https://github.com/viglesiasce/helm-gcs.git
-RUN helm plugin install https://github.com/databus23/helm-diff
-
-
