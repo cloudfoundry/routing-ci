@@ -2,19 +2,27 @@
 
 set -x
 
+set +x
+cat > /tmp/private.json <<EOF
+${GCP_PKS_SERVICE_ACCOUNT_KEY}
+EOF
+set -x
+
+gcloud auth activate-service-account pks-routing@cf-routing.iam.gserviceaccount.com --key-file /tmp/private.json
+
 gcloud container clusters create ${CLUSTER_NAME} --cluster-version=${CLUSTER_VERSION} --zone ${ZONE} --project ${PROJECT}
 
-gcloud components update
+apt-get update && apt-get --only-upgrade install kubectl google-cloud-sdk google-cloud-sdk-app-engine-grpc google-cloud-sdk-pubsub-emulator google-cloud-sdk-app-engine-go google-cloud-sdk-cloud-build-local google-cloud-sdk-datastore-emulator google-cloud-sdk-app-engine-python google-cloud-sdk-cbt google-cloud-sdk-bigtable-emulator google-cloud-sdk-app-engine-python-extras google-cloud-sdk-datalab google-cloud-sdk-app-engine-java
 
 gcloud container clusters get-credentials ${CLUSTER_NAME} --zone ${ZONE} --project ${PROJECT}
 
 kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=$(gcloud config get-value core/account)
 
-kubectl apply -f install/kubernetes/helm/istio/templates/crds.yaml
+kubectl apply -f istio-source/install/kubernetes/helm/istio/templates/crds.yaml
 
-kubectl apply -f install/kubernetes/helm/istio/charts/certmanager/templates/crds.yaml
+kubectl apply -f istio-source/install/kubernetes/helm/istio/charts/certmanager/templates/crds.yaml
 
-helm template install/kubernetes/helm/istio --name istio --namespace istio-system > /tmp/istio.yaml
+helm template istio-source/install/kubernetes/helm/istio --name istio --namespace istio-system > /tmp/istio.yaml
 
 kubectl create namespace istio-system
 

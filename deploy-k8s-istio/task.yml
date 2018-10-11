@@ -8,6 +8,7 @@ image_resource:
 
 inputs:
   - name: routing-ci
+  - name: istio-source
 
 run:
   path: routing-ci/deploy-k8s-istio/task
@@ -16,4 +17,5 @@ params:
   ZONE: us-west1-a
   CLUSTER_NAME: pks-dev
   PROJECT: cf-routing
-  CLUSTER_VERSION: 1.10.6-gke.4
+  CLUSTER_VERSION: 1.10.6-gke.6
+  GCP_PKS_SERVICE_ACCOUNT_KEY:
