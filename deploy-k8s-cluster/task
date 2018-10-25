@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -x
+set -ex
 
 set +x
 cat > /tmp/private.json <<EOF
@@ -18,10 +18,6 @@ gcloud container clusters get-credentials ${CLUSTER_NAME} --zone ${ZONE} --proje
 
 if ${USE_ISTIO}; then
   kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=$(gcloud config get-value core/account)
-
-  kubectl apply -f istio-source/install/kubernetes/helm/istio/templates/crds.yaml
-
-  kubectl apply -f istio-source/install/kubernetes/helm/istio/charts/certmanager/templates/crds.yaml
 
   helm template istio-source/install/kubernetes/helm/istio --name istio --namespace istio-system > /tmp/istio.yaml
 
