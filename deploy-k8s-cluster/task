@@ -19,11 +19,15 @@ gcloud container clusters get-credentials ${CLUSTER_NAME} --zone ${ZONE} --proje
 if ${USE_ISTIO}; then
   kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=$(gcloud config get-value core/account)
 
-  helm template istio-source/install/kubernetes/helm/istio --name istio --namespace istio-system > /tmp/istio.yaml
+  pushd istio-source/install/kubernetes/helm/istio
+    helm init
+    helm dependency update
+    helm template . --name istio --namespace istio-system > /tmp/istio.yaml
 
-  kubectl create namespace istio-system
+    kubectl create namespace istio-system
 
-  kubectl apply -f /tmp/istio.yaml
+    kubectl apply -f /tmp/istio.yaml
+  popd
 fi
 
 
