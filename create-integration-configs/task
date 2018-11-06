@@ -41,7 +41,8 @@ pushd deployments-routing
   "include_sso": false,
   "include_tasks": false,
   "include_v3": false,
-  "include_zipkin": true
+  "include_zipkin": true,
+  "stacks": ["cflinuxfs3"]
 }
 EOF
 
