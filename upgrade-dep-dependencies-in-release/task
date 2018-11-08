@@ -1,0 +1,37 @@
+#!/bin/bash
+set -exuo pipefail
+
+GOPATH="${PWD}/release"
+
+pushd release
+  # install latest release of dep
+  curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+  go get github.com/onsi/ginkgo
+  go install github.com/onsi/ginkgo
+
+  IFS=',' read -ra DIRS <<< "$PACKAGES_TO_UPDATE"
+  for dir in "${DIRS[@]}"; do
+    pushd "${dir}"
+      dep ensure --update
+      ginkgo -r .
+    popd
+  done
+
+  git config user.name "${GIT_COMMIT_USERNAME}"
+  git config user.email "${GIT_COMMIT_EMAIL}"
+
+  git checkout "${BRANCH}"
+
+  if [[ -n $(git status --porcelain) ]]; then
+    echo "changes detected, will commit..."
+    git add --all
+    git commit -m "Upgrade vendored dependencies"
+
+    git log -1 --color | cat
+  else
+   echo "no changes in repo, no commit necessary"
+  fi
+popd
+
+shopt -s dotglob
+cp -R release/* modified-release/
