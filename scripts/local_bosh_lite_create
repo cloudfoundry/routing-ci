@@ -44,7 +44,7 @@ bosh -e vbox -n update-cloud-config "${cf_deployment_dir}/iaas-support/bosh-lite
 
 STEMCELL_VERSION="$(bosh int ${cf_deployment_dir}/cf-deployment.yml --path=/stemcells/0/version)"
 echo "will upload stemcell ${STEMCELL_VERSION}"
-bosh -e vbox upload-stemcell "https://bosh.io/d/stemcells/bosh-warden-boshlite-ubuntu-trusty-go_agent?v=${STEMCELL_VERSION}"
+bosh -e vbox upload-stemcell "https://bosh.io/d/stemcells/bosh-warden-boshlite-ubuntu-xenial-go_agent?v=${STEMCELL_VERSION}"
 
 # mac specific
 sudo route add -net "10.244.0.0/16" "192.168.50.6"
