@@ -2,13 +2,14 @@
 set -exuo pipefail
 
 GOPATH="${PWD}/release"
+PATH="$PATH:$GOPATH/bin"
 
 pushd release
   mkdir bin
   # install latest release of dep
   curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
   go get github.com/onsi/ginkgo
-  go install github.com/onsi/ginkgo
+  go install github.com/onsi/ginkgo/ginkgo
 
   IFS=',' read -ra DIRS <<< "$PACKAGES_TO_UPDATE"
   for dir in "${DIRS[@]}"; do
