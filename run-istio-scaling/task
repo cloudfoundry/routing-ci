@@ -22,6 +22,8 @@ cat << EOF > "${PWD}/config.json"
   "cf_internal_apps_domain": "apps.internal",
   "cf_system_domain": "$SYSTEM_DOMAIN",
   "cf_istio_domain": "istio.$SYSTEM_DOMAIN"
+  "cf_org_name": "scaling-test-org",
+  "cf_space_name": "scaling-test-space"
 }
 EOF
 cat << EOF > "${PWD}/plan.json"
