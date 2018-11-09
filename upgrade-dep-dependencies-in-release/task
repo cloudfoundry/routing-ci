@@ -11,7 +11,7 @@ pushd release
 
   IFS=',' read -ra DIRS <<< "$PACKAGES_TO_UPDATE"
   for dir in "${DIRS[@]}"; do
-    pushd "${dir}"
+    pushd "src/${dir}"
       dep ensure --update
       ginkgo -r .
     popd
