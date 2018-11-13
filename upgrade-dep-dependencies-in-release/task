@@ -11,6 +11,9 @@ pushd release
   go get github.com/onsi/ginkgo
   go install github.com/onsi/ginkgo/ginkgo
 
+  # build the hey binary since the performance tests require it
+  go install github.com/rakyll/hey
+
   IFS=',' read -ra DIRS <<< "$PACKAGES_TO_UPDATE"
   for dir in "${DIRS[@]}"; do
     pushd "src/${dir}"

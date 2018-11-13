@@ -14,7 +14,6 @@ outputs:
 - name: modified-release
 
 params:
-  BRANCH:
   # comma-separated values of folders in src to run update in
   PACKAGES_TO_UPDATE:
   # Identity to use for the git commit
