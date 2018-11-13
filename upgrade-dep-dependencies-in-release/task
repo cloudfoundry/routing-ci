@@ -27,9 +27,11 @@ pushd release
   git config user.name "${GIT_COMMIT_USERNAME}"
   git config user.email "${GIT_COMMIT_EMAIL}"
 
+  # this is actually due to the go get of ginkgo
+  git clean -ffd
+
   if [[ -n $(git status --porcelain) ]]; then
     echo "changes detected, will commit..."
-    git clean -ffd
     git commit -m "Upgrade vendored dependencies"
     git log -1 --color | cat
   else
