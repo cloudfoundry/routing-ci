@@ -25,8 +25,6 @@ pushd release
   git config user.name "${GIT_COMMIT_USERNAME}"
   git config user.email "${GIT_COMMIT_EMAIL}"
 
-  git checkout "${BRANCH}"
-
   if [[ -n $(git status --porcelain) ]]; then
     echo "changes detected, will commit..."
     git add --all
