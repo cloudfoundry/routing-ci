@@ -19,6 +19,8 @@ pushd release
     pushd "src/${dir}"
       dep ensure --update
       ginkgo -r .
+
+      git add .
     popd
   done
 
@@ -27,9 +29,7 @@ pushd release
 
   if [[ -n $(git status --porcelain) ]]; then
     echo "changes detected, will commit..."
-    git add --all
     git commit -m "Upgrade vendored dependencies"
-
     git log -1 --color | cat
   else
    echo "no changes in repo, no commit necessary"
