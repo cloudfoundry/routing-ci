@@ -2,7 +2,7 @@ FROM ubuntu:xenial
 MAINTAINER https://github.com/cloudfoundry-incubator/cf-routing-release
 
 ENV DOCKER_RUBY_VERSION 2.4.4
-ENV BOSH_CLI_VERSION 4.0.1
+ENV BOSH_CLI_VERSION 5.4.0
 ENV GO_VERSION 1.11.1
 ENV TERRAFORM_VERSION 0.11.4
 ENV BBL_VERSION 6.9.16
