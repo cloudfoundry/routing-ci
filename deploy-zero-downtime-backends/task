@@ -104,6 +104,6 @@ trap 'cleanup' EXIT
 
 pushd zero-downtime-release
   bosh create-release
-  bosh -e "${ENVIRONMENT}" ur --rebase
+  bosh -e "${ENVIRONMENT}" upload-release --fix --rebase
   bosh -e "${ENVIRONMENT}" -d zero-downtime -n deploy "${ZERODOWNTIME_DEPLOYMENT}"
 popd
