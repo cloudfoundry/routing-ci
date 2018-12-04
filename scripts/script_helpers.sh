@@ -82,7 +82,7 @@ function bosh_login_bbl() {
   bosh login
 }
 
-bosh_login_lite ()
+function bosh_login_lite ()
 {
   bosh_logout
   local env_dir=${HOME}/workspace/deployments-routing/lite
@@ -103,7 +103,7 @@ bosh_login_lite ()
 }
 
 
-bosh_logout ()
+function bosh_logout ()
 {
   unset BOSH_BBL_ENVIRONMENT
   unset BOSH_USER
@@ -125,7 +125,7 @@ bosh_logout ()
   unset CREDHUB_SECRET
 }
 
-extract_var()
+function extract_var()
 {
   local env=${1}
   local var=${2}
@@ -134,7 +134,7 @@ extract_var()
   credhub find -j -n "${var}" | jq -r .credentials[].name | xargs -n 1 -I {} credhub get -j -n {} | jq -r .value
 }
 
-get_system_domain()
+function get_system_domain()
 {
   local env
   env=${1}
@@ -146,7 +146,7 @@ get_system_domain()
   echo "${env}.routing.cf-app.com"
 }
 
-cf_login()
+function cf_login()
 {
   env=${1}
   local cf_admin_passsword
@@ -160,9 +160,27 @@ cf_login()
   cf auth admin "${cf_admin_password}"
 }
 
-gke_login()
+function gke_login()
 {
   local env
   env=${1}
   gcloud container clusters get-credentials ${env} --zone=us-west1-a --project=cf-routing
+}
+
+function concourse_credhub_login()
+{
+  local concourse_env
+  local web_ip
+  local credhub_address
+  concourse_env="concourse-gcp"
+  DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+  DEPLOYMENT_DIR="${DIR}/../../deployments-routing/${concourse_env}"
+  web_ip=$(bosh int "${DEPLOYMENT_DIR}/options.yml" --path /web_ip_two)
+  credhub_address="https://${web_ip}:8844"
+  bosh_login "${concourse_env}" > /dev/null
+
+  unset CREDHUB_CA_CERT CREDHUB_CLIENT CREDHUB_SECRET CREDHUB_SERVER
+
+  credhub api -s "${credhub_address}" --ca-cert=<(bosh int "${DEPLOYMENT_DIR}/credentials.yml" --path /universal_ca/ca)
+  credhub login -u routing -p $(bosh int "${DEPLOYMENT_DIR}/credentials.yml" --path /routing_team_credhub_cli_password)
 }
