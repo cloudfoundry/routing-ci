@@ -28,4 +28,4 @@ params:
   GIT_COMMIT_EMAIL: "cf-routing-eng@pivotal.io"
 
 run:
-  path: routing-ci/upgrade-package-in-release/task
+  path: routing-ci/upgrade-golang-package-in-release/task
