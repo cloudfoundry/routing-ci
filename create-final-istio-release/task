@@ -8,8 +8,8 @@ final_release_repo_dir="${root_dir}/final-release-repo"
 RELEASE_NAME="${RELEASE_NAME:?"\$RELEASE_NAME not set"}"
 
 set +x
-if [[ -n "${GCP_NATS_BLOBSTORE_SERVICE_ACCOUNT_KEY}" ]]; then
-FORMATTED_KEY="$(sed 's/^/      /' <(echo ${GCP_NATS_BLOBSTORE_SERVICE_ACCOUNT_KEY}))"
+if [[ -n "${GCP_BLOBSTORE_SERVICE_ACCOUNT_KEY}" ]]; then
+FORMATTED_KEY="$(sed 's/^/      /' <(echo ${GCP_BLOBSTORE_SERVICE_ACCOUNT_KEY}))"
 cat > "${release_repo_dir}/config/private.yml" <<EOF
 ---
 blobstore:
