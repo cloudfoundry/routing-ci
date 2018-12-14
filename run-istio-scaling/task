@@ -2,19 +2,32 @@
 
 set -eo pipefail
 
-pushd "${PWD}/${VARS_LOCATION}" > /dev/null
-  eval "$(bbl print-env)"
-  export BOSH_DEPLOYMENT=${DEPLOYMENT_NAME}
-  cf_admin_password=$(credhub find -j -n cf_admin_password | jq -r .credentials[].name | xargs credhub get -j -n | jq -r .value)
-popd > /dev/null
+source routing-ci/scripts/script_helpers.sh
 
-gopath_dir="/root/go/src/code.cloudfoundry.org"
-mkdir -p "${gopath_dir}"
-cp -R istio-scaling "${gopath_dir}"
+apps_up_count=0
 
-go install code.cloudfoundry.org/istio-scaling/vendor/github.com/onsi/ginkgo/ginkgo
+function main() {
+  push_apps
+  login
+  check_response_statuses
+  report_to_datadog
+  clean_up
+}
 
-pushd "${gopath_dir}/istio-scaling"
+function push_apps() {
+  pushd "${PWD}/${VARS_LOCATION}" > /dev/null
+    eval "$(bbl print-env)"
+    export BOSH_DEPLOYMENT=${DEPLOYMENT_NAME}
+    cf_admin_password=$(credhub find -j -n cf_admin_password | jq -r .credentials[].name | xargs credhub get -j -n | jq -r .value)
+  popd > /dev/null
+
+  gopath_dir="/root/go/src/code.cloudfoundry.org"
+  mkdir -p "${gopath_dir}"
+  cp -R istio-scaling "${gopath_dir}"
+
+  go install code.cloudfoundry.org/istio-scaling/vendor/github.com/onsi/ginkgo/ginkgo
+
+  pushd "${gopath_dir}/istio-scaling"
 cat << EOF > "${PWD}/config.json"
 {
   "cf_admin_user": "admin",
@@ -31,10 +44,98 @@ cat << EOF > "${PWD}/plan.json"
   "number_of_apps_to_push": $NUMBER_OF_APPS,
   "number_of_apps_to_curl": $NUMBER_OF_APPS,
   "passing_threshold": $PASSING_THRESHOLD,
-  "app_instances": 1,
-  "cleanup": $CLEANUP_ORG
+  "app_instances": 1
 }
 EOF
 
-  CONFIG="$PWD/config.json" PLAN="$PWD/plan.json" scripts/test
-popd
+    CONFIG="$PWD/config.json" PLAN="$PWD/plan.json" scripts/test
+  popd
+}
+
+function login() {
+  cf_login "${ENVIRONMENT}"
+  cf target -o "o" -s "s"
+}
+
+function check_response_statuses() {
+  all_apps=()
+	# This is due to https://github.com/cloudfoundry/capi-release/blob/0439fe2157747a7698a5ae09a1f01e034fcaaf9e/jobs/cloud_controller_ng/spec#L708
+	local max_result_per_page=100
+  local app_nums=$NUMBER_OF_APPS
+  local pagination=$(($app_nums%$max_result_per_page))
+
+  _app_names() {
+    local per_page=$1
+    local page=$2
+    local app_names=$(jq '[.resources[] | {name: .entity.name}]' <(cf curl /v2/apps?results-per-page=${per_page}&page=${page}))
+    for row in $(echo "${app_names}" | jq -r '.[] | @base64'); do
+      _jq() {
+        echo ${row} | base64 --decode | jq -r ${1}
+      }
+
+      local app_name=$(_jq '.name')
+      all_apps+=( $app_name )
+    done
+  }
+
+	if [[ $app_nums -le $max_result_per_page && $pagination -ne 0 ]]; then
+    _app_names $max_result_per_page 1
+  fi
+	if [[ $pagination -ne 0 && $app_nums -gt $max_result_per_page ]]; then
+    local total_pages=$((app_nums / max_result_per_page))
+    for (( i=1; i<=$((total_pages + 1)); i++ ))
+    do
+      _app_names $max_result_per_page $i
+    done
+  fi
+	if [[ $pagination -eq 0 && $app_nums -gt $max_result_per_page ]]; then
+    local total_pages=$((app_nums / max_result_per_page))
+    for (( i=1; i<=$total_pages; i++ ))
+    do
+      _app_names $max_result_per_page $i
+    done
+  fi
+
+  curl_apps "${all_apps[@]}"
+}
+
+function curl_apps() {
+   arr=("$@")
+   for app_name in "${arr[@]}";
+      do
+      local app_url="http://${app_name}.istio.$SYSTEM_DOMAIN"
+      local app_resp_code=$(curl -o /dev/null -s -w "%{http_code}\n" $app_url)
+
+      if [ "$app_resp_code" -eq "200" ]; then
+        apps_up_count=$((apps_up_count + 1))
+      fi
+      done
+}
+
+function report_to_datadog() {
+  passing_actual=$(echo "scale=1 ; $apps_up_count / $NUMBER_OF_APPS * 100" | bc)
+  printf '%s\n' '-----------------------'
+  printf "RESULTS\n"
+  printf '%s\n' '-----------------------'
+  printf "Passing Threshold: ${PASSING_THRESHOLD}\n"
+  printf "Passing Actual: ${passing_actual}\n"
+  printf "[200 OK] ${apps_up_count} out of ${NUMBER_OF_APPS} \n"
+
+  curl -f -X POST -H "Content-type: application/json" \
+    -d "{ \"series\" :
+           [{\"metric\":\"${ENVIRONMENT}.scale.AppsUp\",
+            \"points\":[[$(date +%s), ${apps_up_count}]],
+            \"type\":\"gauge\",
+            \"tags\":[\"deployment:${SYSTEM_DOMAIN}\"]
+          }]
+        }" \
+      "https://app.datadoghq.com/api/v1/series?api_key=${DATADOG_API_KEY}"
+}
+
+function clean_up() {
+  if [ $CLEANUP_ORG ]; then
+    cf delete-org scaling-test-org -f
+  fi
+}
+
+main
