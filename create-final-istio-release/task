@@ -40,6 +40,10 @@ pushd "${release_repo_dir}" > /dev/null
   fi
 
   new_release_version=$(find releases -regex ".*${RELEASE_NAME}-[0-9]*.yml" | egrep -o "${RELEASE_NAME}-[0-9]+" | egrep -o "[0-9]+" | sort -n | tail -n 1)
+  new_release_version=$(cat final-version/version)
+
+  echo $new_release_version
+  exit 1
 
   git add .final_builds releases
   git commit -m "Final release ${new_release_version}"
