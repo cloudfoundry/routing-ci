@@ -24,6 +24,7 @@ cat << EOF > "${PWD}/config.json"
   "cf_istio_domain": "istio.$SYSTEM_DOMAIN",
   "cf_org_name": "scaling-test-org",
   "cf_space_name": "scaling-test-space"
+  "datadog_api_key": "$DATADOG_API_KEY"
 }
 EOF
 cat << EOF > "${PWD}/plan.json"
