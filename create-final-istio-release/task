@@ -41,9 +41,6 @@ pushd "${release_repo_dir}" > /dev/null
 
   new_release_version=$(cat ${root_dir}/final-version/version)
 
-  echo $new_release_version
-  exit 1
-
   git add .final_builds releases
   git commit -m "Final release ${new_release_version}"
   echo "${new_release_version}" > version_number
