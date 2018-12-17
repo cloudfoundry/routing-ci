@@ -12,6 +12,8 @@ inputs:
   - name: routing-ci
   - name: source1
     optional: true
+  - name: source2
+    optional: true
 
 outputs:
   - name: merged-operations
@@ -19,6 +21,7 @@ outputs:
 params:
   ENVIRONMENT:
   SOURCE1_DIR: ~
+  SOURCE2_DIR: ~
 
 run:
   path: routing-ci/merge-ops-files/task
