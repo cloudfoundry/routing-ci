@@ -52,6 +52,10 @@ RUN \
       && \
       apt clean
 
+# Install consul
+RUN curl https://releases.hashicorp.com/consul/0.6.3/consul_0.6.3_linux_amd64.zip > consul.zip && \
+    unzip -o consul.zip -d /usr/local/bin/
+
 # Install ruby-install
 RUN curl https://codeload.github.com/postmodern/ruby-install/tar.gz/v${RUBY_INSTALLER_VERSION} | tar xvz -C /tmp/ && \
           cd /tmp/ruby-install-${RUBY_INSTALLER_VERSION} && \
@@ -156,6 +160,12 @@ RUN set -ex \
     && echo 'CREATE DATABASE routing_api_test;' | mysql -u root -ppassword \
     && rm -rf /tmp/* /var/tmp/* /var/run/mysqld/* /var/lib/mysql/tmp/*
 
+
+# setup mysql and postgres
+RUN chown -R mysql:mysql /var/lib/mysql /var/log/mysql /var/run/mysqld && \
+    chown -R postgres:postgres /var/lib/postgresql /var/log/postgresql /var/run/postgresql /etc/postgresql && \
+    chown -R root:ssl-cert /etc/ssl/private
+
 # install sshuttle and iptables
 RUN \
   apt-get update && \
@@ -167,6 +177,11 @@ RUN \
 RUN \
     go get \
         -u github.com/golang/dep/cmd/dep
+
+ENV PATH="${PATH}:$PWD/bin"
+RUN go get github.com/nats-io/gnatsd && \
+    go get github.com/onsi/ginkgo/ginkgo && \
+    go get github.com/onsi/gomega
 
 # install certstrap
 RUN \
