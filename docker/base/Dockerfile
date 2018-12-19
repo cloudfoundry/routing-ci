@@ -17,8 +17,8 @@ RUN set -ex \
     && echo 'mysql-server mysql-server/root_password_again password password' | debconf-set-selections
 
 RUN \
-      apt update && \
-      apt -y install --fix-missing \
+      apt-get update && \
+      apt-get -y install --fix-missing \
             mysql-server \
             rsyslog \
             build-essential \
@@ -50,7 +50,7 @@ RUN \
             python-pip \
             zlib1g-dev \
       && \
-      apt clean
+      apt-get clean
 
 # Install consul
 RUN curl https://releases.hashicorp.com/consul/0.6.3/consul_0.6.3_linux_amd64.zip > consul.zip && \
