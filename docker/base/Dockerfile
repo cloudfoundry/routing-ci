@@ -149,22 +149,20 @@ RUN \
   mv bosh-cli-${BOSH_CLI_VERSION}-linux-amd64 /usr/local/bin/bosh2 && \
   cp /usr/local/bin/bosh2 /usr/local/bin/bosh
 
+# setup mysql and postgres
+RUN chown -R mysql:mysql /var/lib/mysql /var/log/mysql /var/run/mysqld && \
+    chown -R postgres:postgres /var/lib/postgresql /var/log/postgresql /var/run/postgresql /etc/postgresql && \
+    chown -R root:ssl-cert /etc/ssl/private
+
 # setup mysql database for testing, then stop and clean up
 RUN set -ex \
     && mkdir -p /var/lib/mysql/tmp /var/log/mysql /var/run/mysqld \
-    && chown -R mysql:mysql /var/lib/mysql /var/log/mysql /var/run/mysqld \
     && chmod -R 755 /var/lib/mysql \
     && chmod -R 777 /tmp \
     && sed -i 's%/tmp%/var/lib/mysql/tmp%' /etc/mysql/my.cnf \
     && service mysql start \
     && echo 'CREATE DATABASE routing_api_test;' | mysql -u root -ppassword \
     && rm -rf /tmp/* /var/tmp/* /var/run/mysqld/* /var/lib/mysql/tmp/*
-
-
-# setup mysql and postgres
-RUN chown -R mysql:mysql /var/lib/mysql /var/log/mysql /var/run/mysqld && \
-    chown -R postgres:postgres /var/lib/postgresql /var/log/postgresql /var/run/postgresql /etc/postgresql && \
-    chown -R root:ssl-cert /etc/ssl/private
 
 # install sshuttle and iptables
 RUN \
