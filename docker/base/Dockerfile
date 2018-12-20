@@ -172,11 +172,6 @@ RUN \
     go get \
         -u github.com/golang/dep/cmd/dep
 
-ENV PATH="${PATH}:$PWD/bin"
-RUN go get github.com/nats-io/gnatsd && \
-    go get github.com/onsi/ginkgo/ginkgo && \
-    go get github.com/onsi/gomega
-
 # install certstrap
 RUN \
     go get \
