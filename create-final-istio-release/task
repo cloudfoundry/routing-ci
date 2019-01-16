@@ -25,9 +25,11 @@ pushd "${release_repo_dir}" > /dev/null
   git config user.name "${GIT_COMMIT_USERNAME}"
   git config user.email "${GIT_COMMIT_EMAIL}"
 
+  new_release_version=$(cat ${root_dir}/final-version/version)
+
   for _ in {1..5}; do
     bosh -v
-    bosh -n create-release --final --sha2
+    bosh -n create-release --version=${new_release_version} --final --sha2
     EXIT_STATUS=${PIPESTATUS[0]}
     if [[ "$EXIT_STATUS" = "0" ]]; then
       break
@@ -38,8 +40,6 @@ pushd "${release_repo_dir}" > /dev/null
     echo "Failed to Create $RELEASE_NAME Release"
     exit "$EXIT_STATUS"
   fi
-
-  new_release_version=$(cat ${root_dir}/final-version/version)
 
   git add .final_builds releases
   git commit -m "Final release ${new_release_version}"
