@@ -38,11 +38,11 @@ RUN \
             libfontconfig1-dev libfreetype6 libssl-dev libpng-dev libjpeg-dev \
             jq \
             libssl-dev=1.0.2g-1ubuntu4 \
-            libssl1.0.0=1.0.2g-1ubuntu \
+            libssl1.0.0=1.0.2g-1ubuntu4 \
             libxml2-dev \
             libxslt-dev \
             libyaml-dev \
-            openssl=1.0.2g-1ubuntu \
+            openssl=1.0.2g-1ubuntu4 \
             zip \
             python-pip \
             zlib1g-dev \
