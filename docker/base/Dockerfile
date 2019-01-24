@@ -46,9 +46,9 @@ RUN \
       && \
       apt-get clean
 
-RUN apt-get update && apt-get -y install libssl1.0.0=1.0.2g-1ubuntu4
-RUN apt-get update && apt-get -y install libssl-dev=1.0.2g-1ubuntu4
-RUN apt-get update && apt-get -y install openssl=1.0.2g-1ubuntu4
+RUN apt-get update && apt-get -y --allow-downgrades install libssl1.0.0=1.0.2g-1ubuntu4
+RUN apt-get update && apt-get -y --allow-downgrades install libssl-dev=1.0.2g-1ubuntu4
+RUN apt-get update && apt-get -y --allow-downgrades install openssl=1.0.2g-1ubuntu4
 
 # Install consul
 RUN curl https://releases.hashicorp.com/consul/0.6.3/consul_0.6.3_linux_amd64.zip > consul.zip && \
