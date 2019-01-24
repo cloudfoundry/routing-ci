@@ -1,12 +1,10 @@
 FROM ubuntu:xenial
 MAINTAINER https://github.com/cloudfoundry-incubator/cf-routing-release
 
-ENV DOCKER_RUBY_VERSION 2.4.4
 ENV BOSH_CLI_VERSION 5.4.0
 ENV GO_VERSION 1.11.1
 ENV TERRAFORM_VERSION 0.11.4
 ENV BBL_VERSION 6.9.16
-ENV RUBY_INSTALLER_VERSION 0.5.0
 ENV ROUTING_API_CLI_VERSION 2.9.0
 ENV CF_CLI_VERSION 6.38.0
 ENV POSTGRES_VERSION 9.3
@@ -55,23 +53,6 @@ RUN \
 # Install consul
 RUN curl https://releases.hashicorp.com/consul/0.6.3/consul_0.6.3_linux_amd64.zip > consul.zip && \
     unzip -o consul.zip -d /usr/local/bin/
-
-# Install ruby-install
-RUN curl https://codeload.github.com/postmodern/ruby-install/tar.gz/v${RUBY_INSTALLER_VERSION} | tar xvz -C /tmp/ && \
-          cd /tmp/ruby-install-${RUBY_INSTALLER_VERSION} && \
-          make install
-
-# Install Ruby
-RUN ruby-install ruby ${DOCKER_RUBY_VERSION} -- --disable-install-rdoc
-
-# Add ruby to PATH
-ENV PATH $PATH:/home/root/.gem/ruby/${DOCKER_RUBY_VERSION}/bin:/opt/rubies/ruby-${DOCKER_RUBY_VERSION}/lib/ruby/gems/${DOCKER_RUBY_VERSION}/bin:/opt/rubies/ruby-${DOCKER_RUBY_VERSION}/bin
-
-# Install gems
-RUN \
-  /opt/rubies/ruby-${DOCKER_RUBY_VERSION}/bin/gem install --no-rdoc --no-ri \
-    bundler \
-    debugger-ruby_core_source
 
 # Install go
 RUN curl https://storage.googleapis.com/golang/go${GO_VERSION}.linux-amd64.tar.gz | tar xvz -C /usr/local/
