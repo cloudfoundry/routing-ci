@@ -37,13 +37,12 @@ RUN \
             libmysqlclient-dev \
             libfontconfig1-dev libfreetype6 libssl-dev libpng-dev libjpeg-dev \
             jq \
-            libssl-dev=1.0.2g-1ubuntu4.13 \
-            libssl-dev/xenial=1.0.2g-1ubuntu4.13 \
-            libssl1.0.0/xenial=1.0.2g-1ubuntu4.13 \
+            libssl-dev=1.0.2g-1ubuntu4 \
+            libssl1.0.0=1.0.2g-1ubuntu \
             libxml2-dev \
             libxslt-dev \
             libyaml-dev \
-            openssl/xenial=1.0.2g-1ubuntu4.13 \
+            openssl=1.0.2g-1ubuntu \
             zip \
             python-pip \
             zlib1g-dev \
