@@ -52,5 +52,6 @@ cat << EOF > "${PWD}/plan.json"
 }
 EOF
 
+  echo "PLAN: $(cat "${PWD}/plan.json")"
   CONFIG="$PWD/config.json" PLAN="$PWD/plan.json" scripts/test
 popd
