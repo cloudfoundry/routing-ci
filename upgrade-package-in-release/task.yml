@@ -10,7 +10,6 @@ inputs:
 - name: release
 - name: package-release
 - name: routing-ci
-- name: deployments-routing
 
 outputs:
 - name: modified-release
@@ -24,8 +23,8 @@ params:
   AWS_ACCESS_KEY_ID:
 
   # Identity to use for the git commit
-  GIT_COMMIT_USERNAME: "CF Routing Team CI Bot"
-  GIT_COMMIT_EMAIL: "cf-routing-eng@pivotal.io"
+  GIT_COMMIT_USERNAME: "CF Networking Team CI Bot"
+  GIT_COMMIT_EMAIL: "cf-networking@pivotal.io"
 
 run:
   path: routing-ci/upgrade-package-in-release/task
