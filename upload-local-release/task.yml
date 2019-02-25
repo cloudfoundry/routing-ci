@@ -1,0 +1,19 @@
+---
+image_resource:
+  type: docker-image
+  source:
+    repository: cloudfoundry/cf-routing-pipeline
+
+platform: linux
+
+inputs:
+  - name: cf-deployment-concourse-tasks
+  - name: bbl-state
+  - name: local-release
+
+run:
+  path: routing-ci/upload-local-release/task
+
+params:
+  BBL_STATE_DIR:
+
