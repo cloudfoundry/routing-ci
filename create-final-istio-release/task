@@ -5,6 +5,8 @@ set -exuo pipefail
 root_dir="${PWD}"
 release_repo_dir="${root_dir}/release-repo"
 final_release_repo_dir="${root_dir}/final-release-repo"
+new_release_version=$(cat ${root_dir}/final-version/version)
+
 RELEASE_NAME="${RELEASE_NAME:?"\$RELEASE_NAME not set"}"
 
 set +x
@@ -22,10 +24,13 @@ fi
 set -x
 
 pushd "${release_repo_dir}" > /dev/null
+  sha=$(git rev-parse --verify HEAD)
+
   git config user.name "${GIT_COMMIT_USERNAME}"
   git config user.email "${GIT_COMMIT_EMAIL}"
 
-  new_release_version=$(cat ${root_dir}/final-version/version)
+  get checkout master
+  git merge $sha
 
   for _ in {1..5}; do
     bosh -v
