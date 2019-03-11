@@ -29,7 +29,7 @@ pushd "${release_repo_dir}" > /dev/null
   git config user.name "${GIT_COMMIT_USERNAME}"
   git config user.email "${GIT_COMMIT_EMAIL}"
 
-  get checkout master
+  git checkout master
   git merge $sha
 
   for _ in {1..5}; do
