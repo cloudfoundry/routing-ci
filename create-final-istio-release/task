@@ -29,9 +29,6 @@ pushd "${release_repo_dir}" > /dev/null
   git config user.name "${GIT_COMMIT_USERNAME}"
   git config user.email "${GIT_COMMIT_EMAIL}"
 
-  git checkout master
-  git merge $sha
-
   for _ in {1..5}; do
     bosh -v
     bosh -n create-release --version=${new_release_version} --final --sha2
