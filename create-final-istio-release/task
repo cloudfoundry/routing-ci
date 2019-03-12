@@ -5,9 +5,9 @@ set -exuo pipefail
 root_dir="${PWD}"
 release_repo_dir="${root_dir}/istio-release"
 master_repo_dir="${root_dir}/istio-release-master"
-final_release_repo_dir="${root_dir}/final-release-repo"
+OUTPUT_DIR="${root_dir}/final-release-repo"
 
-new_release_version=$(cat ${root_dir}/final-version/version)
+FINAL_VERSION=$(cat ${root_dir}/final-version/version)
 
 RELEASE_NAME="${RELEASE_NAME:?"\$RELEASE_NAME not set"}"
 
