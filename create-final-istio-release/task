@@ -48,7 +48,7 @@ pushd "${release_repo_dir}" > /dev/null
   echo "----- DEBUG: show the commit we just created"
   git --no-pager show HEAD
   cp -a ./  ${root_dir}/final-release-repo/
-  cat ${FINAL_VERSION} > ${root_dir}/final-release-repo/version_number
+  echo ${FINAL_VERSION} > ${root_dir}/final-release-repo/version_number
 popd > /dev/null
 
 shopt -s dotglob
