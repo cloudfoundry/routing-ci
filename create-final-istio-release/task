@@ -3,8 +3,10 @@
 set -exuo pipefail
 
 root_dir="${PWD}"
-release_repo_dir="${root_dir}/release-repo"
+release_repo_dir="${root_dir}/istio-release"
+master_repo_dir="${root_dir}/istio-release-master"
 final_release_repo_dir="${root_dir}/final-release-repo"
+
 new_release_version=$(cat ${root_dir}/final-version/version)
 
 RELEASE_NAME="${RELEASE_NAME:?"\$RELEASE_NAME not set"}"
@@ -24,29 +26,28 @@ fi
 set -x
 
 pushd "${release_repo_dir}" > /dev/null
-  sha=$(git rev-parse --verify HEAD)
-
+  echo "----- Set git identity"
   git config user.name "${GIT_COMMIT_USERNAME}"
   git config user.email "${GIT_COMMIT_EMAIL}"
 
-  for _ in {1..5}; do
-    bosh -v
-    bosh -n create-release --version=${new_release_version} --final --sha2
-    EXIT_STATUS=${PIPESTATUS[0]}
-    if [[ "$EXIT_STATUS" = "0" ]]; then
-      break
-    fi
-  done
+  git remote add -f master-repo ../istio-release-master
+  git merge "master-repo/master" -m "Merge with master"
 
-  if [[ ! "$EXIT_STATUS" = "0" ]]; then
-    echo "Failed to Create $RELEASE_NAME Release"
-    exit "$EXIT_STATUS"
-  fi
+  git status
+  git diff-index --quiet HEAD -- || ( echo "There are uncommitted changes! Investigate immediately." && exit 1 )
+
+  echo "----- Create final release"
+  bosh -v
+  bosh -n create-release --sha2 --final --version=${FINAL_VERSION} --tarball=${OUTPUT_DIR}/routing-${FINAL_VERSION}.tgz
+
+  echo "----- Update master and develop branches on origin"
 
   git add .final_builds releases
-  git commit -m "Final release ${new_release_version}"
-  echo "${new_release_version}" > version_number
+  git commit -m "Create final release ${FINAL_VERSION}"
+
+  echo "----- DEBUG: show the commit we just created"
+  git --no-pager show HEAD
+  cp -a ./  ${root_dir}/final-release-repo/
 popd > /dev/null
 
 shopt -s dotglob
-cp -R release-repo/* "${final_release_repo_dir}"

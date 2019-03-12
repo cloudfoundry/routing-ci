@@ -8,7 +8,8 @@ image_resource:
 
 inputs:
   - name: routing-ci
-  - name: release-repo
+  - name: istio-release-master
+  - name: istio-release
   - name: final-version
 
 outputs:
