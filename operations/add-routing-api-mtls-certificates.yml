@@ -31,7 +31,9 @@
       extended_key_usage:
         - client_auth
 
-# update properties
+# update Routing API properties
+#   enabled_api_endpoints must be set to `both` to avoid downtime during the initial deploy.
+#   this can be changed to `mtls` in later deploys.
 - type: replace
   path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/enabled_api_endpoints?
   value: "both"
@@ -47,3 +49,16 @@
 - type: replace
   path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/mtls_server_key?
   value: "((routing_api_tls.private_key))"
+
+# Update TCP Router
+- type: replace
+  path: /instance_groups/name=tcp-router/jobs/name=tcp_router/properties/routing_api/client_cert?
+  value: "((routing_api_tls_client.certificate))"
+
+- type: replace
+  path: /instance_groups/name=tcp-router/jobs/name=tcp_router/properties/routing_api/client_private_key?
+  value: "((routing_api_tls_client.private_key))"
+
+- type: replace
+  path: /instance_groups/name=tcp-router/jobs/name=tcp_router/properties/routing_api/ca_cert?
+  value: "((routing_api_ca.ca))"
