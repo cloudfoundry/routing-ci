@@ -39,7 +39,7 @@
   value: "both"
 
 - type: replace
-  path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/mtls_client_ca?
+  path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/mtls_ca?
   value: "((routing_api_tls_client.ca))"
 
 - type: replace
@@ -49,6 +49,14 @@
 - type: replace
   path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api/mtls_server_key?
   value: "((routing_api_tls.private_key))"
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api?/mtls_client_cert
+  value: "((routing_api_tls_client.certificate))"
+
+- type: replace
+  path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api?/mtls_client_key
+  value: "((routing_api_tls_client.private_key))"
 
 # Update TCP Router
 - type: replace
@@ -74,82 +82,4 @@
 
 - type: replace
   path: /instance_groups/name=router/jobs/name=gorouter/properties/routing_api?/ca_certs
-  value: "((routing_api_ca.ca))"
-
-# Update database route_registrar
-- type: replace
-  path: /instance_groups/name=database/jobs/name=route_registrar/properties/route_registrar/routing_api?/client_cert
-  value: "((routing_api_tls_client.certificate))"
-
-- type: replace
-  path: /instance_groups/name=database/jobs/name=route_registrar/properties/route_registrar/routing_api?/client_private_key
-  value: "((routing_api_tls_client.private_key))"
-
-- type: replace
-  path: /instance_groups/name=database/jobs/name=route_registrar/properties/route_registrar/routing_api?/server_ca_cert
-  value: "((routing_api_ca.ca))"
-
-# Update uaa route_registrar
-- type: replace
-  path: /instance_groups/name=uaa/jobs/name=route_registrar/properties/route_registrar/routing_api?/client_cert
-  value: "((routing_api_tls_client.certificate))"
-
-- type: replace
-  path: /instance_groups/name=uaa/jobs/name=route_registrar/properties/route_registrar/routing_api?/client_private_key
-  value: "((routing_api_tls_client.private_key))"
-
-- type: replace
-  path: /instance_groups/name=uaa/jobs/name=route_registrar/properties/route_registrar/routing_api?/server_ca_cert
-  value: "((routing_api_ca.ca))"
-
-# Update singleton-blobstore route_registrar
-- type: replace
-  path: /instance_groups/name=singleton-blobstore/jobs/name=route_registrar/properties/route_registrar/routing_api?/client_cert
-  value: "((routing_api_tls_client.certificate))"
-
-- type: replace
-  path: /instance_groups/name=singleton-blobstore/jobs/name=route_registrar/properties/route_registrar/routing_api?/client_private_key
-  value: "((routing_api_tls_client.private_key))"
-
-- type: replace
-  path: /instance_groups/name=singleton-blobstore/jobs/name=route_registrar/properties/route_registrar/routing_api?/server_ca_cert
-  value: "((routing_api_ca.ca))"
-
-# Update api route_registrar
-- type: replace
-  path: /instance_groups/name=api/jobs/name=route_registrar/properties/route_registrar/routing_api?/client_cert
-  value: "((routing_api_tls_client.certificate))"
-
-- type: replace
-  path: /instance_groups/name=api/jobs/name=route_registrar/properties/route_registrar/routing_api?/client_private_key
-  value: "((routing_api_tls_client.private_key))"
-
-- type: replace
-  path: /instance_groups/name=api/jobs/name=route_registrar/properties/route_registrar/routing_api?/server_ca_cert
-  value: "((routing_api_ca.ca))"
-
-# Update doppler route_registrar
-- type: replace
-  path: /instance_groups/name=doppler/jobs/name=route_registrar/properties/route_registrar/routing_api?/client_cert
-  value: "((routing_api_tls_client.certificate))"
-
-- type: replace
-  path: /instance_groups/name=doppler/jobs/name=route_registrar/properties/route_registrar/routing_api?/client_private_key
-  value: "((routing_api_tls_client.private_key))"
-
-- type: replace
-  path: /instance_groups/name=doppler/jobs/name=route_registrar/properties/route_registrar/routing_api?/server_ca_cert
-  value: "((routing_api_ca.ca))"
-
-# Update log-api route_registrar
-- type: replace
-  path: /instance_groups/name=log-api/jobs/name=route_registrar/properties/route_registrar/routing_api?/client_cert
-  value: "((routing_api_tls_client.certificate))"
-
-- type: replace
-  path: /instance_groups/name=log-api/jobs/name=route_registrar/properties/route_registrar/routing_api?/client_private_key
-  value: "((routing_api_tls_client.private_key))"
-
-- type: replace
-  path: /instance_groups/name=log-api/jobs/name=route_registrar/properties/route_registrar/routing_api?/server_ca_cert
   value: "((routing_api_ca.ca))"
