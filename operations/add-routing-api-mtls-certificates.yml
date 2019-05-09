@@ -57,16 +57,3 @@
 - type: replace
   path: /instance_groups/name=api/jobs/name=routing-api/properties/routing_api?/mtls_client_key
   value: "((routing_api_tls_client.private_key))"
-
-# Update GoRouter
-- type: replace
-  path: /instance_groups/name=router/jobs/name=gorouter/properties/routing_api?/cert_chain
-  value: "((routing_api_tls_client.certificate))"
-
-- type: replace
-  path: /instance_groups/name=router/jobs/name=gorouter/properties/routing_api?/private_key
-  value: "((routing_api_tls_client.private_key))"
-
-- type: replace
-  path: /instance_groups/name=router/jobs/name=gorouter/properties/routing_api?/ca_certs
-  value: "((routing_api_ca.ca))"
