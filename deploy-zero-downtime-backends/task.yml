@@ -1,0 +1,18 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: cloudfoundry/cf-routing-pipeline
+
+inputs:
+  - name: deployments-routing
+  - name: zero-downtime-release
+  - name: routing-ci
+
+run:
+  path: routing-ci/deploy-zero-downtime-backends/task
+
+params:
+  ENVIRONMENT:

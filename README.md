@@ -1,11 +1,43 @@
 # routing-ci
 
+Public configuration for the CF Routing team's CI pipelines
 
-This repo has been deprecated. The tasks are now versioned with the release code
-that uses them.
+[CI Dashboard: `dashboard.routing.cf-app.com`](http://dashboard.routing.cf-app.com)
 
+### Dashboard config
 
-Did this break you? Either go back in history and copy the task and version it
-with your code. Or contact the networking program on
-[slack](https://cloudfoundry.slack.com) in the #networking
-channel.
+#### DNS
+ - `cf-app.com` base domain includes an NS record that delegates `routing.cf-app.com` to [DNS Zone `routing-team`](https://console.cloud.google.com/net-services/dns/zones/routing-team?project=cf-routing)
+ - CNAME record `axxxxxxxl.routing.cf-app.com` is required for domain verification.  If you remove it, everything breaks!
+ - Then `dashboard.routing.cf-app.com` is a CNAME for `c.storage.googleapis.com` in order to support [GCP Static Website Hosting](https://cloud.google.com/storage/docs/hosting-static-website)
+
+#### Storage
+ - There's a GCP [storage bucket for `dashboard.routing.cf-app.com`](https://console.cloud.google.com/storage/browser/dashboard.routing.cf-app.com?project=cf-routing)
+ - It is configured to serve the contents of the `index.html` file in the storage bucket
+ - That file defines a simple `iframe` that uses the `htmlpreview.github.io`
+   ```
+   curl dashboard.routing.cf-app.com
+   ...
+       <iframe src="http://htmlpreview.github.io/?https://github.com/cloudfoundry/routing-ci/blob/master/public-dashboard.html"></iframe>
+   ```
+  - the html preview is of the [`public-dashboard.html` file in this repo](public-dashboard.html)
+  - that file contains its own `iframe`s to show various views from our Concourse server
+
+### Why use two layers of indirection?
+We could put the Concourse iframes directly in the `index.html` file.  But that file is difficult to update: you have to use the GCP console, or GCP API.  This way, we can make changes to the dashboard layout with a simple `git push` to this repo.
+
+## Helper Scripts
+
+There are a handful of helper scripts and functions in the `/scripts` directory. To use them, add the directory to your path and source the directory:
+
+For `cf_login` and `bosh_login` to environments:
+```bash
+source ~/workspace/routing-ci/scripts/script_helpers.sh
+cf_login <env_name>
+```
+
+For local bosh-lite management:
+```bash
+export PATH=$PATH:$(pwd)/scripts
+local_bosh_lite_create
+```
