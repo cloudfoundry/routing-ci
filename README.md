@@ -1,5 +1,11 @@
 # routing-ci
 
+## Deprecation Notice
+This repo is deprecated. If you use tasks or pipelines in this repo, please
+reach out to cf-networking@pivotal.io
+
+--------------
+
 Public configuration for the CF Routing team's CI pipelines
 
 [CI Dashboard: `dashboard.routing.cf-app.com`](http://dashboard.routing.cf-app.com)
